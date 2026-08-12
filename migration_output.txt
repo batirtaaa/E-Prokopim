@@ -1,0 +1,132 @@
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////
+
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////
+/////////////////  /////////////////[1G[16A[40CNexuss@nexuss
+[40C-------------
+[40COS: Windows 11 Home Single Language x86_64
+[40CHost: ASUS TUF Gaming A15 FA506NCR_FA506NCR (1.0)
+[40CKernel: WIN32_NT 10.0.26200.8973 (25H2)
+[40CUptime: 1 hour, 4 mins
+[40CShell: CMD 10.0.26100.8972
+[40CDisplay (CMN1521): 1920x1080 @ 144 Hz (as 1536x864) in 16" [Built-in]
+[40CDE: Fluent
+[40CWM: Desktop Window Manager 10.0.26100.8972
+[40CWM Theme: Custom - Seafoam (System: Dark, Apps: Dark)
+[40CIcons: Recycle Bin
+[40CFont: Segoe UI (12pt) [Caption / Menu / Message / Status]
+[40CCursor: Windows Default (32px)
+[40CTerminal: Antigravity IDE
+[40CCPU: AMD Ryzen 7 7435HS (16) @ 4,55 GHz
+[40CGPU: NVIDIA GeForce RTX 3050 Laptop GPU (3,87 GiB) [Discrete]
+[40CMemory: 7,48 GiB / 7,82 GiB (96%)
+[40CSwap: 2,02 GiB / 16,00 GiB (13%)
+[40CDisk (C:\): 239,16 GiB / 246,48 GiB (97%) - NTFS
+[40CDisk (D:\): 85,59 GiB / 200,19 GiB (43%) - NTFS
+[40CLocal IP (Wi-Fi): 192.168.101.21/24
+[40CBattery: 100% [AC Connected]
+[40CLocale: en-ID
+[40C
+[40C[40m   [41m   [42m   [43m   [44m   [45m   [46m   [47m   [m
+[40C[100m   [101m   [102m   [103m   [104m   [105m   [106m   [107m   [m
+====================================
+  SIKOPIM - Setup Database
+====================================
+
+[1/4] Starting MySQL...
+Waiting for MySQL to start (10s)...
+
+[2/4] Checking MySQL connection...
+mysqld is alive
+
+[3/4] Creating database...
+Database 'sikopim' ready.
+
+[4/4] Running migrations and seeding...
+
+ Dropping all tables .. 312.07ms DONE
+
+ INFO Preparing database. 
+
+ Creating migration table .. 24.59ms DONE
+
+ INFO Running migrations. 
+
+ 0001_01_01_000000_create_users_table .. 168.71ms DONE
+ 0001_01_01_000001_create_cache_table .. 83.57ms DONE
+ 0001_01_01_000002_create_jobs_table .. 143.95ms DONE
+ 2024_01_01_000001_create_users_table .. 0.11ms DONE
+ 2024_01_01_000002_create_instansi_table .. 19.70ms DONE
+ 2024_01_01_000003_create_kegiatan_table .. 102.80ms DONE
+ 2024_01_01_000004_create_personel_table .. 92.89ms DONE
+ 2024_01_01_000005_create_penugasan_table .. 410.65ms DONE
+ 2024_01_01_000006_create_notulensi_table .. 378.20ms DONE
+ 2024_01_01_000007_create_arahan_table .. 399.52ms DONE
+ 2024_01_01_000008_create_arsip_table .. 218.53ms DONE
+ 2024_01_01_000009_create_dokumentasi_table .. 210.23ms DONE
+ 2024_01_01_000010_create_daftar_hadir_table .. 236.94ms DONE
+ 2024_01_01_000011_create_supporting_tables .. 288.08ms DONE
+
+
+ INFO Seeding database. 
+
+
+====================================
+  Setup Complete! 
+  Login: admin / admin123
+  URL  : http://localhost:8000
+====================================
+
+Starting Laravel development server...
+Press Ctrl+C to stop the server.
+
+ INFO Server running on [http://127.0.0.1:8000]. 
+
+ Press Ctrl+C to stop the server
+
+ 2026-08-10 22:31:59 /login .. ~ 24s
+ PHP Fatal error: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at C:\xampp\htdocs\magang\vendor\symfony\http-foundation\Response.php:393) in C:\xampp\htdocs\magang\vendor\symfony\http-foundation\Response.php:328
+ Stack trace:
+ #0 C:\xampp\htdocs\magang\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(263): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError()
+ #1 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->{closure:Illuminate\Foundation\Bootstrap\HandleExceptions::forwardsTo():262}()
+ #2 C:\xampp\htdocs\magang\vendor\symfony\http-foundation\Response.php(328): header()
+ #3 C:\xampp\htdocs\magang\vendor\symfony\http-foundation\Response.php(407): Symfony\Component\HttpFoundation\Response->sendHeaders()
+ #4 C:\xampp\htdocs\magang\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(226): Symfony\Component\HttpFoundation\Response->send()
+ #5 C:\xampp\htdocs\magang\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(203): Illuminate\Foundation\Bootstrap\HandleExceptions->renderHttpResponse()
+ #6 C:\xampp\htdocs\magang\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(263): Illuminate\Foundation\Bootstrap\HandleExceptions->handleException()
+ #7 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->{closure:Illuminate\Foundation\Bootstrap\HandleExceptions::forwardsTo():262}()
+ #8 {main}
+ thrown in C:\xampp\htdocs\magang\vendor\symfony\http-foundation\Response.php on line 328
+ PHP Fatal error: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at C:\xampp\htdocs\magang\vendor\symfony\http-foundation\Response.php:393) in C:\xampp\htdocs\magang\vendor\symfony\http-foundation\Response.php:328
+ Stack trace:
+ #0 C:\xampp\htdocs\magang\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(263): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError()
+ #1 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->{closure:Illuminate\Foundation\Bootstrap\HandleExceptions::forwardsTo():262}()
+ #2 C:\xampp\htdocs\magang\vendor\symfony\http-foundation\Response.php(328): header()
+ #3 C:\xampp\htdocs\magang\vendor\symfony\http-foundation\Response.php(407): Symfony\Component\HttpFoundation\Response->sendHeaders()
+ #4 C:\xampp\htdocs\magang\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(226): Symfony\Component\HttpFoundation\Response->send()
+ #5 C:\xampp\htdocs\magang\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(203): Illuminate\Foundation\Bootstrap\HandleExceptions->renderHttpResponse()
+ #6 C:\xampp\htdocs\magang\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(239): Illuminate\Foundation\Bootstrap\HandleExceptions->handleException()
+ #7 C:\xampp\htdocs\magang\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(263): Illuminate\Foundation\Bootstrap\HandleExceptions->handleShutdown()
+ #8 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->{closure:Illuminate\Foundation\Bootstrap\HandleExceptions::forwardsTo():262}()
+ #9 {main}
+ thrown in C:\xampp\htdocs\magang\vendor\symfony\http-foundation\Response.php on line 328
+ 2026-08-10 22:34:56 / .. ~ 4s
+
+ INFO Environment modified. Restarting server.. 
+
+ INFO Server running on [http://127.0.0.1:8000]. 
+
+ Press Ctrl+C to stop the server
+
