@@ -13,6 +13,10 @@ use App\Http\Controllers\DaftarHadirController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ProfilAdminController;
+use App\Http\Controllers\KegiatanPimpinanController;
+use App\Http\Controllers\SubKomunikasiPimpinanController;
+use App\Http\Controllers\SubDokumentasiPimpinanController;
+use App\Http\Controllers\SubProtokolController;
 
 // Auth Routes
 Route::middleware('guest')->group(function () {
@@ -29,6 +33,20 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Kegiatan Pimpinan
+    Route::get('/kegiatan-pimpinan', [KegiatanPimpinanController::class, 'index'])->name('kegiatan-pimpinan.index');
+    Route::get('/kegiatan-pimpinan/create', [KegiatanPimpinanController::class, 'create'])->name('kegiatan-pimpinan.create');
+    Route::post('/kegiatan-pimpinan', [KegiatanPimpinanController::class, 'store'])->name('kegiatan-pimpinan.store');
+
+    // Sub Komunikasi Pimpinan
+    Route::get('/sub-komunikasi-pimpinan', [SubKomunikasiPimpinanController::class, 'index'])->name('sub-komunikasi-pimpinan.index');
+
+    // Sub Dokumentasi Pimpinan
+    Route::get('/sub-dokumentasi-pimpinan', [SubDokumentasiPimpinanController::class, 'index'])->name('sub-dokumentasi-pimpinan.index');
+
+    // Sub Protokol
+    Route::get('/sub-protokol', [SubProtokolController::class, 'index'])->name('sub-protokol.index');
 
     // Kegiatan
     Route::resource('/kegiatan', KegiatanController::class);
