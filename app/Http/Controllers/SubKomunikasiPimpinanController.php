@@ -8,6 +8,7 @@ class SubKomunikasiPimpinanController extends Controller
 {
     public function index()
     {
-        return view('sub-komunikasi-pimpinan.index');
+        return redirect()->route('sambutan.index');
     }
 }
+

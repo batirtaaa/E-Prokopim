@@ -47,19 +47,43 @@ class PenugasanController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'kegiatan_id' => 'required|exists:kegiatan,id',
-            'personel_id' => 'required|exists:personel,id',
             'peran' => 'required|string|max:100',
-            'status' => 'required|in:ditugaskan,dikonfirmasi,berlangsung,selesai,tidak_hadir',
+            'status' => 'nullable|in:ditugaskan,dikonfirmasi,berlangsung,selesai,tidak_hadir',
             'catatan' => 'nullable|string',
+            'tenggat_waktu' => 'nullable|string',
         ]);
 
-        $validated['assigned_by'] = Auth::id();
-        Penugasan::create($validated);
+        $personelIds = [];
+        if ($request->has('personel_ids') && is_array($request->personel_ids)) {
+            $personelIds = $request->personel_ids;
+        } elseif ($request->filled('personel_id')) {
+            $personelIds = [$request->personel_id];
+        }
 
-        // Update personel status
-        Personel::find($validated['personel_id'])->update(['status_ketersediaan' => 'bertugas']);
+        if (empty($personelIds)) {
+            return back()->withErrors(['personel_id' => 'Pilih minimal satu personel.'])->withInput();
+        }
+
+        $status = $request->input('status', 'ditugaskan');
+        $catatan = $request->input('catatan');
+        if ($request->filled('tenggat_waktu')) {
+            $catatan = ($catatan ? $catatan . "\n" : '') . "Tenggat Waktu: " . $request->tenggat_waktu;
+        }
+
+        foreach ($personelIds as $pId) {
+            Penugasan::create([
+                'kegiatan_id' => $request->kegiatan_id,
+                'personel_id' => $pId,
+                'peran' => $request->peran,
+                'status' => $status,
+                'catatan' => $catatan,
+                'assigned_by' => Auth::id(),
+            ]);
+
+            Personel::where('id', $pId)->update(['status_ketersediaan' => 'bertugas']);
+        }
 
         return redirect()->route('penugasan.index')
             ->with('success', 'Penugasan berhasil dibuat.');

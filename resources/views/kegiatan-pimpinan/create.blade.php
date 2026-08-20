@@ -185,7 +185,7 @@
         <div class="form-row-2">
             <div class="form-group">
                 <label class="form-label">Nomor Surat / Agenda <span class="required">*</span></label>
-                <input type="text" class="form-input auto-generated" value="AG-231015-001" name="nomor_agenda" readonly>
+                <input type="text" class="form-input auto-generated" value="{{ old('nomor_agenda', $nomorAgenda ?? 'AG-'.date('Ymd').'-001') }}" name="nomor_agenda" readonly>
                 <span class="form-hint">Dihasilkan secara otomatis oleh sistem.</span>
             </div>
             <div class="form-group">

@@ -114,30 +114,43 @@
 
             {{-- 3. Komunikasi Pimpinan (dropdown) --}}
             <div class="sidebar-nav-group">
-                <div class="sidebar-nav-group-header {{ request()->routeIs('sub-komunikasi-pimpinan.*') ? 'active open' : '' }}" onclick="toggleNavGroup(this)">
-                    <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46" /></svg>
+                <div class="sidebar-nav-group-header {{ (request()->routeIs('sambutan.*') || request()->routeIs('media-sosial.*')) ? 'active open' : '' }}" onclick="toggleNavGroup(this)">
+                    <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46"/></svg>
                     Komunikasi Pimpinan
-                    <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                    <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
                 </div>
-                <div class="sidebar-nav-group-children {{ request()->routeIs('sub-komunikasi-pimpinan.*') ? 'open' : '' }}">
-                    <a href="{{ route('sub-komunikasi-pimpinan.index') }}" class="sidebar-nav-link {{ request()->routeIs('sub-komunikasi-pimpinan.*') ? 'active' : '' }}">
+                <div class="sidebar-nav-group-children {{ (request()->routeIs('sambutan.*') || request()->routeIs('media-sosial.*')) ? 'open' : '' }}">
+                    <a href="{{ route('sambutan.index') }}" class="sidebar-nav-link {{ request()->routeIs('sambutan.*') ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-                        Sub Komunikasi Pimpinan
+                        Sambutan
+                    </a>
+                    <a href="{{ route('media-sosial.index') }}" class="sidebar-nav-link {{ request()->routeIs('media-sosial.*') ? 'active' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+                        Media Sosial
+                    </a>
+                    <a href="#" class="sidebar-nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+                        Analisis
                     </a>
                 </div>
             </div>
 
+
             {{-- 4. Dokumentasi Pimpinan (dropdown) --}}
             <div class="sidebar-nav-group">
-                <div class="sidebar-nav-group-header {{ request()->routeIs('sub-dokumentasi-pimpinan.*') ? 'active open' : '' }}" onclick="toggleNavGroup(this)">
+                <div class="sidebar-nav-group-header {{ (request()->routeIs('sub-dokumentasi-pimpinan.*') || request()->routeIs('galeri-arsip.*') || request()->routeIs('penugasan.*')) ? 'active open' : '' }}" onclick="toggleNavGroup(this)">
                     <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" /></svg>
                     Dokumentasi Pimpinan
                     <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                 </div>
-                <div class="sidebar-nav-group-children {{ request()->routeIs('sub-dokumentasi-pimpinan.*') ? 'open' : '' }}">
-                    <a href="{{ route('sub-dokumentasi-pimpinan.index') }}" class="sidebar-nav-link {{ request()->routeIs('sub-dokumentasi-pimpinan.*') ? 'active' : '' }}">
+                <div class="sidebar-nav-group-children {{ (request()->routeIs('sub-dokumentasi-pimpinan.*') || request()->routeIs('galeri-arsip.*') || request()->routeIs('penugasan.*')) ? 'open' : '' }}">
+                    <a href="{{ route('galeri-arsip.index') }}" class="sidebar-nav-link {{ request()->routeIs('galeri-arsip.*') ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-                        Sub Dokumentasi Pimpinan
+                        Galeri Arsip
+                    </a>
+                    <a href="{{ route('penugasan.index') }}" class="sidebar-nav-link {{ request()->routeIs('penugasan.*') ? 'active' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+                        Penugasan
                     </a>
                 </div>
             </div>
@@ -159,15 +172,27 @@
 
             {{-- 6. Administrasi (dropdown) --}}
             <div class="sidebar-nav-group">
-                <div class="sidebar-nav-group-header" onclick="toggleNavGroup(this)">
-                    <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <div class="sidebar-nav-group-header {{ (request()->routeIs('arsip.*') || request()->routeIs('pengaturan.*')) ? 'active open' : '' }}" onclick="toggleNavGroup(this)">
+                    <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" /></svg>
                     Administrasi
                     <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                 </div>
-                <div class="sidebar-nav-group-children">
-                    <a href="{{ route('pengaturan.index') }}" class="sidebar-nav-link {{ request()->routeIs('pengaturan.*') ? 'active' : '' }}">
+                <div class="sidebar-nav-group-children {{ (request()->routeIs('arsip.*') || request()->routeIs('pengaturan.*')) ? 'open' : '' }}">
+                    <a href="{{ route('arsip.index') }}" class="sidebar-nav-link {{ request()->routeIs('arsip.*') ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-                        Pengaturan
+                        Arsip Surat
+                    </a>
+                    <a href="#" class="sidebar-nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+                        Asset
+                    </a>
+                    <a href="#" class="sidebar-nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+                        Pegawai
+                    </a>
+                    <a href="#" class="sidebar-nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+                        Keuangan
                     </a>
                 </div>
             </div>

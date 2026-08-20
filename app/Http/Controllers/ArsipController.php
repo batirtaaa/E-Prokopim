@@ -12,11 +12,34 @@ class ArsipController extends Controller
     public function index(Request $request)
     {
         $query = Arsip::with('uploadedBy')->orderBy('created_at', 'desc');
-        if ($request->filled('search')) $query->where('judul', 'like', '%' . $request->search . '%');
-        if ($request->filled('kategori')) $query->where('kategori', $request->kategori);
-        if ($request->filled('tahun')) $query->where('tahun', $request->tahun);
-        $arsip = $query->paginate(12)->withQueryString();
+        
+        if ($request->filled('search')) {
+            $query->where(function($q) use ($request) {
+                $q->where('judul', 'like', '%' . $request->search . '%')
+                  ->orWhere('nomor_arsip', 'like', '%' . $request->search . '%');
+            });
+        }
+        
+        if ($request->filled('jenis_surat')) {
+            $query->where('kategori', $request->jenis_surat);
+        } elseif ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        if ($request->filled('tahun')) {
+            $query->where('tahun', $request->tahun);
+        }
+
+        $arsip = $query->paginate(10)->withQueryString();
         $totalArsip = Arsip::count();
+
         return view('arsip.index', compact('arsip', 'totalArsip'));
     }
 
