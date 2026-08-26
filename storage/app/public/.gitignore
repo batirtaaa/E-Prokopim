@@ -1,0 +1,4 @@
+!.gitignore
+# Abaikan file video besar agar tidak terkena limit 100MB GitHub
+*.mp4
+*.mov

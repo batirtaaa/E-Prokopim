@@ -1,0 +1,2 @@
+ERROR: Input redirection is not supported, exiting the process immediately.
+2026-08-10 22:26:35 0 [Note] Using unique option prefix 'key_buffer' is error-prone and can break in the future. Please use the full name 'key_buffer_size' instead.
