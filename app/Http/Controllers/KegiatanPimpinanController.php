@@ -78,6 +78,12 @@ class KegiatanPimpinanController extends Controller
             $lokasiName = $lokasiMap[$request->lokasi] ?? $request->lokasi;
         }
 
+        if ($request->leading_sektor === 'lainnya') {
+            $leadingSektor = trim($request->leading_sektor_custom) ?: 'Lainnya';
+        } else {
+            $leadingSektor = $request->leading_sektor;
+        }
+
         $tanggalMulai = Carbon::parse($request->tanggal . ' ' . $request->waktu_mulai);
         $tanggalSelesai = $request->filled('waktu_selesai')
             ? Carbon::parse($request->tanggal . ' ' . $request->waktu_selesai)
@@ -91,7 +97,7 @@ class KegiatanPimpinanController extends Controller
         $kegiatan = Kegiatan::create([
             'nomor_agenda'    => $nomorAgenda,
             'judul'           => $request->nama_kegiatan,
-            'leading_sektor'  => $request->leading_sektor,
+            'leading_sektor'  => $leadingSektor,
             'deskripsi'       => $request->keterangan,
             'lokasi'          => $lokasiName,
             'tanggal_mulai'   => $tanggalMulai,
@@ -136,14 +142,15 @@ class KegiatanPimpinanController extends Controller
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit kegiatan.');
         }
         $request->validate([
-            'nama_kegiatan'  => 'required|string|max:255',
-            'leading_sektor' => 'nullable|string|max:255',
-            'tanggal'        => 'required|date',
-            'waktu_mulai'    => 'required',
-            'waktu_selesai'  => 'nullable',
-            'lokasi'         => 'required|string',
-            'pimpinan'       => 'nullable|array',
-            'keterangan'     => 'nullable|string',
+            'nama_kegiatan'         => 'required|string|max:255',
+            'leading_sektor'        => 'nullable|string|max:255',
+            'leading_sektor_custom' => 'nullable|string|max:255',
+            'tanggal'               => 'required|date',
+            'waktu_mulai'           => 'required',
+            'waktu_selesai'         => 'nullable',
+            'lokasi'                => 'required|string',
+            'pimpinan'              => 'nullable|array',
+            'keterangan'            => 'nullable|string',
         ]);
 
         $lokasiMap = [
@@ -156,6 +163,13 @@ class KegiatanPimpinanController extends Controller
         } else {
             $lokasiName = $lokasiMap[$request->lokasi] ?? $request->lokasi;
         }
+
+        if ($request->leading_sektor === 'lainnya') {
+            $leadingSektor = trim($request->leading_sektor_custom) ?: 'Lainnya';
+        } else {
+            $leadingSektor = $request->leading_sektor;
+        }
+
         $tanggalMulai = Carbon::parse($request->tanggal . ' ' . $request->waktu_mulai);
         $tanggalSelesai = $request->filled('waktu_selesai')
             ? Carbon::parse($request->tanggal . ' ' . $request->waktu_selesai)
@@ -163,7 +177,7 @@ class KegiatanPimpinanController extends Controller
 
         $kegiatan->update([
             'judul'           => $request->nama_kegiatan,
-            'leading_sektor'  => $request->leading_sektor,
+            'leading_sektor'  => $leadingSektor,
             'deskripsi'       => $request->keterangan,
             'lokasi'          => $lokasiName,
             'tanggal_mulai'   => $tanggalMulai,

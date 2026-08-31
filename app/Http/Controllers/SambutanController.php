@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sambutan;
 use App\Models\Personel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -21,8 +22,14 @@ class SambutanController extends Controller
             $s = $request->search;
             $query->where(function ($q) use ($s) {
                 $q->where('nomor_surat', 'like', "%{$s}%")
-                  ->orWhere('perihal', 'like', "%{$s}%");
+                  ->orWhere('perihal', 'like', "%{$s}%")
+                  ->orWhere('tujuan', 'like', "%{$s}%")
+                  ->orWhere('asal_instansi', 'like', "%{$s}%");
             });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
         }
 
         if ($request->filled('bulan')) {
@@ -63,16 +70,40 @@ class SambutanController extends Controller
         $request->validate([
             'nomor_surat'    => 'required|string|max:100',
             'tanggal_surat'  => 'required|date',
+            'tanggal_acara'  => 'nullable|date',
             'asal_instansi'  => 'required|string|max:255',
+            'tujuan'         => 'nullable|string|max:255',
+            'tujuan_custom'  => 'nullable|string|max:255',
             'perihal'        => 'required|string',
+            'status'         => 'nullable|in:draft,diproses,selesai',
             'status_urgensi' => 'required|in:biasa,segera,penting',
             'jenis'          => 'required|in:permohonan,hasil',
+            'tenggat_waktu'  => 'nullable|date',
+            'deadline_jam'   => 'nullable|string',
             'dokumen'        => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
         ], [
             'dokumen.required' => 'Dokumen pendukung wajib diunggah sebelum menyimpan dan melanjutkan.',
             'dokumen.mimes' => 'Format file harus berupa PDF, JPG, JPEG, atau PNG.',
             'dokumen.max' => 'Ukuran file maksimal adalah 10MB.',
         ]);
+
+        if ($request->tujuan === 'lainnya') {
+            $tujuan = trim($request->tujuan_custom) ?: 'Lainnya';
+        } else {
+            $tujuan = $request->tujuan;
+        }
+
+        $deadlineAt = null;
+        if ($request->filled('tenggat_waktu')) {
+            $jam = $request->filled('deadline_jam') ? $request->deadline_jam : '16:00:00';
+            try {
+                $deadlineAt = Carbon::parse($request->tenggat_waktu . ' ' . $jam);
+            } catch (\Exception $e) {
+                $deadlineAt = Carbon::parse($request->tenggat_waktu . ' 23:59:59');
+            }
+        }
+
+        $status = $request->input('status', 'diproses');
 
         $file     = $request->file('dokumen');
         $fileName = $file->getClientOriginalName();
@@ -81,18 +112,21 @@ class SambutanController extends Controller
         $sambutan = Sambutan::create([
             'nomor_surat'        => $request->nomor_surat,
             'tanggal_surat'      => $request->tanggal_surat,
+            'tanggal_acara'      => $request->tanggal_acara,
             'asal_instansi'      => $request->asal_instansi,
+            'tujuan'             => $tujuan,
             'perihal'            => $request->perihal,
             'deskripsi_singkat'  => $request->deskripsi_singkat,
             'tanggal_terima'     => now()->toDateString(),
             'tenggat_waktu'      => $request->tenggat_waktu,
+            'deadline_at'        => $deadlineAt,
             'file_path'          => $filePath,
             'file_name'          => $fileName,
             'status_urgensi'     => $request->status_urgensi,
             'instruksi_disposisi'=> $request->instruksi,
             'petugas_id'         => $request->petugas_id ?: null,
             'jenis'              => $request->jenis,
-            'status'             => 'diproses',
+            'status'             => $status,
             'created_by'         => Auth::id(),
         ]);
 
@@ -128,18 +162,44 @@ class SambutanController extends Controller
         $request->validate([
             'nomor_surat'    => 'required|string|max:100',
             'tanggal_surat'  => 'required|date',
+            'tanggal_acara'  => 'nullable|date',
             'asal_instansi'  => 'required|string|max:255',
+            'tujuan'         => 'nullable|string|max:255',
+            'tujuan_custom'  => 'nullable|string|max:255',
             'perihal'        => 'required|string',
+            'status'         => 'nullable|in:draft,diproses,selesai',
             'status_urgensi' => 'required|in:biasa,segera,penting',
+            'tenggat_waktu'  => 'nullable|date',
+            'deadline_jam'   => 'nullable|string',
         ]);
+
+        if ($request->tujuan === 'lainnya') {
+            $tujuan = trim($request->tujuan_custom) ?: 'Lainnya';
+        } else {
+            $tujuan = $request->tujuan;
+        }
+
+        $deadlineAt = null;
+        if ($request->filled('tenggat_waktu')) {
+            $jam = $request->filled('deadline_jam') ? $request->deadline_jam : '16:00:00';
+            try {
+                $deadlineAt = Carbon::parse($request->tenggat_waktu . ' ' . $jam);
+            } catch (\Exception $e) {
+                $deadlineAt = Carbon::parse($request->tenggat_waktu . ' 23:59:59');
+            }
+        }
 
         $data = [
             'nomor_surat'        => $request->nomor_surat,
             'tanggal_surat'      => $request->tanggal_surat,
+            'tanggal_acara'      => $request->tanggal_acara,
             'asal_instansi'      => $request->asal_instansi,
+            'tujuan'             => $tujuan,
             'perihal'            => $request->perihal,
             'deskripsi_singkat'  => $request->deskripsi_singkat,
             'tenggat_waktu'      => $request->tenggat_waktu,
+            'deadline_at'        => $deadlineAt,
+            'status'             => $request->input('status', $sambutan->status),
             'status_urgensi'     => $request->status_urgensi,
             'instruksi_disposisi'=> $request->instruksi,
             'petugas_id'         => $request->petugas_id ?: null,

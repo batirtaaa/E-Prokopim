@@ -164,6 +164,33 @@
                     <input type="date" class="form-input" name="tanggal_surat" value="{{ old('tanggal_surat') }}" required>
                 </div>
             </div>
+
+            <div class="form-row-2" style="margin-bottom:18px">
+                <div class="form-group" style="margin-bottom:0">
+                    <label class="form-label">Tanggal Acara / Pelaksanaan <span class="req">*</span></label>
+                    <input type="date" class="form-input" name="tanggal_acara" value="{{ old('tanggal_acara') }}" required>
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                    <label class="form-label">Ditujukan Kepada (Tujuan Sambutan) <span class="req">*</span></label>
+                    <select class="form-select" name="tujuan" id="selectTujuan" onchange="toggleTujuanCustom(this.value)" required>
+                        <option value="">Pilih pimpinan tujuan...</option>
+                        <option value="Wali Kota (B1)" {{ old('tujuan') === 'Wali Kota (B1)' ? 'selected' : '' }}>Wali Kota (B1)</option>
+                        <option value="Wakil Wali Kota (B2)" {{ old('tujuan') === 'Wakil Wali Kota (B2)' ? 'selected' : '' }}>Wakil Wali Kota (B2)</option>
+                        <option value="Sekretaris Daerah (B3)" {{ old('tujuan') === 'Sekretaris Daerah (B3)' ? 'selected' : '' }}>Sekretaris Daerah (B3)</option>
+                        <option value="Ketua TP-PKK / Aryatri Benarto (PKK1)" {{ old('tujuan') === 'Ketua TP-PKK / Aryatri Benarto (PKK1)' ? 'selected' : '' }}>Ketua TP-PKK / Aryatri Benarto (PKK1)</option>
+                        <option value="Wakil Ketua TP-PKK / Fitriana Dewi (PKK2)" {{ old('tujuan') === 'Wakil Ketua TP-PKK / Fitriana Dewi (PKK2)' ? 'selected' : '' }}>Wakil Ketua TP-PKK / Fitriana Dewi (PKK2)</option>
+                        <option value="Ketua DWP / R. Dewi Pertiwi Zulkarnain (DWP)" {{ old('tujuan') === 'Ketua DWP / R. Dewi Pertiwi Zulkarnain (DWP)' ? 'selected' : '' }}>Ketua DWP / R. Dewi Pertiwi Zulkarnain (DWP)</option>
+                        <option value="Asisten Pemerintahan dan Kesra (Asisten 1)" {{ old('tujuan') === 'Asisten Pemerintahan dan Kesra (Asisten 1)' ? 'selected' : '' }}>Asisten Pemerintahan dan Kesra (Asisten 1)</option>
+                        <option value="Asisten Perekonomian dan Pembangunan (Asisten 2)" {{ old('tujuan') === 'Asisten Perekonomian dan Pembangunan (Asisten 2)' ? 'selected' : '' }}>Asisten Perekonomian dan Pembangunan (Asisten 2)</option>
+                        <option value="Asisten Administrasi Umum (Asisten 3)" {{ old('tujuan') === 'Asisten Administrasi Umum (Asisten 3)' ? 'selected' : '' }}>Asisten Administrasi Umum (Asisten 3)</option>
+                        <option value="lainnya" {{ old('tujuan') === 'lainnya' ? 'selected' : '' }}>Lainnya (Ketik Manual)</option>
+                    </select>
+                    <div id="tujuanCustomWrap" style="display: {{ old('tujuan') === 'lainnya' ? 'block' : 'none' }}; margin-top: 8px;">
+                        <input type="text" class="form-input" name="tujuan_custom" id="inputTujuanCustom" value="{{ old('tujuan_custom') }}" placeholder="Ketik tujuan / penerima naskah sambutan...">
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="form-label">Asal Instansi / Pengirim <span class="req">*</span></label>
                 <input type="text" class="form-input" name="asal_instansi" value="{{ old('asal_instansi') }}" placeholder="Masukkan nama instansi pengirim" required>
@@ -207,19 +234,51 @@
         Penugasan Disposisi
     </div>
     <div class="disposisi-body">
-        <div class="form-group">
-            <label class="form-label">Pilih Petugas <span class="req">*</span></label>
-            <select class="form-select" name="petugas_id" id="input-petugas">
-                <option value="">Pilih petugas...</option>
-                @foreach($personelList as $personel)
-                    <option value="{{ $personel->id }}" {{ old('petugas_id') == $personel->id ? 'selected' : '' }}>{{ $personel->nama_lengkap }} — {{ $personel->jabatan }}</option>
-                @endforeach
-            </select>
+        <div class="form-row-2" style="margin-bottom:18px">
+            <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Pilih Petugas Disposisi <span class="req">*</span></label>
+                <select class="form-select" name="petugas_id" id="input-petugas">
+                    <option value="">Pilih petugas...</option>
+                    @foreach($personelList as $personel)
+                        <option value="{{ $personel->id }}" {{ old('petugas_id') == $personel->id ? 'selected' : '' }}>{{ $personel->nama_lengkap }} — {{ $personel->jabatan }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Status Permohonan <span class="req">*</span></label>
+                <select class="form-select" name="status" id="input-status">
+                    <option value="diproses" {{ old('status', 'diproses') === 'diproses' ? 'selected' : '' }}>Progres / Sedang Diproses</option>
+                    <option value="selesai" {{ old('status') === 'selesai' ? 'selected' : '' }}>Selesai</option>
+                    <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>Draft</option>
+                </select>
+            </div>
         </div>
-        <div class="form-group">
-            <label class="form-label">Tenggat Waktu <span class="req">*</span></label>
-            <input type="date" class="form-input" name="tenggat_waktu" id="input-tenggat" value="{{ old('tenggat_waktu') }}" required>
+
+        {{-- Deadline Disposisi --}}
+        <div class="form-group" style="margin-bottom:18px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px">
+                <label class="form-label" style="margin-bottom:0 !important">Batas Waktu / Deadline Pengerjaan <span class="req">*</span></label>
+                <div style="display:flex;gap:6px;align-items:center;">
+                    <span style="font-size:11.5px;color:#64748b;">Pintas:</span>
+                    <button type="button" onclick="setQuickDeadline(2)" style="font-size:11.5px;padding:3px 9px;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;border-radius:6px;cursor:pointer;font-weight:600">⚡ +2 Jam (Standar Disposisi)</button>
+                    <button type="button" onclick="setQuickTodayEnd()" style="font-size:11.5px;padding:3px 9px;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;border-radius:6px;cursor:pointer">Hari Ini 16:00</button>
+                    <button type="button" onclick="setQuickTomorrow()" style="font-size:11.5px;padding:3px 9px;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;border-radius:6px;cursor:pointer">Besok 10:00</button>
+                </div>
+            </div>
+            <div class="form-row-2">
+                <div>
+                    <input type="date" class="form-input" name="tenggat_waktu" id="input-tenggat" value="{{ old('tenggat_waktu') }}" required>
+                </div>
+                <div>
+                    <input type="time" class="form-input" name="deadline_jam" id="input-deadline-jam" value="{{ old('deadline_jam', '16:00') }}" required>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#d97706;margin-top:6px;background:#fef3c7;padding:6px 12px;border-radius:6px">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:14px;height:14px;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span><strong>Pengingat Disposisi:</strong> Disposisi naskah sambutan diharapkan selesai dikerjakan maksimal <strong>2 jam</strong> setelah instruksi diberikan.</span>
+            </div>
         </div>
+
         <div class="form-group">
             <label class="form-label">Instruksi / Catatan Disposisi</label>
             <textarea class="form-textarea" name="instruksi" placeholder="Masukkan instruksi atau catatan khusus...">{{ old('instruksi') }}</textarea>
@@ -379,6 +438,62 @@ if (uploadArea) {
             handleFile(fileInput);
         }
     });
+}
+
+function toggleTujuanCustom(val) {
+    const wrap = document.getElementById('tujuanCustomWrap');
+    const input = document.getElementById('inputTujuanCustom');
+    if (wrap && input) {
+        if (val === 'lainnya') {
+            wrap.style.display = 'block';
+            input.required = true;
+            input.focus();
+        } else {
+            wrap.style.display = 'none';
+            input.required = false;
+        }
+    }
+}
+
+function setQuickDeadline(hours) {
+    const now = new Date();
+    now.setHours(now.getHours() + hours);
+    
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const hh = String(now.getHours()).padStart(2, '0');
+    const min = String(now.getMinutes()).padStart(2, '0');
+    
+    const dateInput = document.getElementById('input-tenggat');
+    const timeInput = document.getElementById('input-deadline-jam');
+    if (dateInput) dateInput.value = `${yyyy}-${mm}-${dd}`;
+    if (timeInput) timeInput.value = `${hh}:${min}`;
+}
+
+function setQuickTodayEnd() {
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    
+    const dateInput = document.getElementById('input-tenggat');
+    const timeInput = document.getElementById('input-deadline-jam');
+    if (dateInput) dateInput.value = `${yyyy}-${mm}-${dd}`;
+    if (timeInput) timeInput.value = `16:00`;
+}
+
+function setQuickTomorrow() {
+    const now = new Date();
+    now.setDate(now.getDate() + 1);
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    
+    const dateInput = document.getElementById('input-tenggat');
+    const timeInput = document.getElementById('input-deadline-jam');
+    if (dateInput) dateInput.value = `${yyyy}-${mm}-${dd}`;
+    if (timeInput) timeInput.value = `10:00`;
 }
 </script>
 @endpush

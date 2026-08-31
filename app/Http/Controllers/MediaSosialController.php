@@ -30,114 +30,80 @@ class MediaSosialController extends Controller
     {
         $tab = $request->get('tab', 'infografis');
 
-        // Tab Infografis → tampilkan folder full 12 bulan untuk tahun yang dipilih
-        if ($tab === 'infografis') {
-            $dbYears = MediaSosial::where('kategori', 'infografis')
-                ->whereNotNull('tanggal_publikasi')
-                ->selectRaw('YEAR(tanggal_publikasi) as tahun')
-                ->distinct()
-                ->pluck('tahun')
-                ->map(fn($y) => (int)$y)
-                ->toArray();
-
-            $currentYear = (int) now()->year;
-            $defaultRange = range($currentYear - 3, $currentYear + 1);
-            $availableYears = collect(array_merge($defaultRange, $dbYears))
-                ->unique()
-                ->sortDesc()
-                ->values();
-
-            $selectedTahun = (int) $request->get('tahun', $currentYear);
-            if (!$availableYears->contains($selectedTahun)) {
-                $availableYears->push($selectedTahun);
-                $availableYears = $availableYears->unique()->sortDesc()->values();
-            }
-
-            // Hitung jumlah item per bulan untuk tahun terpilih
-            $countsByMonth = MediaSosial::where('kategori', 'infografis')
-                ->whereYear('tanggal_publikasi', $selectedTahun)
-                ->selectRaw('MONTH(tanggal_publikasi) as bulan, COUNT(*) as total')
-                ->groupByRaw('MONTH(tanggal_publikasi)')
-                ->pluck('total', 'bulan')
-                ->toArray();
-
-            // Bangun 12 bulan lengkap (Januari - Desember)
-            $folders = collect(range(1, 12))->map(function ($bulan) use ($selectedTahun, $countsByMonth) {
-                return [
-                    'tahun' => $selectedTahun,
-                    'bulan' => $bulan,
-                    'label' => self::NAMA_BULAN[$bulan] . ' ' . $selectedTahun,
-                    'total' => $countsByMonth[$bulan] ?? 0,
-                ];
-            });
-
-            return view('sub-komunikasi-pimpinan.media-sosial.index', compact(
-                'tab', 'folders', 'availableYears', 'selectedTahun'
-            ));
+        // Validasi tab yang diperbolehkan
+        $validTabs = ['infografis', 'videografis', 'media_luar_ruang'];
+        if (!in_array($tab, $validTabs)) {
+            $tab = 'infografis';
         }
 
-        // Tab Videografis / Media Luar Ruang → card grid biasa
-        $query = MediaSosial::where('kategori', $tab)
-            ->orderBy('tanggal_publikasi', 'desc')
-            ->orderBy('created_at', 'desc');
-
-        if ($request->filled('search')) {
-            $s = $request->search;
-            $query->where(function ($q) use ($s) {
-                $q->where('judul', 'like', "%{$s}%")
-                  ->orWhere('deskripsi', 'like', "%{$s}%")
-                  ->orWhere('platform', 'like', "%{$s}%")
-                  ->orWhere('tanggal_publikasi', 'like', "%{$s}%");
-            });
-        }
-
-        if ($request->filled('bulan')) {
-            $query->whereMonth('tanggal_publikasi', now()->month)
-                  ->whereYear('tanggal_publikasi', now()->year);
-        }
-
-        if ($request->filled('platform')) {
-            $query->where('platform', $request->platform);
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        $items   = $query->paginate(6)->withQueryString();
-        $folders = collect();
-
-        // Hitung tahun yang tersedia untuk modal export
-        $dbYears = MediaSosial::whereNotNull('tanggal_publikasi')
+        // Semua tab → tampilkan grid folder 12 bulan (konsisten untuk semua)
+        $dbYears = MediaSosial::where('kategori', $tab)
+            ->whereNotNull('tanggal_publikasi')
             ->selectRaw('YEAR(tanggal_publikasi) as tahun')
-            ->distinct()->pluck('tahun')->map(fn($y) => (int)$y)->toArray();
-        $currentYear    = (int) now()->year;
-        $defaultRange   = range($currentYear - 3, $currentYear + 1);
-        $availableYears = collect(array_merge($defaultRange, $dbYears))->unique()->sortDesc()->values();
-        $selectedTahun  = $currentYear;
+            ->distinct()
+            ->pluck('tahun')
+            ->map(fn($y) => (int)$y)
+            ->toArray();
 
-        return view('sub-komunikasi-pimpinan.media-sosial.index', compact('items', 'tab', 'folders', 'availableYears', 'selectedTahun'));
+        $currentYear  = (int) now()->year;
+        $defaultRange = range($currentYear - 3, $currentYear + 1);
+        $availableYears = collect(array_merge($defaultRange, $dbYears))
+            ->unique()
+            ->sortDesc()
+            ->values();
+
+        $selectedTahun = (int) $request->get('tahun', $currentYear);
+        if (!$availableYears->contains($selectedTahun)) {
+            $availableYears->push($selectedTahun);
+            $availableYears = $availableYears->unique()->sortDesc()->values();
+        }
+
+        // Hitung jumlah item per bulan untuk tahun terpilih
+        $countsByMonth = MediaSosial::where('kategori', $tab)
+            ->whereYear('tanggal_publikasi', $selectedTahun)
+            ->selectRaw('MONTH(tanggal_publikasi) as bulan, COUNT(*) as total')
+            ->groupByRaw('MONTH(tanggal_publikasi)')
+            ->pluck('total', 'bulan')
+            ->toArray();
+
+        // Bangun 12 bulan lengkap (Januari - Desember)
+        $folders = collect(range(1, 12))->map(function ($bulan) use ($selectedTahun, $countsByMonth) {
+            return [
+                'tahun' => $selectedTahun,
+                'bulan' => $bulan,
+                'label' => self::NAMA_BULAN[$bulan] . ' ' . $selectedTahun,
+                'total' => $countsByMonth[$bulan] ?? 0,
+            ];
+        });
+
+        $items = collect();
+
+        return view('sub-komunikasi-pimpinan.media-sosial.index', compact(
+            'tab', 'folders', 'availableYears', 'selectedTahun', 'items'
+        ));
     }
 
+
     /**
-     * Tampilkan isi folder infografis berdasarkan bulan & tahun
+     * Tampilkan isi folder berdasarkan kategori, bulan & tahun
      */
-    public function folderBulan(Request $request, int $tahun, int $bulan)
+    public function folderBulan(Request $request, string $kategori, int $tahun, int $bulan)
     {
         // Validasi parameter
-        if ($bulan < 1 || $bulan > 12 || $tahun < 2000 || $tahun > 2100) {
+        $validKategori = ['infografis', 'videografis', 'media_luar_ruang'];
+        if (!in_array($kategori, $validKategori) || $bulan < 1 || $bulan > 12 || $tahun < 2000 || $tahun > 2100) {
             abort(404);
         }
 
         $namaBulan   = self::NAMA_BULAN[$bulan] ?? 'Bulan';
         $folderLabel = $namaBulan . ' ' . $tahun;
 
-        $query = MediaSosial::where('kategori', 'infografis')
+        $query = MediaSosial::where('kategori', $kategori)
             ->whereYear('tanggal_publikasi', $tahun)
             ->whereMonth('tanggal_publikasi', $bulan);
 
-        // Filter per Kategori Infografis (chip filter)
-        if ($request->filled('kat')) {
+        // Filter per Sub-Kategori (hanya berlaku untuk infografis)
+        if ($kategori === 'infografis' && $request->filled('kat')) {
             $kat = $request->kat;
             if ($kat === 'lainnya') {
                 $bakuKeys = array_keys(self::SUB_KATEGORI_LIST);
@@ -151,13 +117,14 @@ class MediaSosialController extends Controller
             }
         }
 
-        // Search: bisa cari tanggal (dd-mm, dd M yyyy, dll), judul, sub_kategori
+        // Search: judul, deskripsi, platform, tanggal
         if ($request->filled('search')) {
             $s = $request->search;
             $query->where(function ($q) use ($s) {
                 $q->where('judul', 'like', "%{$s}%")
                   ->orWhere('deskripsi', 'like', "%{$s}%")
                   ->orWhere('sub_kategori', 'like', "%{$s}%")
+                  ->orWhere('platform', 'like', "%{$s}%")
                   ->orWhereRaw("DATE_FORMAT(tanggal_publikasi, '%d %M %Y') LIKE ?", ["%{$s}%"])
                   ->orWhereRaw("DATE_FORMAT(tanggal_publikasi, '%d-%m-%Y') LIKE ?", ["%{$s}%"])
                   ->orWhereRaw("DATE_FORMAT(tanggal_publikasi, '%d/%m/%Y') LIKE ?", ["%{$s}%"])
@@ -172,7 +139,7 @@ class MediaSosialController extends Controller
         $namaBulanList   = self::NAMA_BULAN;
 
         // Hitung tahun yang tersedia untuk filter / navigasi
-        $dbYears = MediaSosial::where('kategori', 'infografis')
+        $dbYears = MediaSosial::where('kategori', $kategori)
             ->whereNotNull('tanggal_publikasi')
             ->selectRaw('YEAR(tanggal_publikasi) as tahun')
             ->distinct()->pluck('tahun')->map(fn($y) => (int)$y)->toArray();
@@ -181,7 +148,7 @@ class MediaSosialController extends Controller
         $availableYears = collect(array_merge($defaultRange, $dbYears, [$tahun]))->unique()->sortDesc()->values();
 
         return view('sub-komunikasi-pimpinan.media-sosial.folder', compact(
-            'items', 'tahun', 'bulan', 'folderLabel', 'subKategoriList', 'namaBulanList', 'availableYears'
+            'items', 'kategori', 'tahun', 'bulan', 'folderLabel', 'subKategoriList', 'namaBulanList', 'availableYears'
         ));
     }
 

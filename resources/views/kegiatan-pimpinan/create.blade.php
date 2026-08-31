@@ -191,51 +191,136 @@
                 <input type="text" class="form-input auto-generated" value="{{ old('nomor_agenda', $kegiatan->nomor_agenda ?? $nomorAgenda ?? 'AG-'.date('Ymd').'-001') }}" name="nomor_agenda" readonly>
                 <span class="form-hint">Dihasilkan secara otomatis oleh sistem.</span>
             </div>
+            @php
+                $dinasList = [
+                    'Dinas Pendidikan (Disdik)',
+                    'Dinas Kesehatan (Dinkes)',
+                    'Dinas Komunikasi dan Informatika (Diskominfo)',
+                    'Dinas Perhubungan (Dishub)',
+                    'Dinas Sumber Daya Air dan Bina Marga (DSDABM)',
+                    'Dinas Cipta Karya, Bina Konstruksi dan Tata Ruang (Disciptabintar)',
+                    'Dinas Perumahan dan Kawasan Permukiman (DPKP)',
+                    'Dinas Sosial (Dinsos)',
+                    'Dinas Tenaga Kerja (Disnaker)',
+                    'Dinas Kependudukan dan Pencatatan Sipil (Disdukcapil)',
+                    'Dinas Koperasi dan Usaha Kecil dan Menengah (KUKM)',
+                    'Dinas Perdagangan dan Perindustrian (Disdagin)',
+                    'Dinas Kebudayaan dan Pariwisata (Disbudpar)',
+                    'Dinas Pemuda dan Olahraga (Dispora)',
+                    'Dinas Ketahanan Pangan dan Pertanian (DKPP)',
+                    'Dinas Lingkungan Hidup (DLH)',
+                    'Dinas Pengendalian Penduduk dan KB (DPPKB)',
+                    'Dinas Pemberdayaan Perempuan dan Perlindungan Anak (DP3A)',
+                    'Dinas Kebakaran dan Penanggulangan Bencana (Diskar PB)',
+                    'Dinas Penanaman Modal dan PTSP (DPMPTSP)',
+                    'Dinas Perpustakaan dan Kearsipan (Dispusip)',
+                    'Satuan Polisi Pamong Praja (Satpol PP)',
+                    'Badan Perencanaan Pembangunan, Penelitian dan Pengembangan (Bappelitbang)',
+                    'Badan Pendapatan Daerah (Bapenda)',
+                    'Badan Keuangan dan Aset Daerah (BKAD)',
+                    'Badan Kepegawaian dan Pengembangan SDM (BKPSDM)',
+                    'Badan Kesatuan Bangsa dan Politik (Bakesbangpol)',
+                    'Badan Penanggulangan Bencana Daerah (BPBD)',
+                    'Inspektorat Daerah Kota Bandung',
+                    'Sekretariat Daerah (Setda)',
+                    'Sekretariat DPRD Kota Bandung',
+                    'Bagian Protokol dan Komunikasi Pimpinan (Prokopim)',
+                    'Bagian Tata Pemerintahan',
+                    'Bagian Kesejahteraan Rakyat',
+                    'Bagian Hukum',
+                    'Bagian Perekonomian',
+                    'Bagian Pengadaan Barang dan Jasa',
+                    'Bagian Organisasi',
+                    'Bagian Umum',
+                    'Bagian Perencanaan dan Keuangan',
+                    'Bagian Sumber Daya Alam',
+                    'Kecamatan se-Kota Bandung',
+                    'Kelurahan se-Kota Bandung',
+                    'BUMD / Perumda Kota Bandung',
+                    'Instansi Vertikal / Mitra Eksternal',
+                ];
+
+                $curLeading = old('leading_sektor', $kegiatan->leading_sektor ?? '');
+                $customLeadingVal = old('leading_sektor_custom', '');
+                $selectedLeading = '';
+                $isLeadingCustom = false;
+
+                if (!empty($curLeading)) {
+                    if (in_array($curLeading, $dinasList)) {
+                        $selectedLeading = $curLeading;
+                    } else {
+                        $selectedLeading = 'lainnya';
+                        $isLeadingCustom = true;
+                        if (empty($customLeadingVal)) {
+                            $customLeadingVal = $curLeading;
+                        }
+                    }
+                }
+            @endphp
             <div class="form-group">
                 <label class="form-label">Leading Sektor / Dinas Pengampu</label>
-                <input type="text" class="form-input" name="leading_sektor" list="opdList" value="{{ old('leading_sektor', $kegiatan->leading_sektor ?? '') }}" placeholder="Pilih atau ketik dinas / OPD pengampu..." autocomplete="off">
-                <datalist id="opdList">
-                    <option value="Bagian Protokol dan Komunikasi Pimpinan (Prokopim)">
-                    <option value="Dinas Pendidikan (Disdik)">
-                    <option value="Dinas Kesehatan (Dinkes)">
-                    <option value="Dinas Komunikasi dan Informatika (Diskominfo)">
-                    <option value="Dinas Perhubungan (Dishub)">
-                    <option value="Dinas Sumber Daya Air dan Bina Marga (DSDABM)">
-                    <option value="Dinas Cipta Karya, Bina Konstruksi dan Tata Ruang (Disciptabintar)">
-                    <option value="Dinas Perumahan dan Kawasan Permukiman (DPKP)">
-                    <option value="Dinas Sosial (Dinsos)">
-                    <option value="Dinas Tenaga Kerja (Disnaker)">
-                    <option value="Dinas Kependudukan dan Pencatatan Sipil (Disdukcapil)">
-                    <option value="Dinas Koperasi dan Usaha Kecil dan Menengah (KUKM)">
-                    <option value="Dinas Perdagangan dan Perindustrian (Disdagin)">
-                    <option value="Dinas Kebudayaan dan Pariwisata (Disbudpar)">
-                    <option value="Dinas Pemuda dan Olahraga (Dispora)">
-                    <option value="Dinas Ketahanan Pangan dan Pertanian (DKPP)">
-                    <option value="Dinas Lingkungan Hidup (DLH)">
-                    <option value="Dinas Pengendalian Penduduk dan KB (DPPKB)">
-                    <option value="Dinas Pemberdayaan Perempuan dan Perlindungan Anak (DP3A)">
-                    <option value="Dinas Kebakaran dan Penanggulangan Bencana (Diskar PB)">
-                    <option value="Dinas Penanaman Modal dan PTSP (DPMPTSP)">
-                    <option value="Dinas Perpustakaan dan Kearsipan (Dispusip)">
-                    <option value="Satuan Polisi Pamong Praja (Satpol PP)">
-                    <option value="Badan Perencanaan Pembangunan, Penelitian dan Pengembangan (Bappelitbang)">
-                    <option value="Badan Pendapatan Daerah (Bapenda)">
-                    <option value="Badan Keuangan dan Aset Daerah (BKAD)">
-                    <option value="Badan Kepegawaian dan Pengembangan SDM (BKPSDM)">
-                    <option value="Badan Kesatuan Bangsa dan Politik (Bakesbangpol)">
-                    <option value="Badan Penanggulangan Bencana Daerah (BPBD)">
-                    <option value="Inspektorat Daerah Kota Bandung">
-                    <option value="Sekretariat Daerah (Setda)">
-                    <option value="Bagian Tata Pemerintahan">
-                    <option value="Bagian Kesejahteraan Rakyat">
-                    <option value="Bagian Hukum">
-                    <option value="Bagian Perekonomian">
-                    <option value="Bagian Pengadaan Barang dan Jasa">
-                    <option value="Bagian Organisasi">
-                    <option value="Bagian Umum">
-                    <option value="Bagian Perencanaan dan Keuangan">
-                    <option value="Bagian Sumber Daya Alam">
-                </datalist>
+                <select class="form-select" name="leading_sektor" id="selectLeadingSektor" onchange="toggleLeadingCustom(this.value)">
+                    <option value="">Pilih Dinas / OPD Pengampu...</option>
+                    <optgroup label="Dinas Pemerintah Kota Bandung">
+                        <option value="Dinas Pendidikan (Disdik)" {{ $selectedLeading === 'Dinas Pendidikan (Disdik)' ? 'selected' : '' }}>Dinas Pendidikan (Disdik)</option>
+                        <option value="Dinas Kesehatan (Dinkes)" {{ $selectedLeading === 'Dinas Kesehatan (Dinkes)' ? 'selected' : '' }}>Dinas Kesehatan (Dinkes)</option>
+                        <option value="Dinas Komunikasi dan Informatika (Diskominfo)" {{ $selectedLeading === 'Dinas Komunikasi dan Informatika (Diskominfo)' ? 'selected' : '' }}>Dinas Komunikasi dan Informatika (Diskominfo)</option>
+                        <option value="Dinas Perhubungan (Dishub)" {{ $selectedLeading === 'Dinas Perhubungan (Dishub)' ? 'selected' : '' }}>Dinas Perhubungan (Dishub)</option>
+                        <option value="Dinas Sumber Daya Air dan Bina Marga (DSDABM)" {{ $selectedLeading === 'Dinas Sumber Daya Air dan Bina Marga (DSDABM)' ? 'selected' : '' }}>Dinas Sumber Daya Air dan Bina Marga (DSDABM)</option>
+                        <option value="Dinas Cipta Karya, Bina Konstruksi dan Tata Ruang (Disciptabintar)" {{ $selectedLeading === 'Dinas Cipta Karya, Bina Konstruksi dan Tata Ruang (Disciptabintar)' ? 'selected' : '' }}>Dinas Cipta Karya, Bina Konstruksi dan Tata Ruang (Disciptabintar)</option>
+                        <option value="Dinas Perumahan dan Kawasan Permukiman (DPKP)" {{ $selectedLeading === 'Dinas Perumahan dan Kawasan Permukiman (DPKP)' ? 'selected' : '' }}>Dinas Perumahan dan Kawasan Permukiman (DPKP)</option>
+                        <option value="Dinas Sosial (Dinsos)" {{ $selectedLeading === 'Dinas Sosial (Dinsos)' ? 'selected' : '' }}>Dinas Sosial (Dinsos)</option>
+                        <option value="Dinas Tenaga Kerja (Disnaker)" {{ $selectedLeading === 'Dinas Tenaga Kerja (Disnaker)' ? 'selected' : '' }}>Dinas Tenaga Kerja (Disnaker)</option>
+                        <option value="Dinas Kependudukan dan Pencatatan Sipil (Disdukcapil)" {{ $selectedLeading === 'Dinas Kependudukan dan Pencatatan Sipil (Disdukcapil)' ? 'selected' : '' }}>Dinas Kependudukan dan Pencatatan Sipil (Disdukcapil)</option>
+                        <option value="Dinas Koperasi dan Usaha Kecil dan Menengah (KUKM)" {{ $selectedLeading === 'Dinas Koperasi dan Usaha Kecil dan Menengah (KUKM)' ? 'selected' : '' }}>Dinas Koperasi dan Usaha Kecil dan Menengah (KUKM)</option>
+                        <option value="Dinas Perdagangan dan Perindustrian (Disdagin)" {{ $selectedLeading === 'Dinas Perdagangan dan Perindustrian (Disdagin)' ? 'selected' : '' }}>Dinas Perdagangan dan Perindustrian (Disdagin)</option>
+                        <option value="Dinas Kebudayaan dan Pariwisata (Disbudpar)" {{ $selectedLeading === 'Dinas Kebudayaan dan Pariwisata (Disbudpar)' ? 'selected' : '' }}>Dinas Kebudayaan dan Pariwisata (Disbudpar)</option>
+                        <option value="Dinas Pemuda dan Olahraga (Dispora)" {{ $selectedLeading === 'Dinas Pemuda dan Olahraga (Dispora)' ? 'selected' : '' }}>Dinas Pemuda dan Olahraga (Dispora)</option>
+                        <option value="Dinas Ketahanan Pangan dan Pertanian (DKPP)" {{ $selectedLeading === 'Dinas Ketahanan Pangan dan Pertanian (DKPP)' ? 'selected' : '' }}>Dinas Ketahanan Pangan dan Pertanian (DKPP)</option>
+                        <option value="Dinas Lingkungan Hidup (DLH)" {{ $selectedLeading === 'Dinas Lingkungan Hidup (DLH)' ? 'selected' : '' }}>Dinas Lingkungan Hidup (DLH)</option>
+                        <option value="Dinas Pengendalian Penduduk dan KB (DPPKB)" {{ $selectedLeading === 'Dinas Pengendalian Penduduk dan KB (DPPKB)' ? 'selected' : '' }}>Dinas Pengendalian Penduduk dan KB (DPPKB)</option>
+                        <option value="Dinas Pemberdayaan Perempuan dan Perlindungan Anak (DP3A)" {{ $selectedLeading === 'Dinas Pemberdayaan Perempuan dan Perlindungan Anak (DP3A)' ? 'selected' : '' }}>Dinas Pemberdayaan Perempuan dan Perlindungan Anak (DP3A)</option>
+                        <option value="Dinas Kebakaran dan Penanggulangan Bencana (Diskar PB)" {{ $selectedLeading === 'Dinas Kebakaran dan Penanggulangan Bencana (Diskar PB)' ? 'selected' : '' }}>Dinas Kebakaran dan Penanggulangan Bencana (Diskar PB)</option>
+                        <option value="Dinas Penanaman Modal dan PTSP (DPMPTSP)" {{ $selectedLeading === 'Dinas Penanaman Modal dan PTSP (DPMPTSP)' ? 'selected' : '' }}>Dinas Penanaman Modal dan PTSP (DPMPTSP)</option>
+                        <option value="Dinas Perpustakaan dan Kearsipan (Dispusip)" {{ $selectedLeading === 'Dinas Perpustakaan dan Kearsipan (Dispusip)' ? 'selected' : '' }}>Dinas Perpustakaan dan Kearsipan (Dispusip)</option>
+                        <option value="Satuan Polisi Pamong Praja (Satpol PP)" {{ $selectedLeading === 'Satuan Polisi Pamong Praja (Satpol PP)' ? 'selected' : '' }}>Satuan Polisi Pamong Praja (Satpol PP)</option>
+                    </optgroup>
+                    <optgroup label="Badan & Inspektorat">
+                        <option value="Badan Perencanaan Pembangunan, Penelitian dan Pengembangan (Bappelitbang)" {{ $selectedLeading === 'Badan Perencanaan Pembangunan, Penelitian dan Pengembangan (Bappelitbang)' ? 'selected' : '' }}>Badan Perencanaan Pembangunan, Penelitian dan Pengembangan (Bappelitbang)</option>
+                        <option value="Badan Pendapatan Daerah (Bapenda)" {{ $selectedLeading === 'Badan Pendapatan Daerah (Bapenda)' ? 'selected' : '' }}>Badan Pendapatan Daerah (Bapenda)</option>
+                        <option value="Badan Keuangan dan Aset Daerah (BKAD)" {{ $selectedLeading === 'Badan Keuangan dan Aset Daerah (BKAD)' ? 'selected' : '' }}>Badan Keuangan dan Aset Daerah (BKAD)</option>
+                        <option value="Badan Kepegawaian dan Pengembangan SDM (BKPSDM)" {{ $selectedLeading === 'Badan Kepegawaian dan Pengembangan SDM (BKPSDM)' ? 'selected' : '' }}>Badan Kepegawaian dan Pengembangan SDM (BKPSDM)</option>
+                        <option value="Badan Kesatuan Bangsa dan Politik (Bakesbangpol)" {{ $selectedLeading === 'Badan Kesatuan Bangsa dan Politik (Bakesbangpol)' ? 'selected' : '' }}>Badan Kesatuan Bangsa dan Politik (Bakesbangpol)</option>
+                        <option value="Badan Penanggulangan Bencana Daerah (BPBD)" {{ $selectedLeading === 'Badan Penanggulangan Bencana Daerah (BPBD)' ? 'selected' : '' }}>Badan Penanggulangan Bencana Daerah (BPBD)</option>
+                        <option value="Inspektorat Daerah Kota Bandung" {{ $selectedLeading === 'Inspektorat Daerah Kota Bandung' ? 'selected' : '' }}>Inspektorat Daerah Kota Bandung</option>
+                    </optgroup>
+                    <optgroup label="Sekretariat & Bagian Setda">
+                        <option value="Bagian Protokol dan Komunikasi Pimpinan (Prokopim)" {{ $selectedLeading === 'Bagian Protokol dan Komunikasi Pimpinan (Prokopim)' ? 'selected' : '' }}>Bagian Protokol dan Komunikasi Pimpinan (Prokopim)</option>
+                        <option value="Bagian Tata Pemerintahan" {{ $selectedLeading === 'Bagian Tata Pemerintahan' ? 'selected' : '' }}>Bagian Tata Pemerintahan</option>
+                        <option value="Bagian Kesejahteraan Rakyat" {{ $selectedLeading === 'Bagian Kesejahteraan Rakyat' ? 'selected' : '' }}>Bagian Kesejahteraan Rakyat</option>
+                        <option value="Bagian Hukum" {{ $selectedLeading === 'Bagian Hukum' ? 'selected' : '' }}>Bagian Hukum</option>
+                        <option value="Bagian Perekonomian" {{ $selectedLeading === 'Bagian Perekonomian' ? 'selected' : '' }}>Bagian Perekonomian</option>
+                        <option value="Bagian Pengadaan Barang dan Jasa" {{ $selectedLeading === 'Bagian Pengadaan Barang dan Jasa' ? 'selected' : '' }}>Bagian Pengadaan Barang dan Jasa</option>
+                        <option value="Bagian Organisasi" {{ $selectedLeading === 'Bagian Organisasi' ? 'selected' : '' }}>Bagian Organisasi</option>
+                        <option value="Bagian Umum" {{ $selectedLeading === 'Bagian Umum' ? 'selected' : '' }}>Bagian Umum</option>
+                        <option value="Bagian Perencanaan dan Keuangan" {{ $selectedLeading === 'Bagian Perencanaan dan Keuangan' ? 'selected' : '' }}>Bagian Perencanaan dan Keuangan</option>
+                        <option value="Bagian Sumber Daya Alam" {{ $selectedLeading === 'Bagian Sumber Daya Alam' ? 'selected' : '' }}>Bagian Sumber Daya Alam</option>
+                        <option value="Sekretariat Daerah (Setda)" {{ $selectedLeading === 'Sekretariat Daerah (Setda)' ? 'selected' : '' }}>Sekretariat Daerah (Setda)</option>
+                        <option value="Sekretariat DPRD Kota Bandung" {{ $selectedLeading === 'Sekretariat DPRD Kota Bandung' ? 'selected' : '' }}>Sekretariat DPRD Kota Bandung</option>
+                    </optgroup>
+                    <optgroup label="Kewilayahan & Lainnya">
+                        <option value="Kecamatan se-Kota Bandung" {{ $selectedLeading === 'Kecamatan se-Kota Bandung' ? 'selected' : '' }}>Kecamatan se-Kota Bandung</option>
+                        <option value="Kelurahan se-Kota Bandung" {{ $selectedLeading === 'Kelurahan se-Kota Bandung' ? 'selected' : '' }}>Kelurahan se-Kota Bandung</option>
+                        <option value="BUMD / Perumda Kota Bandung" {{ $selectedLeading === 'BUMD / Perumda Kota Bandung' ? 'selected' : '' }}>BUMD / Perumda Kota Bandung</option>
+                        <option value="Instansi Vertikal / Mitra Eksternal" {{ $selectedLeading === 'Instansi Vertikal / Mitra Eksternal' ? 'selected' : '' }}>Instansi Vertikal / Mitra Eksternal</option>
+                        <option value="lainnya" {{ $selectedLeading === 'lainnya' ? 'selected' : '' }}>Lainnya (Ketik Manual)</option>
+                    </optgroup>
+                </select>
+                <div id="leadingCustomWrapper" style="display: {{ $isLeadingCustom ? 'block' : 'none' }}; margin-top: 10px;">
+                    <input type="text" class="form-input" name="leading_sektor_custom" id="inputLeadingCustom"
+                           value="{{ $customLeadingVal }}"
+                           placeholder="Ketik nama dinas / instansi pengampu..." {{ $isLeadingCustom ? 'required' : '' }}>
+                </div>
                 <span class="form-hint">Dinas, Badan, Bagian, atau Instansi yang menaungi acara.</span>
             </div>
         </div>
@@ -350,6 +435,21 @@
 function toggleLokasiCustom(val) {
     const wrap = document.getElementById('lokasiCustomWrapper');
     const input = document.getElementById('inputLokasiCustom');
+    if (wrap && input) {
+        if (val === 'lainnya') {
+            wrap.style.display = 'block';
+            input.required = true;
+            input.focus();
+        } else {
+            wrap.style.display = 'none';
+            input.required = false;
+        }
+    }
+}
+
+function toggleLeadingCustom(val) {
+    const wrap = document.getElementById('leadingCustomWrapper');
+    const input = document.getElementById('inputLeadingCustom');
     if (wrap && input) {
         if (val === 'lainnya') {
             wrap.style.display = 'block';

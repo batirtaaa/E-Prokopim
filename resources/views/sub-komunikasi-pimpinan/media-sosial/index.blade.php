@@ -592,19 +592,18 @@
 <div class="ms-toolbar-wrap">
     <div class="ms-tabs">
         <a href="{{ route('media-sosial.index', ['tab' => 'infografis', 'tahun' => $selectedTahun ?? now()->year]) }}" class="ms-tab {{ $tab === 'infografis' ? 'active' : '' }}">Infografis</a>
-        <a href="{{ route('media-sosial.index', ['tab' => 'videografis']) }}" class="ms-tab {{ $tab === 'videografis' ? 'active' : '' }}">Videografis</a>
-        <a href="{{ route('media-sosial.index', ['tab' => 'media_luar_ruang']) }}" class="ms-tab {{ $tab === 'media_luar_ruang' ? 'active' : '' }}">Media Luar Ruang</a>
+        <a href="{{ route('media-sosial.index', ['tab' => 'videografis', 'tahun' => $selectedTahun ?? now()->year]) }}" class="ms-tab {{ $tab === 'videografis' ? 'active' : '' }}">Videografis</a>
+        <a href="{{ route('media-sosial.index', ['tab' => 'media_luar_ruang', 'tahun' => $selectedTahun ?? now()->year]) }}" class="ms-tab {{ $tab === 'media_luar_ruang' ? 'active' : '' }}">Media Luar Ruang</a>
     </div>
 
-    @if($tab === 'infografis')
-    {{-- Filter Tahun di Toolbar --}}
+    {{-- Filter Tahun di Toolbar — sama untuk semua tab --}}
     <div class="ms-toolbar-right" style="padding-right: 12px;">
         <div style="display:flex; align-items:center; gap:8px;">
             <span style="font-size:12.5px; font-weight:600; color:#64748b; display:flex; align-items:center; gap:5px;">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:15px;height:15px;color:#1e3a5f"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
                 Tahun:
             </span>
-            <select onchange="window.location.href='{{ route('media-sosial.index', ['tab' => 'infografis']) }}&tahun=' + this.value"
+            <select onchange="window.location.href='{{ route('media-sosial.index') }}?tab={{ $tab }}&tahun=' + this.value"
                     style="padding:6px 14px; font-size:13px; font-weight:700; border-radius:8px; border:1.5px solid #cbd5e1; background:#f8fafc; color:#1e3a5f; cursor:pointer; outline:none; transition:all 0.15s;">
                 @foreach($availableYears ?? [now()->year] as $yr)
                     <option value="{{ $yr }}" {{ ($selectedTahun ?? now()->year) == $yr ? 'selected' : '' }}>{{ $yr }}</option>
@@ -612,30 +611,12 @@
             </select>
         </div>
     </div>
-    @else
-    {{-- Search bar untuk tab selain infografis --}}
-    <form method="GET" action="{{ route('media-sosial.index') }}" class="ms-toolbar-right">
-        <input type="hidden" name="tab" value="{{ $tab }}">
-        <div class="ms-search-wrap">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-            <input type="text" class="ms-search-input" name="search" value="{{ request('search') }}" placeholder="Cari judul atau tag...">
-        </div>
-        <button type="submit" name="bulan" value="1" class="ms-btn-filter">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
-            Bulan Ini
-        </button>
-        <button type="submit" class="ms-btn-filter">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"/></svg>
-            Filter
-        </button>
-    </form>
-    @endif
 </div>
 
 {{-- ============================================================
-     TAB INFOGRAFIS → Tampilan Folder 12 Bulan
+     SEMUA TAB → Tampilan Folder 12 Bulan (konsisten)
      ============================================================ --}}
-@if($tab === 'infografis')
+@if(true)
 
 
 
@@ -654,7 +635,7 @@
         $cs = $colorSchemes[($folder['bulan'] - 1) % count($colorSchemes)];
         $namaBulan = [1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'Mei',6=>'Jun',7=>'Jul',8=>'Agt',9=>'Sep',10=>'Okt',11=>'Nov',12=>'Des'];
     @endphp
-    <a href="{{ route('media-sosial.folder', [$folder['tahun'], str_pad($folder['bulan'], 2, '0', STR_PAD_LEFT)]) }}"
+    <a href="{{ route('media-sosial.folder', [$tab, $folder['tahun'], str_pad($folder['bulan'], 2, '0', STR_PAD_LEFT)]) }}"
        class="folder-card" style="--folder-accent:{{ $cs['accent'] }}">
         {{-- Icon Kalender dengan angka bulan --}}
         <div class="folder-icon-wrap" style="background:{{ $cs['bg'] }}">
@@ -679,132 +660,10 @@
     @endforeach
 </div>
 
-{{-- ============================================================
-     TAB VIDEOGRAFIS / MEDIA LUAR RUANG → Card Grid biasa
-     ============================================================ --}}
-@else
 
-<div class="ms-grid">
-    @forelse($items as $item)
-    <div class="ms-card">
-        {{-- Thumbnail --}}
-        <div class="ms-card-thumb">
-            @if($item->file_path)
-                @if(Str::endsWith($item->file_path, ['.mp4', '.mov']))
-                    <video src="{{ asset('storage/' . $item->file_path) }}" style="width:100%;height:100%;object-fit:cover" muted></video>
-                @else
-                    <img src="{{ asset('storage/' . $item->file_path) }}" alt="{{ $item->judul }}">
-                @endif
-            @else
-                <div class="ms-mock-preview">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" style="width:44px;height:44px;color:#94a3b8;margin-bottom:6px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
-                    <span style="font-size:11px;font-weight:600;color:#64748b">{{ strtoupper($item->kategori) }}</span>
-                </div>
-            @endif
-            <span class="ms-platform-badge">{{ $item->platform_label }}</span>
-        </div>
+@endif {{-- end @if(true) --}}
 
-        {{-- Body --}}
-        <div class="ms-card-body">
-            <div class="ms-card-header-row">
-                <div class="ms-card-title" title="{{ $item->judul }}">{{ $item->judul }}</div>
-                <div style="position:relative">
-                    <button type="button" class="ms-menu-btn" onclick="toggleCardMenu(event, 'menu-{{ $item->id }}')">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px;height:16px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"/></svg>
-                    </button>
-                    <div id="menu-{{ $item->id }}" class="dropdown-menu-card">
-                        @if(auth()->user()->isAdmin())
-                        <button type="button" class="dropdown-menu-item" onclick="editMedia({{ json_encode($item) }})">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/></svg>
-                            Edit
-                        </button>
-                        @endif
-                        @if($item->link_post)
-                        <a href="{{ $item->link_post }}" target="_blank" rel="noopener noreferrer" class="dropdown-menu-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg>
-                            Buka Link URL
-                        </a>
-                        @endif
-                        @if($item->file_path)
-                            <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank" class="dropdown-menu-item" download>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-                                Unduh File
-                            </a>
-                        @endif
-                        @if(auth()->user()->isAdmin())
-                        <form method="POST" action="{{ route('media-sosial.destroy', $item) }}" onsubmit="return confirm('Hapus media ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="dropdown-menu-item danger">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
-                                Hapus
-                            </button>
-                        </form>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <div class="ms-card-desc">
-                {{ $item->deskripsi ?: 'Tidak ada deskripsi singkat.' }}
-            </div>
-            <div class="ms-card-footer">
-                <div class="ms-date">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
-                    <span>{{ $item->tanggal_publikasi ? $item->tanggal_publikasi->format('d M Y') : '—' }}</span>
-                </div>
-                <span class="ms-status-badge ms-status-{{ $item->status }}">
-                    {{ $item->status_label }}
-                </span>
-            </div>
-        </div>
-    </div>
-    @empty
-    @endforelse
 
-    @if(auth()->user()->isAdmin())
-    {{-- "Tambah Desain Baru" Card --}}
-    <a href="javascript:void(0)" onclick="openUploadModal('{{ $tab }}')" class="ms-card-add">
-        <div class="ms-add-icon-wrap">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
-        </div>
-        <div class="ms-add-title">Tambah Desain Baru</div>
-        <div class="ms-add-sub">
-            @if($tab === 'videografis')
-                Unggah video grafis (.mp4, .mov) untuk diarsipkan.
-            @else
-                Unggah desain billboard, baliho atau materi media luar ruang.
-            @endif
-        </div>
-    </a>
-    @endif
-</div>
-
-{{-- Pagination --}}
-@if(isset($items) && ($items->hasPages() || $items->total() > 0))
-<div class="ms-pagination-wrap">
-    @if($items->onFirstPage())
-        <span class="ms-page-btn disabled"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:13px;height:13px"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg></span>
-    @else
-        <a href="{{ $items->previousPageUrl() }}" class="ms-page-btn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:13px;height:13px"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg></a>
-    @endif
-
-    @for($page = 1; $page <= max(1, $items->lastPage()); $page++)
-        @if($page == $items->currentPage())
-            <span class="ms-page-btn active">{{ $page }}</span>
-        @else
-            <a href="{{ $items->url($page) }}" class="ms-page-btn">{{ $page }}</a>
-        @endif
-    @endfor
-
-    @if($items->hasMorePages())
-        <a href="{{ $items->nextPageUrl() }}" class="ms-page-btn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:13px;height:13px"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg></a>
-    @else
-        <span class="ms-page-btn disabled"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:13px;height:13px"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg></span>
-    @endif
-</div>
-@endif
-
-@endif {{-- end @else (bukan infografis) --}}
 
 {{-- ============================================================
      Upload / Create Modal

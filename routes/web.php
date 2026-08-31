@@ -68,7 +68,7 @@ Route::middleware('auth')->group(function () {
     // Komunikasi Pimpinan — Media Sosial
     Route::get('/komunikasi-pimpinan/media-sosial', [MediaSosialController::class, 'index'])->name('media-sosial.index');
     Route::get('/komunikasi-pimpinan/media-sosial/export-rekap', [MediaSosialController::class, 'exportRekap'])->name('media-sosial.export-rekap');
-    Route::get('/komunikasi-pimpinan/media-sosial/infografis/{tahun}/{bulan}', [MediaSosialController::class, 'folderBulan'])->name('media-sosial.folder');
+    Route::get('/komunikasi-pimpinan/media-sosial/{kategori}/{tahun}/{bulan}', [MediaSosialController::class, 'folderBulan'])->name('media-sosial.folder');
     Route::post('/komunikasi-pimpinan/media-sosial', [MediaSosialController::class, 'store'])->name('media-sosial.store');
     Route::put('/komunikasi-pimpinan/media-sosial/{mediaSosial}', [MediaSosialController::class, 'update'])->name('media-sosial.update');
     Route::delete('/komunikasi-pimpinan/media-sosial/{mediaSosial}', [MediaSosialController::class, 'destroy'])->name('media-sosial.destroy');

@@ -13,16 +13,18 @@ class Sambutan extends Model
     protected $table = 'sambutan';
 
     protected $fillable = [
-        'nomor_surat', 'tanggal_surat', 'asal_instansi', 'perihal',
-        'deskripsi_singkat', 'tanggal_terima', 'tenggat_waktu',
+        'nomor_surat', 'tanggal_surat', 'tanggal_acara', 'asal_instansi', 'tujuan',
+        'perihal', 'deskripsi_singkat', 'tanggal_terima', 'tenggat_waktu', 'deadline_at',
         'file_path', 'file_name', 'status_urgensi', 'instruksi_disposisi',
         'petugas_id', 'jenis', 'status', 'created_by',
     ];
 
     protected $casts = [
         'tanggal_surat'  => 'date',
+        'tanggal_acara'  => 'date',
         'tanggal_terima' => 'date',
         'tenggat_waktu'  => 'date',
+        'deadline_at'    => 'datetime',
     ];
 
     public function petugas(): BelongsTo
@@ -50,6 +52,24 @@ class Sambutan extends Model
             'penting' => 'Penting',
             'segera'  => 'Segera',
             default   => 'Biasa',
+        };
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return match($this->status) {
+            'selesai'  => 'Selesai',
+            'diproses' => 'Progres',
+            default    => 'Draft',
+        };
+    }
+
+    public function getStatusBadgeClassAttribute(): string
+    {
+        return match($this->status) {
+            'selesai'  => 'sb-status-selesai',
+            'diproses' => 'sb-status-progres',
+            default    => 'sb-status-draft',
         };
     }
 }

@@ -279,6 +279,22 @@
 .pgw-email-text {
     font-size: 12px;
     color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+.pgw-email-text svg {
+    color: #94a3b8;
+    transition: color 0.15s ease;
+    flex-shrink: 0;
+}
+.pgw-email-text:hover {
+    color: #2563eb;
+}
+.pgw-email-text:hover svg {
+    color: #2563eb;
 }
 
 /* Status Pill Badges */
@@ -526,7 +542,16 @@
                         <td>
                             <div class="pgw-name-block">
                                 <span class="pgw-name-text">{{ $p->nama_lengkap }}</span>
-                                <span class="pgw-email-text">{{ $p->display_email }}</span>
+                                @if($p->display_email)
+                                    <a href="mailto:{{ $p->display_email }}" class="pgw-email-text" title="Kirim Email ke {{ $p->display_email }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="13" height="13">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                        </svg>
+                                        <span>{{ $p->display_email }}</span>
+                                    </a>
+                                @else
+                                    <span class="pgw-email-text">-</span>
+                                @endif
                             </div>
                         </td>
                         <td style="font-weight: 500; color: #334155;">{{ $p->nip ?? '-' }}</td>
@@ -538,20 +563,6 @@
                         </td>
                         <td>
                             <div class="pgw-row-actions">
-                                {{-- Download / Email details --}}
-                                <a href="mailto:{{ $p->display_email }}" class="pgw-icon-btn" title="Kirim Email">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="16" height="16">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                                    </svg>
-                                </a>
-
-                                {{-- WhatsApp button --}}
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $p->phone ?: '6281234567890') }}?text={{ urlencode('Halo ' . $p->nama_lengkap . ', terkait koordinasi Prokopim Kota Bandung:') }}" target="_blank" class="pgw-icon-btn whatsapp-btn" title="Hubungi via WhatsApp">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
-                                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                                    </svg>
-                                </a>
-
                                 @if(auth()->user()->isAdmin())
                                 {{-- Edit Link --}}
                                 <a href="{{ route('pegawai.edit', $p) }}" class="pgw-icon-btn" title="Edit Pegawai">
@@ -565,6 +576,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                                     </button>
                                 </form>
+                                @else
+                                <span style="color:#cbd5e1;font-size:13px">—</span>
                                 @endif
                             </div>
                         </td>

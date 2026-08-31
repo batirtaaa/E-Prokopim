@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Infografis — {$folderLabel} — Arsip Media Sosial")
+@section('title', ucwords(str_replace('_', ' ', $kategori)) . " — {$folderLabel} — Arsip Media Sosial")
 
 @push('styles')
 <style>
@@ -378,9 +378,9 @@
 
 {{-- Breadcrumb --}}
 <div class="folder-breadcrumb">
-    <a href="{{ route('media-sosial.index', ['tab' => 'infografis', 'tahun' => $tahun]) }}">Arsip Media Sosial</a>
+    <a href="{{ route('media-sosial.index', ['tab' => $kategori, 'tahun' => $tahun]) }}">Arsip Media Sosial</a>
     <span class="sep">/</span>
-    <a href="{{ route('media-sosial.index', ['tab' => 'infografis', 'tahun' => $tahun]) }}">Infografis ({{ $tahun }})</a>
+    <a href="{{ route('media-sosial.index', ['tab' => $kategori, 'tahun' => $tahun]) }}">{{ ucwords(str_replace('_', ' ', $kategori)) }} ({{ $tahun }})</a>
     <span class="sep">/</span>
     <span class="current">{{ $folderLabel }}</span>
 </div>
@@ -396,11 +396,11 @@
         <div class="folder-header-info">
             <h1>{{ $folderLabel }}</h1>
             <p>
-                <strong style="color:#1e3a5f">{{ $items->total() }}</strong> infografis ditemukan
+                <strong style="color:#1e3a5f">{{ $items->total() }}</strong> item ditemukan
                 @if(request('search'))
                     &mdash; pencarian "<em>{{ request('search') }}</em>"
                 @endif
-                @if(request('kat'))
+                @if($kategori === 'infografis' && request('kat'))
                     &mdash; kategori "<em>{{ $subKategoriList[request('kat')] ?? request('kat') }}</em>"
                 @endif
             </p>
@@ -413,7 +413,7 @@
             </svg>
             Rekap Excel ({{ $tahun }})
         </a>
-        <a href="{{ route('media-sosial.index', ['tab' => 'infografis', 'tahun' => $tahun]) }}" class="btn-back">
+        <a href="{{ route('media-sosial.index', ['tab' => $kategori, 'tahun' => $tahun]) }}" class="btn-back">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
             Semua Bulan ({{ $tahun }})
         </a>
@@ -427,7 +427,7 @@
 </div>
 
 {{-- Search & Filter Bar --}}
-<form method="GET" action="{{ route('media-sosial.folder', [$tahun, str_pad($bulan, 2, '0', STR_PAD_LEFT)]) }}" id="searchForm">
+<form method="GET" action="{{ route('media-sosial.folder', [$kategori, $tahun, str_pad($bulan, 2, '0', STR_PAD_LEFT)]) }}" id="searchForm">
     <div class="folder-search-bar">
         <div class="folder-search-wrap">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -436,7 +436,7 @@
             <input type="text" class="folder-search-input" name="search"
                    value="{{ request('search') }}"
                    id="searchInput"
-                   placeholder="Cari judul atau tanggal (contoh: 17, Agustus, 17-08-2026)...">
+                   placeholder="Cari judul, platform, atau tanggal...">
         </div>
         @if(request('kat')) <input type="hidden" name="kat" value="{{ request('kat') }}"> @endif
         <button type="submit" class="folder-filter-btn">
@@ -465,14 +465,14 @@
                 @endforeach
             </select>
             @if((int)$bulan !== (int)now()->month || (int)$tahun !== (int)now()->year)
-            <a href="{{ route('media-sosial.folder', [now()->year, str_pad(now()->month, 2, '0', STR_PAD_LEFT)]) }}" class="folder-filter-btn" title="Pindah langsung ke Bulan Ini" style="color:#2563eb; border-color:#93c5fd; background:#eff6ff; font-weight:600;">
+            <a href="{{ route('media-sosial.folder', [$kategori, now()->year, str_pad(now()->month, 2, '0', STR_PAD_LEFT)]) }}" class="folder-filter-btn" title="Pindah langsung ke Bulan Ini" style="color:#2563eb; border-color:#93c5fd; background:#eff6ff; font-weight:600;">
                 Bulan Ini
             </a>
             @endif
         </div>
 
         @if(request('search') || request('kat'))
-        <a href="{{ route('media-sosial.folder', [$tahun, str_pad($bulan, 2, '0', STR_PAD_LEFT)]) }}"
+        <a href="{{ route('media-sosial.folder', [$kategori, $tahun, str_pad($bulan, 2, '0', STR_PAD_LEFT)]) }}"
            class="folder-filter-btn" style="color:#ef4444;border-color:#fca5a5">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
             Reset
@@ -481,26 +481,28 @@
     </div>
 </form>
 
-{{-- Filter Kategori Chips --}}
+{{-- Filter Kategori Chips — hanya untuk Infografis --}}
+@if($kategori === 'infografis')
 <div class="kategori-filter-wrap">
-    <a href="{{ route('media-sosial.folder', [$tahun, str_pad($bulan, 2, '0', STR_PAD_LEFT)]) }}{{ request('search') ? '?search='.urlencode(request('search')) : '' }}"
+    <a href="{{ route('media-sosial.folder', [$kategori, $tahun, str_pad($bulan, 2, '0', STR_PAD_LEFT)]) }}{{ request('search') ? '?search='.urlencode(request('search')) : '' }}"
        class="kat-btn {{ !request('kat') ? 'active' : '' }}">
         Semua Kategori
     </a>
     @foreach($subKategoriList as $key => $label)
     @php $dotColor = $katColorDot[$key] ?? '#6b7280'; @endphp
-    <a href="{{ route('media-sosial.folder', [$tahun, str_pad($bulan, 2, '0', STR_PAD_LEFT)]) }}?kat={{ $key }}{{ request('search') ? '&search='.urlencode(request('search')) : '' }}"
+    <a href="{{ route('media-sosial.folder', [$kategori, $tahun, str_pad($bulan, 2, '0', STR_PAD_LEFT)]) }}?kat={{ $key }}{{ request('search') ? '&search='.urlencode(request('search')) : '' }}"
        class="kat-btn {{ request('kat') === $key ? 'active' : '' }}">
         <span class="kat-btn-dot" style="background:{{ $dotColor }}"></span>
         {{ $label }}
     </a>
     @endforeach
-    <a href="{{ route('media-sosial.folder', [$tahun, str_pad($bulan, 2, '0', STR_PAD_LEFT)]) }}?kat=lainnya{{ request('search') ? '&search='.urlencode(request('search')) : '' }}"
+    <a href="{{ route('media-sosial.folder', [$kategori, $tahun, str_pad($bulan, 2, '0', STR_PAD_LEFT)]) }}?kat=lainnya{{ request('search') ? '&search='.urlencode(request('search')) : '' }}"
        class="kat-btn {{ request('kat') === 'lainnya' ? 'active' : '' }}">
         <span class="kat-btn-dot" style="background:#7c3aed"></span>
         Lainnya
     </a>
 </div>
+@endif
 
 {{-- File Grid --}}
 @if($items->count() > 0)
@@ -633,9 +635,9 @@
         @if(request('search'))
             Coba kata kunci lain, misalnya "17" untuk tanggal 17, atau "Agustus".
         @elseif(request('kat'))
-            Tidak ada infografis kategori <strong>{{ $subKategoriList[request('kat')] ?? request('kat') }}</strong> di bulan ini.
+            Tidak ada item kategori <strong>{{ $subKategoriList[request('kat')] ?? request('kat') }}</strong> di bulan ini.
         @else
-            Belum ada infografis yang diarsipkan untuk <strong>{{ $folderLabel }}</strong>.
+            Belum ada media yang diarsipkan untuk <strong>{{ $folderLabel }}</strong>.
         @endif
     </p>
     @if(auth()->user()->isAdmin() && !request('search') && !request('kat'))
@@ -651,20 +653,21 @@
 <div id="uploadModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 id="modalTitle">Upload Infografis — {{ $folderLabel }}</h3>
+            <h3 id="modalTitle">Upload {{ ucwords(str_replace('_', ' ', $kategori)) }} — {{ $folderLabel }}</h3>
             <button type="button" class="modal-close" onclick="closeModal('uploadModal')">&times;</button>
         </div>
         <form id="mediaForm" method="POST" action="{{ route('media-sosial.store') }}" enctype="multipart/form-data">
             @csrf
             <div id="methodField"></div>
-            <input type="hidden" name="kategori" value="infografis">
+            <input type="hidden" name="kategori" value="{{ $kategori }}">
             <div class="modal-body">
                 <div class="form-group-m">
                     <label class="form-label-m">Judul Media <span class="req">*</span></label>
-                    <input type="text" class="form-input-m" name="judul" id="inputJudul" placeholder="Contoh: Hari Kemerdekaan RI ke-81..." required>
+                    <input type="text" class="form-input-m" name="judul" id="inputJudul" placeholder="Contoh: Capaian Kinerja..." required>
                 </div>
 
-                {{-- Sub Kategori --}}
+                {{-- Sub Kategori (Hanya untuk Infografis) --}}
+                @if($kategori === 'infografis')
                 <div class="form-group-m">
                     <label class="form-label-m">Kategori Infografis <span class="req">*</span></label>
                     <select class="form-select-m" name="sub_kategori" id="inputSubKategori" onchange="onSubKategoriChange(this.value)" required>
@@ -679,17 +682,27 @@
                                placeholder="Ketik kategori infografis..." maxlength="100">
                     </div>
                 </div>
+                @endif
 
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
                     <div class="form-group-m">
-                        <label class="form-label-m">Platform Media Sosial <span class="req">*</span></label>
+                        <label class="form-label-m">Platform / Media <span class="req">*</span></label>
                         <select class="form-select-m" name="platform" id="inputPlatform" onchange="onPlatformChange(this.value)" required>
-                            <option value="instagram">Instagram</option>
-                            <option value="facebook">Facebook</option>
-                            <option value="tiktok">TikTok</option>
-                            <option value="youtube">YouTube</option>
-                            <option value="x_twitter">X (Twitter)</option>
-                            <option value="lainnya">Lainnya</option>
+                            @if($kategori === 'media_luar_ruang')
+                                <option value="billboard">Billboard</option>
+                                <option value="videotron">Videotron</option>
+                                <option value="baliho">Baliho</option>
+                                <option value="spanduk">Spanduk</option>
+                                <option value="banner">Banner / X-Banner</option>
+                                <option value="lainnya">Lainnya</option>
+                            @else
+                                <option value="instagram">Instagram</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="tiktok">TikTok</option>
+                                <option value="youtube">YouTube</option>
+                                <option value="x_twitter">X (Twitter)</option>
+                                <option value="lainnya">Lainnya</option>
+                            @endif
                         </select>
                         <div id="platformCustomWrapper" style="display:none; margin-top:8px">
                             <input type="text" class="form-input-m" name="platform_custom" id="inputPlatformCustom"
@@ -785,11 +798,13 @@ function openUploadModal() {
     form.reset();
     form.action = "{{ route('media-sosial.store') }}";
     document.getElementById('methodField').innerHTML = '';
-    document.getElementById('modalTitle').textContent = 'Upload Infografis — {{ $folderLabel }}';
+    document.getElementById('modalTitle').textContent = 'Upload {{ ucwords(str_replace('_', ' ', $kategori)) }} — {{ $folderLabel }}';
     document.getElementById('btnSubmitModal').textContent = 'Simpan ke Arsip';
     document.getElementById('inputTanggal').value = "{{ $tahun }}-{{ str_pad($bulan, 2, '0', STR_PAD_LEFT) }}-{{ date('d') }}";
     document.getElementById('inputLinkPost').value = '';
-    onSubKategoriChange('hari_besar');
+    if (document.getElementById('inputSubKategori')) {
+        onSubKategoriChange('hari_besar');
+    }
     document.getElementById('uploadModal').style.display = 'flex';
 }
 
@@ -798,40 +813,44 @@ function editMedia(item) {
     form.reset();
     form.action = "/komunikasi-pimpinan/media-sosial/" + item.id;
     document.getElementById('methodField').innerHTML = '@method("PUT")';
-    document.getElementById('modalTitle').textContent = 'Edit Data Infografis';
+    document.getElementById('modalTitle').textContent = 'Edit Data {{ ucwords(str_replace('_', ' ', $kategori)) }}';
     document.getElementById('btnSubmitModal').textContent = 'Perbarui Media';
 
     document.getElementById('inputJudul').value     = item.judul || '';
     // Set platform, handle custom
-    const knownPlatforms = ['instagram','facebook','tiktok','youtube','x_twitter','billboard','videotron','baliho','spanduk'];
+    const knownPlatforms = ['instagram','facebook','tiktok','youtube','x_twitter','billboard','videotron','baliho','spanduk','banner'];
     const platVal = item.platform || 'instagram';
     const platSelect = document.getElementById('inputPlatform');
     const platCustom = document.getElementById('inputPlatformCustom');
-    if (knownPlatforms.includes(platVal)) {
-        platSelect.value = platVal;
-        onPlatformChange(platVal);
-    } else {
-        platSelect.value = 'lainnya';
-        onPlatformChange('lainnya');
-        if (platCustom) platCustom.value = platVal;
+    if (platSelect) {
+        if (knownPlatforms.includes(platVal)) {
+            platSelect.value = platVal;
+            onPlatformChange(platVal);
+        } else {
+            platSelect.value = 'lainnya';
+            onPlatformChange('lainnya');
+            if (platCustom) platCustom.value = platVal;
+        }
     }
     document.getElementById('inputTanggal').value   = item.tanggal_publikasi ? item.tanggal_publikasi.split('T')[0] : '';
     document.getElementById('inputStatus').value    = item.status || 'dipublikasi';
     document.getElementById('inputDeskripsi').value = item.deskripsi || '';
     document.getElementById('inputLinkPost').value  = item.link_post || '';
 
-    const knownKeys = ['hari_besar', 'obituary', 'kamis_nyunda', 'giat_pimpinan'];
-    const sub = item.sub_kategori || '';
-    if (knownKeys.includes(sub)) {
-        document.getElementById('inputSubKategori').value = sub;
-        onSubKategoriChange(sub);
-    } else if (sub) {
-        document.getElementById('inputSubKategori').value = 'lainnya_custom';
-        onSubKategoriChange('lainnya_custom');
-        document.getElementById('inputSubKategoriCustom').value = sub;
-    } else {
-        document.getElementById('inputSubKategori').value = 'hari_besar';
-        onSubKategoriChange('hari_besar');
+    if (document.getElementById('inputSubKategori')) {
+        const knownKeys = ['hari_besar', 'obituary', 'kamis_nyunda', 'giat_pimpinan'];
+        const sub = item.sub_kategori || '';
+        if (knownKeys.includes(sub)) {
+            document.getElementById('inputSubKategori').value = sub;
+            onSubKategoriChange(sub);
+        } else if (sub) {
+            document.getElementById('inputSubKategori').value = 'lainnya_custom';
+            onSubKategoriChange('lainnya_custom');
+            document.getElementById('inputSubKategoriCustom').value = sub;
+        } else {
+            document.getElementById('inputSubKategori').value = 'hari_besar';
+            onSubKategoriChange('hari_besar');
+        }
     }
 
     document.getElementById('uploadModal').style.display = 'flex';
@@ -848,7 +867,7 @@ document.getElementById('searchInput')?.addEventListener('keydown', function(e) 
 function jumpToFolder() {
     const b = document.getElementById('jumpBulanSelect').value;
     const y = document.getElementById('jumpTahunSelect').value;
-    const baseUrl = "{{ url('/komunikasi-pimpinan/media-sosial/infografis') }}";
+    const baseUrl = "{{ url('/komunikasi-pimpinan/media-sosial/' . $kategori) }}";
     window.location.href = baseUrl + '/' + y + '/' + b;
 }
 </script>

@@ -125,9 +125,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-/* Table */
+}/* Table */
 .sb-table-wrap { background:white; border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; }
 .sb-table { width:100%; border-collapse:collapse; }
 .sb-table thead th {
@@ -144,8 +142,54 @@
 .sb-table tbody tr:hover { background:#fafbff; }
 .sb-table tbody tr.row-selected { background:#f0f7ff; }
 .sb-nomor { font-weight:600; color:#2563eb; font-size:13px; }
-.sb-perihal-main { font-weight:500; font-size:13px; color:#111827; }
+.sb-perihal-main { font-weight:500; font-size:13px; color:#111827; line-height: 1.4; }
 .sb-perihal-sub  { font-size:11.5px; color:#9ca3af; margin-top:2px; }
+.sb-tujuan-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #e0f2fe;
+    color: #0369a1;
+    margin-top: 4px;
+}
+.sb-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.sb-status-badge.sb-status-progres {
+    background: #fef3c7;
+    color: #b45309;
+}
+.sb-status-badge.sb-status-selesai {
+    background: #dcfce7;
+    color: #15803d;
+}
+.sb-status-badge.sb-status-draft {
+    background: #f1f5f9;
+    color: #475569;
+}
+.sb-deadline-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #475569;
+    margin-top: 3px;
+}
+.sb-deadline-badge.overdue {
+    color: #dc2626;
+    font-weight: 600;
+}
 
 /* Pagination */
 .sb-pagination { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-top:1px solid #f3f4f6; font-size:13px; color:#6b7280; }
@@ -219,7 +263,7 @@
         <input type="hidden" name="tab" value="{{ $jenis }}">
         <div class="sb-search-wrap">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-            <input type="text" class="sb-search-input" name="search" value="{{ request('search') }}" placeholder="Cari judul atau tag...">
+            <input type="text" class="sb-search-input" name="search" value="{{ request('search') }}" placeholder="Cari judul, tujuan, atau nomor surat...">
         </div>
         <button type="submit" name="bulan" value="1" class="sb-filter-btn">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
@@ -244,10 +288,10 @@
                 @endif
                 <th style="width:40px">No</th>
                 <th>Nomor Surat</th>
-                <th>Perihal</th>
-                <th>Tanggal Terima</th>
-                <th>Tenggat Waktu</th>
-                <th>Disposisi</th>
+                <th>Perihal &amp; Tujuan</th>
+                <th>Tanggal Acara</th>
+                <th>Deadline &amp; Disposisi</th>
+                <th>Status</th>
                 <th style="text-align:right">Aksi</th>
             </tr>
         </thead>
@@ -260,32 +304,78 @@
                 </td>
                 @endif
                 <td style="color:#9ca3af;font-size:13px">{{ $sambutan->firstItem() + $i }}</td>
-                <td><span class="sb-nomor">{{ $item->nomor_surat }}</span></td>
+                <td>
+                    <span class="sb-nomor">{{ $item->nomor_surat }}</span>
+                    <div style="font-size:11.5px;color:#64748b;margin-top:2px;">{{ $item->asal_instansi }}</div>
+                </td>
                 <td>
                     <div class="sb-perihal-main">{{ $item->perihal }}</div>
+                    @if($item->tujuan)
+                        <div class="sb-tujuan-badge">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:11px;height:11px"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+                            <span>{{ $item->tujuan }}</span>
+                        </div>
+                    @endif
                     @if($item->deskripsi_singkat)
                         <div class="sb-perihal-sub">{{ Str::limit($item->deskripsi_singkat, 40) }}</div>
                     @endif
                 </td>
-                <td>{{ $item->tanggal_terima ? $item->tanggal_terima->format('d M Y') : '—' }}</td>
-                <td>{{ $item->tenggat_waktu ? $item->tenggat_waktu->format('d M Y') : '—' }}</td>
-                <td>{{ $item->petugas ? $item->petugas->nama_lengkap : '—' }}</td>
+                <td>
+                    @if($item->tanggal_acara)
+                        <div style="font-weight:600;color:#0f172a;font-size:12.5px">{{ $item->tanggal_acara->translatedFormat('d M Y') }}</div>
+                    @elseif($item->tanggal_terima)
+                        <div style="color:#64748b;font-size:12px">{{ $item->tanggal_terima->translatedFormat('d M Y') }}</div>
+                    @else
+                        <span style="color:#9ca3af">—</span>
+                    @endif
+                </td>
+                <td>
+                    <div style="font-weight:500;color:#1e293b">{{ $item->petugas ? $item->petugas->nama_lengkap : '—' }}</div>
+                    @if($item->deadline_at)
+                        @php
+                            $isOverdue = $item->deadline_at->isPast() && $item->status !== 'selesai';
+                        @endphp
+                        <div class="sb-deadline-badge {{ $isOverdue ? 'overdue' : '' }}" title="Batas waktu disposisi: maks. 2 jam">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:12px;height:12px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span>{{ $item->deadline_at->format('d M Y, H:i') }}</span>
+                            @if($isOverdue)
+                                <span style="font-size:10px;background:#fef2f2;color:#ef4444;padding:1px 4px;border-radius:4px;border:1px solid #fca5a5">Terlewat</span>
+                            @endif
+                        </div>
+                    @elseif($item->tenggat_waktu)
+                        <div class="sb-deadline-badge">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:12px;height:12px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span>{{ $item->tenggat_waktu->format('d M Y') }}</span>
+                        </div>
+                    @endif
+                </td>
+                <td>
+                    <span class="sb-status-badge {{ $item->status_badge_class }}">
+                        {{ $item->status_label }}
+                    </span>
+                </td>
                 <td>
                     <div style="display:flex;gap:6px;align-items:center;justify-content:flex-end">
                         {{-- WhatsApp --}}
                         @php
                             $rowDocUrl = $item->file_path ? url('storage/' . $item->file_path) : null;
-                            $rowTenggat = $item->tenggat_waktu ? $item->tenggat_waktu->format('d M Y') : '-';
+                            $rowAcara = $item->tanggal_acara ? $item->tanggal_acara->translatedFormat('d F Y') : '-';
+                            $rowDeadline = $item->deadline_at ? $item->deadline_at->format('d F Y, H:i') : ($item->tenggat_waktu ? $item->tenggat_waktu->translatedFormat('d F Y') : '-');
 
                             $rowWaLines = [
+                                "📄 *DISPOSISI SURAT SAMBUTAN*",
                                 "Nomor Surat: " . $item->nomor_surat,
                                 "Instansi: " . $item->asal_instansi,
+                                "Tujuan: " . ($item->tujuan ?: '-'),
+                                "Tanggal Acara: " . $rowAcara,
                                 "Perihal: " . $item->perihal,
-                                "Tenggat: " . $rowTenggat,
+                                "Petugas: " . ($item->petugas ? $item->petugas->nama_lengkap : '-'),
+                                "Deadline: " . $rowDeadline . " (Maks. 2 Jam)",
+                                "Status: " . $item->status_label,
                             ];
 
                             if ($rowDocUrl) {
-                                $rowWaLines[] = $rowDocUrl;
+                                $rowWaLines[] = "Dokumen: " . $rowDocUrl;
                             }
 
                             $rowWaText = implode("\n", $rowWaLines);
@@ -325,6 +415,7 @@
             @endforelse
         </tbody>
     </table>
+</div>
 
     {{-- Pagination --}}
     <div class="sb-pagination">
