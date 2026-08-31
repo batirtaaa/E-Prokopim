@@ -73,7 +73,146 @@
 .ms-btn-filter:hover { border-color:#2563eb; color:#2563eb; }
 .ms-btn-filter svg { width:14px; height:14px; }
 
-/* Grid Cards */
+/* ============================================================
+   FOLDER GRID — khusus tab Infografis
+   ============================================================ */
+.folder-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.folder-section-title svg { width:18px; height:18px; color:#1e3a5f; }
+
+.folder-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+@media (min-width: 1400px) { .folder-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 1100px) { .folder-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px)  { .folder-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px)  { .folder-grid { grid-template-columns: 1fr; } }
+
+.folder-card {
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 24px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.18s cubic-bezier(.4,0,.2,1);
+    position: relative;
+    overflow: hidden;
+}
+.folder-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1e3a5f, #3b82f6);
+    opacity: 0;
+    transition: opacity 0.18s;
+}
+.folder-card:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 8px 24px -4px rgba(30,58,95,0.12);
+    transform: translateY(-3px);
+}
+.folder-card:hover::before { opacity: 1; }
+
+.folder-icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    position: relative;
+}
+
+/* Ikon kalender mini di dalam folder */
+.folder-cal-icon {
+    width: 48px;
+    height: 48px;
+    border: 2px solid;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.folder-cal-top {
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-align: center;
+    padding: 4px 0 3px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+.folder-cal-year {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    background: white;
+}
+
+.folder-icon-wrap svg { width: 32px; height: 32px; }
+
+.folder-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+.folder-count {
+    font-size: 12px;
+    color: #6b7280;
+    background: #f1f5f9;
+    padding: 2px 10px;
+    border-radius: 20px;
+}
+.folder-count strong { color: #1e3a5f; }
+
+/* Folder "Tambah Baru" */
+.folder-card-add {
+    background: #f8faff;
+    border: 2px dashed #bfdbfe;
+    border-radius: 14px;
+    padding: 24px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.18s;
+    min-height: 160px;
+    justify-content: center;
+}
+.folder-card-add:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    transform: translateY(-3px);
+}
+
+/* ============================================================
+   CARD GRID — videografis / media luar ruang
+   ============================================================ */
 .ms-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -350,6 +489,10 @@
     box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
     animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
+@keyframes scaleIn {
+    from { opacity:0; transform:scale(0.95); }
+    to   { opacity:1; transform:scale(1); }
+}
 .modal-header {
     display: flex;
     align-items: center;
@@ -377,6 +520,10 @@
     padding: 16px 24px; border-top: 1px solid #e5e7eb; background: #f9fafb;
     border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;
 }
+
+/* Sub Kategori field */
+#subKategoriWrapper { transition: all 0.2s; }
+#lainnyaCustomWrapper { margin-top: 8px; }
 </style>
 @endpush
 
@@ -399,21 +546,74 @@
         <h1>Arsip Media Sosial</h1>
         <p>Kelola dan pantau publikasi infografis, videografis, dan media luar ruang.</p>
     </div>
-    @if(auth()->user()->isAdmin())
-    <button type="button" onclick="openUploadModal('{{ $tab }}')" class="btn-upload-top">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-        Upload Media
-    </button>
-    @endif
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <a href="javascript:void(0)" onclick="openExportModal()" class="ms-btn-filter" style="border-color:#16a34a;color:#16a34a;gap:7px;font-weight:600;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:15px;height:15px">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+            </svg>
+            Download Rekap Excel
+        </a>
+    </div>
+</div>
+
+{{-- Modal Pilih Tahun Export --}}
+<div id="exportModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:16px; width:360px; max-width:92vw; box-shadow:0 20px 60px -10px rgba(0,0,0,0.25); overflow:hidden;">
+        <div style="background:#1e3a5f; padding:18px 24px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" style="width:20px;height:20px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                <span style="font-size:15px;font-weight:700;color:white;">Download Rekap Excel</span>
+            </div>
+            <button onclick="document.getElementById('exportModal').style.display='none'" style="background:none;border:none;color:white;cursor:pointer;font-size:20px;line-height:1;">&times;</button>
+        </div>
+        <div style="padding:24px;">
+            <p style="font-size:13px;color:#6b7280;margin-bottom:16px;line-height:1.6;">
+                File Excel akan berisi <strong>Rekap Per Bulan</strong> (ringkasan) dan <strong>Detail</strong> upload Infografis, Videografis, dan Media Luar Ruang untuk tahun yang dipilih.
+            </p>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:8px;">Pilih Tahun</label>
+            <select id="exportTahunSelect" style="width:100%;padding:10px 14px;border:1.5px solid #d1d5db;border-radius:8px;font-size:14px;font-weight:600;color:#1e3a5f;background:#f8fafc;outline:none;">
+                @foreach($availableYears ?? [now()->year] as $yr)
+                    <option value="{{ $yr }}" {{ ($selectedTahun ?? now()->year) == $yr ? 'selected' : '' }}>{{ $yr }}</option>
+                @endforeach
+            </select>
+            <div style="margin-top:8px;font-size:11.5px;color:#9ca3af;">Format: Microsoft Excel (.xls) — dapat dibuka di Excel, LibreOffice, Google Sheets</div>
+        </div>
+        <div style="padding:0 24px 20px;display:flex;gap:10px;justify-content:flex-end;">
+            <button onclick="document.getElementById('exportModal').style.display='none'" style="padding:9px 18px;border:1.5px solid #e5e7eb;border-radius:8px;background:white;font-size:13px;color:#374151;cursor:pointer;font-weight:500;">Batal</button>
+            <a id="exportDownloadBtn" href="#" onclick="doExport()" style="padding:9px 22px;background:#16a34a;color:white;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:none;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                Download
+            </a>
+        </div>
+    </div>
 </div>
 
 {{-- Tabs & Toolbar --}}
 <div class="ms-toolbar-wrap">
     <div class="ms-tabs">
-        <a href="{{ route('media-sosial.index', ['tab' => 'infografis']) }}" class="ms-tab {{ $tab === 'infografis' ? 'active' : '' }}">Infografis</a>
+        <a href="{{ route('media-sosial.index', ['tab' => 'infografis', 'tahun' => $selectedTahun ?? now()->year]) }}" class="ms-tab {{ $tab === 'infografis' ? 'active' : '' }}">Infografis</a>
         <a href="{{ route('media-sosial.index', ['tab' => 'videografis']) }}" class="ms-tab {{ $tab === 'videografis' ? 'active' : '' }}">Videografis</a>
         <a href="{{ route('media-sosial.index', ['tab' => 'media_luar_ruang']) }}" class="ms-tab {{ $tab === 'media_luar_ruang' ? 'active' : '' }}">Media Luar Ruang</a>
     </div>
+
+    @if($tab === 'infografis')
+    {{-- Filter Tahun di Toolbar --}}
+    <div class="ms-toolbar-right" style="padding-right: 12px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:12.5px; font-weight:600; color:#64748b; display:flex; align-items:center; gap:5px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:15px;height:15px;color:#1e3a5f"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                Tahun:
+            </span>
+            <select onchange="window.location.href='{{ route('media-sosial.index', ['tab' => 'infografis']) }}&tahun=' + this.value"
+                    style="padding:6px 14px; font-size:13px; font-weight:700; border-radius:8px; border:1.5px solid #cbd5e1; background:#f8fafc; color:#1e3a5f; cursor:pointer; outline:none; transition:all 0.15s;">
+                @foreach($availableYears ?? [now()->year] as $yr)
+                    <option value="{{ $yr }}" {{ ($selectedTahun ?? now()->year) == $yr ? 'selected' : '' }}>{{ $yr }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    @else
+    {{-- Search bar untuk tab selain infografis --}}
     <form method="GET" action="{{ route('media-sosial.index') }}" class="ms-toolbar-right">
         <input type="hidden" name="tab" value="{{ $tab }}">
         <div class="ms-search-wrap">
@@ -429,9 +629,61 @@
             Filter
         </button>
     </form>
+    @endif
 </div>
 
-{{-- Grid Cards --}}
+{{-- ============================================================
+     TAB INFOGRAFIS → Tampilan Folder 12 Bulan
+     ============================================================ --}}
+@if($tab === 'infografis')
+
+
+
+<div class="folder-grid">
+    @foreach($folders as $folder)
+    @php
+        // Warna folder berputar menggunakan indeks
+        $colorSchemes = [
+            ['bg' => '#eff6ff', 'accent' => '#2563eb', 'top' => '#3b82f6'],
+            ['bg' => '#f0fdf4', 'accent' => '#16a34a', 'top' => '#22c55e'],
+            ['bg' => '#fef3c7', 'accent' => '#d97706', 'top' => '#f59e0b'],
+            ['bg' => '#fdf4ff', 'accent' => '#9333ea', 'top' => '#a855f7'],
+            ['bg' => '#fff1f2', 'accent' => '#e11d48', 'top' => '#f43f5e'],
+            ['bg' => '#ecfdf5', 'accent' => '#059669', 'top' => '#10b981'],
+        ];
+        $cs = $colorSchemes[($folder['bulan'] - 1) % count($colorSchemes)];
+        $namaBulan = [1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'Mei',6=>'Jun',7=>'Jul',8=>'Agt',9=>'Sep',10=>'Okt',11=>'Nov',12=>'Des'];
+    @endphp
+    <a href="{{ route('media-sosial.folder', [$folder['tahun'], str_pad($folder['bulan'], 2, '0', STR_PAD_LEFT)]) }}"
+       class="folder-card" style="--folder-accent:{{ $cs['accent'] }}">
+        {{-- Icon Kalender dengan angka bulan --}}
+        <div class="folder-icon-wrap" style="background:{{ $cs['bg'] }}">
+            <div class="folder-cal-icon" style="border-color:{{ $cs['accent'] }}">
+                <div class="folder-cal-top" style="background:{{ $cs['top'] }}">
+                    {{ $namaBulan[$folder['bulan']] ?? '' }}
+                </div>
+                <div class="folder-cal-year" style="color:{{ $cs['accent'] }}">
+                    {{ $folder['tahun'] }}
+                </div>
+            </div>
+        </div>
+        <div class="folder-name">{{ $folder['label'] }}</div>
+        @if($folder['total'] > 0)
+        <div class="folder-count" style="background:#dbeafe; color:#1e40af; font-weight:700; border:1px solid #bfdbfe;">
+            <strong>{{ $folder['total'] }}</strong> file
+        </div>
+        @else
+        <div class="folder-count"><strong>0</strong> file</div>
+        @endif
+    </a>
+    @endforeach
+</div>
+
+{{-- ============================================================
+     TAB VIDEOGRAFIS / MEDIA LUAR RUANG → Card Grid biasa
+     ============================================================ --}}
+@else
+
 <div class="ms-grid">
     @forelse($items as $item)
     <div class="ms-card">
@@ -466,6 +718,12 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/></svg>
                             Edit
                         </button>
+                        @endif
+                        @if($item->link_post)
+                        <a href="{{ $item->link_post }}" target="_blank" rel="noopener noreferrer" class="dropdown-menu-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg>
+                            Buka Link URL
+                        </a>
                         @endif
                         @if($item->file_path)
                             <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank" class="dropdown-menu-item" download>
@@ -511,9 +769,7 @@
         </div>
         <div class="ms-add-title">Tambah Desain Baru</div>
         <div class="ms-add-sub">
-            @if($tab === 'infografis')
-                Unggah file infografis (.jpg, .png, .pdf) untuk diarsipkan.
-            @elseif($tab === 'videografis')
+            @if($tab === 'videografis')
                 Unggah video grafis (.mp4, .mov) untuk diarsipkan.
             @else
                 Unggah desain billboard, baliho atau materi media luar ruang.
@@ -524,7 +780,7 @@
 </div>
 
 {{-- Pagination --}}
-@if($items->hasPages() || $items->total() > 0)
+@if(isset($items) && ($items->hasPages() || $items->total() > 0))
 <div class="ms-pagination-wrap">
     @if($items->onFirstPage())
         <span class="ms-page-btn disabled"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:13px;height:13px"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg></span>
@@ -548,44 +804,97 @@
 </div>
 @endif
 
-{{-- Upload / Create Modal --}}
-<div id="uploadModal" class="modal-overlay">
+@endif {{-- end @else (bukan infografis) --}}
+
+{{-- ============================================================
+     Upload / Create Modal
+     ============================================================ --}}
+<div id="uploadModal" class="modal-overlay" style="display:none">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 id="modalTitle">Upload Media Baru</h3>
+            <h3 id="modalTitle">
+                @if($tab === 'infografis') Upload Infografis Baru
+                @elseif($tab === 'videografis') Upload Videografis Baru
+                @else Upload Media Luar Ruang Baru @endif
+            </h3>
             <button type="button" class="modal-close" onclick="closeModal('uploadModal')">&times;</button>
         </div>
         <form id="mediaForm" method="POST" action="{{ route('media-sosial.store') }}" enctype="multipart/form-data">
             @csrf
             <div id="methodField"></div>
+            <input type="hidden" name="kategori" id="inputKategori" value="{{ $tab }}">
             <div class="modal-body">
                 <div class="form-group-m">
                     <label class="form-label-m">Judul Media <span class="req">*</span></label>
                     <input type="text" class="form-input-m" name="judul" id="inputJudul" placeholder="Contoh: Capaian Kinerja Triwulan III..." required>
                 </div>
+
+                @if($tab === 'infografis')
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
                     <div class="form-group-m">
-                        <label class="form-label-m">Kategori <span class="req">*</span></label>
-                        <select class="form-select-m" name="kategori" id="inputKategori" required>
-                            <option value="infografis" {{ $tab === 'infografis' ? 'selected' : '' }}>Infografis</option>
-                            <option value="videografis" {{ $tab === 'videografis' ? 'selected' : '' }}>Videografis</option>
-                            <option value="media_luar_ruang" {{ $tab === 'media_luar_ruang' ? 'selected' : '' }}>Media Luar Ruang</option>
+                        <label class="form-label-m">Kategori Infografis <span class="req">*</span></label>
+                        <select class="form-select-m" name="sub_kategori" id="inputSubKategori" onchange="onSubKategoriChange(this.value)" required>
+                            <option value="hari_besar">Hari Besar</option>
+                            <option value="obituary">Obituary</option>
+                            <option value="kamis_nyunda">Kamis Nyunda</option>
+                            <option value="giat_pimpinan">Giat Pimpinan</option>
+                            <option value="lainnya_custom">Dan Lainnya (Ketik Manual)</option>
                         </select>
+                        {{-- Input teks bebas untuk "Dan Lainnya" --}}
+                        <div id="lainnyaCustomWrapper" style="display:none; margin-top:8px">
+                            <input type="text" class="form-input-m" name="sub_kategori_custom" id="inputSubKategoriCustom"
+                                   placeholder="Ketik kategori infografis..." maxlength="100">
+                        </div>
                     </div>
                     <div class="form-group-m">
-                        <label class="form-label-m">Platform / Media <span class="req">*</span></label>
-                        <select class="form-select-m" name="platform" id="inputPlatform" required>
+                        <label class="form-label-m">Platform Media Sosial <span class="req">*</span></label>
+                        <select class="form-select-m" name="platform" id="inputPlatform" onchange="onPlatformChange(this.value)" required>
                             <option value="instagram">Instagram</option>
                             <option value="facebook">Facebook</option>
-                            <option value="website">Website</option>
                             <option value="tiktok">TikTok</option>
                             <option value="youtube">YouTube</option>
-                            <option value="billboard">Billboard</option>
-                            <option value="videotron">Videotron</option>
+                            <option value="x_twitter">X (Twitter)</option>
                             <option value="lainnya">Lainnya</option>
                         </select>
+                        <div id="platformCustomWrapper" style="display:none; margin-top:8px">
+                            <input type="text" class="form-input-m" name="platform_custom" id="inputPlatformCustom"
+                                   placeholder="Ketik nama platform..." maxlength="100">
+                        </div>
                     </div>
                 </div>
+                @elseif($tab === 'videografis')
+                <div class="form-group-m">
+                    <label class="form-label-m">Platform Media Sosial <span class="req">*</span></label>
+                    <select class="form-select-m" name="platform" id="inputPlatform" onchange="onPlatformChange(this.value)" required>
+                        <option value="instagram">Instagram</option>
+                        <option value="facebook">Facebook</option>
+                        <option value="tiktok">TikTok</option>
+                        <option value="youtube">YouTube</option>
+                        <option value="x_twitter">X (Twitter)</option>
+                        <option value="lainnya">Lainnya</option>
+                    </select>
+                    <div id="platformCustomWrapper" style="display:none; margin-top:8px">
+                        <input type="text" class="form-input-m" name="platform_custom" id="inputPlatformCustom"
+                               placeholder="Ketik nama platform..." maxlength="100">
+                    </div>
+                </div>
+                @else
+                <div class="form-group-m">
+                    <label class="form-label-m">Media Luar Ruang <span class="req">*</span></label>
+                    <select class="form-select-m" name="platform" id="inputPlatform" onchange="onPlatformChange(this.value)" required>
+                        <option value="billboard">Billboard</option>
+                        <option value="videotron">Videotron</option>
+                        <option value="baliho">Baliho</option>
+                        <option value="spanduk">Spanduk / Banner</option>
+                        <option value="lainnya">Lainnya (Ketik Manual)</option>
+                    </select>
+                    <div id="platformCustomWrapper" style="display:none; margin-top:8px">
+                        <input type="text" class="form-input-m" name="platform_custom" id="inputPlatformCustom"
+                               placeholder="Ketik jenis media luar ruang..." maxlength="100">
+                    </div>
+                </div>
+                @endif
+
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
                     <div class="form-group-m">
                         <label class="form-label-m">Tanggal Publikasi <span class="req">*</span></label>
@@ -604,6 +913,12 @@
                     <label class="form-label-m">Deskripsi Singkat</label>
                     <textarea class="form-textarea-m" name="deskripsi" id="inputDeskripsi" placeholder="Ringkasan singkat mengenai konten media..."></textarea>
                 </div>
+                @if($tab !== 'media_luar_ruang')
+                <div class="form-group-m" id="linkPostWrapper">
+                    <label class="form-label-m">Link / URL Postingan</label>
+                    <input type="url" class="form-input-m" name="link_post" id="inputLinkPost" placeholder="Contoh: https://www.instagram.com/p/...">
+                </div>
+                @endif
                 <div class="form-group-m">
                     <label class="form-label-m">File Media (.jpg, .png, .pdf, .mp4)</label>
                     <input type="file" class="form-input-m" name="file_media" id="inputFileMedia" accept=".jpg,.jpeg,.png,.webp,.pdf,.mp4">
@@ -635,16 +950,74 @@ document.addEventListener('click', function() {
     document.querySelectorAll('.dropdown-menu-card').forEach(m => m.classList.remove('show'));
 });
 
+function onSubKategoriChange(val) {
+    const customWrap  = document.getElementById('lainnyaCustomWrapper');
+    const customInput = document.getElementById('inputSubKategoriCustom');
+    if (customWrap && customInput) {
+        if (val === 'lainnya_custom') {
+            customWrap.style.display = '';
+            customInput.required = true;
+        } else {
+            customWrap.style.display = 'none';
+            customInput.required = false;
+        }
+    }
+}
+
+function onPlatformChange(val) {
+    const wrapper = document.getElementById('platformCustomWrapper');
+    const input   = document.getElementById('inputPlatformCustom');
+    if (wrapper && input) {
+        if (val === 'lainnya') {
+            wrapper.style.display = '';
+            input.required = true;
+            input.focus();
+        } else {
+            wrapper.style.display = 'none';
+            input.required = false;
+            input.value = '';
+        }
+    }
+}
+
 function openUploadModal(defaultKategori) {
     const form = document.getElementById('mediaForm');
     form.reset();
     form.action = "{{ route('media-sosial.store') }}";
     document.getElementById('methodField').innerHTML = '';
-    document.getElementById('modalTitle').textContent = 'Upload Media Baru';
-    document.getElementById('btnSubmitModal').textContent = 'Simpan Media';
-    if (defaultKategori) {
-        document.getElementById('inputKategori').value = defaultKategori;
+    
+    const kat = defaultKategori || '{{ $tab }}';
+    document.getElementById('inputKategori').value = kat;
+    
+    if (kat === 'infografis') {
+        document.getElementById('modalTitle').textContent = 'Upload Infografis Baru';
+    } else if (kat === 'videografis') {
+        document.getElementById('modalTitle').textContent = 'Upload Videografis Baru';
+    } else {
+        document.getElementById('modalTitle').textContent = 'Upload Media Luar Ruang Baru';
     }
+    
+    document.getElementById('btnSubmitModal').textContent = 'Simpan Media';
+    document.getElementById('inputTanggal').value = "{{ date('Y-m-d') }}";
+    
+    if (document.getElementById('inputLinkPost')) {
+        document.getElementById('inputLinkPost').value = '';
+    }
+    
+    const subKatSelect = document.getElementById('inputSubKategori');
+    if (subKatSelect) {
+        subKatSelect.value = 'hari_besar';
+        onSubKategoriChange('hari_besar');
+    }
+
+    if (document.getElementById('platformCustomWrapper')) {
+        document.getElementById('platformCustomWrapper').style.display = 'none';
+    }
+    if (document.getElementById('inputPlatformCustom')) {
+        document.getElementById('inputPlatformCustom').value = '';
+        document.getElementById('inputPlatformCustom').required = false;
+    }
+    
     document.getElementById('uploadModal').style.display = 'flex';
 }
 
@@ -656,12 +1029,46 @@ function editMedia(item) {
     document.getElementById('modalTitle').textContent = 'Edit Data Media';
     document.getElementById('btnSubmitModal').textContent = 'Perbarui Media';
 
-    document.getElementById('inputJudul').value = item.judul || '';
-    document.getElementById('inputKategori').value = item.kategori || 'infografis';
-    document.getElementById('inputPlatform').value = item.platform || 'instagram';
-    document.getElementById('inputTanggal').value = item.tanggal_publikasi ? item.tanggal_publikasi.split('T')[0] : '';
-    document.getElementById('inputStatus').value = item.status || 'dipublikasi';
+    document.getElementById('inputJudul').value    = item.judul || '';
+    document.getElementById('inputKategori').value = item.kategori || '{{ $tab }}';
+    // Set platform, handle custom
+    const knownPlatforms = ['instagram','facebook','tiktok','youtube','x_twitter','billboard','videotron','baliho','spanduk'];
+    const platVal = item.platform || 'instagram';
+    const platSelect = document.getElementById('inputPlatform');
+    const platCustom = document.getElementById('inputPlatformCustom');
+    if (knownPlatforms.includes(platVal)) {
+        if (platSelect) platSelect.value = platVal;
+        onPlatformChange(platVal);
+    } else {
+        if (platSelect) platSelect.value = 'lainnya';
+        onPlatformChange('lainnya');
+        if (platCustom) platCustom.value = platVal;
+    }
+    document.getElementById('inputTanggal').value  = item.tanggal_publikasi ? item.tanggal_publikasi.split('T')[0] : '';
+    document.getElementById('inputStatus').value   = item.status || 'dipublikasi';
     document.getElementById('inputDeskripsi').value = item.deskripsi || '';
+    if (document.getElementById('inputLinkPost')) {
+        document.getElementById('inputLinkPost').value = item.link_post || '';
+    }
+
+    // Set sub_kategori jika ada
+    const subKatSelect = document.getElementById('inputSubKategori');
+    if (subKatSelect && item.kategori === 'infografis') {
+        const knownKeys = ['hari_besar', 'obituary', 'kamis_nyunda', 'giat_pimpinan'];
+        const sub = item.sub_kategori || '';
+        if (knownKeys.includes(sub)) {
+            subKatSelect.value = sub;
+            onSubKategoriChange(sub);
+        } else if (sub) {
+            subKatSelect.value = 'lainnya_custom';
+            onSubKategoriChange('lainnya_custom');
+            const customInp = document.getElementById('inputSubKategoriCustom');
+            if (customInp) customInp.value = sub;
+        } else {
+            subKatSelect.value = 'hari_besar';
+            onSubKategoriChange('hari_besar');
+        }
+    }
 
     document.getElementById('uploadModal').style.display = 'flex';
 }
@@ -669,6 +1076,17 @@ function editMedia(item) {
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) modal.style.display = 'none';
+}
+
+function openExportModal() {
+    document.getElementById('exportModal').style.display = 'flex';
+}
+
+function doExport() {
+    const tahun = document.getElementById('exportTahunSelect').value;
+    const url = '{{ route("media-sosial.export-rekap") }}?tahun=' + tahun;
+    window.location.href = url;
+    document.getElementById('exportModal').style.display = 'none';
 }
 </script>
 @endpush

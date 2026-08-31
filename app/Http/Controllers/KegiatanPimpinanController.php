@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kegiatan;
+use App\Exports\KegiatanPimpinanRekapExport;
 use App\Http\Controllers\NotifikasiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,13 +20,22 @@ class KegiatanPimpinanController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('judul', 'like', '%' . $search . '%')
                   ->orWhere('nomor_agenda', 'like', '%' . $search . '%')
-                  ->orWhere('lokasi', 'like', '%' . $search . '%');
+                  ->orWhere('lokasi', 'like', '%' . $search . '%')
+                  ->orWhere('leading_sektor', 'like', '%' . $search . '%');
             });
         }
 
         $kegiatan = $query->paginate(10)->withQueryString();
 
-        return view('kegiatan-pimpinan.index', compact('kegiatan'));
+        $dbYears = Kegiatan::whereNotNull('tanggal_mulai')
+            ->selectRaw('YEAR(tanggal_mulai) as tahun')
+            ->distinct()->pluck('tahun')->map(fn($y) => (int)$y)->toArray();
+        $currentYear    = (int) now()->year;
+        $defaultRange   = range($currentYear - 3, $currentYear + 1);
+        $availableYears = collect(array_merge($defaultRange, $dbYears))->unique()->sortDesc()->values();
+        $selectedTahun  = $currentYear;
+
+        return view('kegiatan-pimpinan.index', compact('kegiatan', 'availableYears', 'selectedTahun'));
     }
 
     public function create()
@@ -46,24 +56,27 @@ class KegiatanPimpinanController extends Controller
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menambah kegiatan.');
         }
         $request->validate([
-            'nama_kegiatan' => 'required|string|max:255',
-            'tanggal'       => 'required|date',
-            'waktu_mulai'   => 'required',
-            'waktu_selesai' => 'nullable',
-            'lokasi'        => 'required|string',
-            'pimpinan'      => 'nullable|array',
-            'keterangan'    => 'nullable|string',
-            'nomor_agenda'  => 'nullable|string|max:100',
+            'nama_kegiatan'  => 'required|string|max:255',
+            'leading_sektor' => 'nullable|string|max:255',
+            'tanggal'        => 'required|date',
+            'waktu_mulai'    => 'required',
+            'waktu_selesai'  => 'nullable',
+            'lokasi'         => 'required|string',
+            'pimpinan'       => 'nullable|array',
+            'keterangan'     => 'nullable|string',
+            'nomor_agenda'   => 'nullable|string|max:100',
         ]);
 
         $lokasiMap = [
-            'gedung_dprd'        => 'Gedung DPRD Kota Bandung',
-            'balai_kota'         => 'Balai Kota Bandung',
-            'taman_sekeloa'      => 'Taman Sekeloa',
-            'kolam_retensi'      => 'Kolam Retensi Gedebage',
-            'ruang_rapat_tengah' => 'Ruang Rapat Tengah',
+            'pendopo'     => 'Pendopo Kota Bandung',
+            'balai_kota'  => 'Balai Kota Bandung',
+            'gedung_dprd' => 'Gedung DPRD Kota Bandung',
         ];
-        $lokasiName = $lokasiMap[$request->lokasi] ?? $request->lokasi;
+        if ($request->lokasi === 'lainnya') {
+            $lokasiName = trim($request->lokasi_custom) ?: 'Lainnya';
+        } else {
+            $lokasiName = $lokasiMap[$request->lokasi] ?? $request->lokasi;
+        }
 
         $tanggalMulai = Carbon::parse($request->tanggal . ' ' . $request->waktu_mulai);
         $tanggalSelesai = $request->filled('waktu_selesai')
@@ -78,6 +91,7 @@ class KegiatanPimpinanController extends Controller
         $kegiatan = Kegiatan::create([
             'nomor_agenda'    => $nomorAgenda,
             'judul'           => $request->nama_kegiatan,
+            'leading_sektor'  => $request->leading_sektor,
             'deskripsi'       => $request->keterangan,
             'lokasi'          => $lokasiName,
             'tanggal_mulai'   => $tanggalMulai,
@@ -91,8 +105,9 @@ class KegiatanPimpinanController extends Controller
         // Kirim notifikasi ke semua user jika bukan draft
         if ($status !== 'draft') {
             $tanggalLabel = $tanggalMulai->translatedFormat('d F Y, H:i');
+            $instansiInfo = $kegiatan->leading_sektor ? " ({$kegiatan->leading_sektor})" : "";
             NotifikasiController::createForAllUsers(
-                '📅 Kegiatan Baru: ' . $kegiatan->judul,
+                '📅 Kegiatan Baru: ' . $kegiatan->judul . $instansiInfo,
                 "Kegiatan baru telah dijadwalkan di {$lokasiName} pada {$tanggalLabel}.",
                 'kegiatan',
                 route('kegiatan-pimpinan.index')
@@ -121,23 +136,26 @@ class KegiatanPimpinanController extends Controller
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit kegiatan.');
         }
         $request->validate([
-            'nama_kegiatan' => 'required|string|max:255',
-            'tanggal'       => 'required|date',
-            'waktu_mulai'   => 'required',
-            'waktu_selesai' => 'nullable',
-            'lokasi'        => 'required|string',
-            'pimpinan'      => 'nullable|array',
-            'keterangan'    => 'nullable|string',
+            'nama_kegiatan'  => 'required|string|max:255',
+            'leading_sektor' => 'nullable|string|max:255',
+            'tanggal'        => 'required|date',
+            'waktu_mulai'    => 'required',
+            'waktu_selesai'  => 'nullable',
+            'lokasi'         => 'required|string',
+            'pimpinan'       => 'nullable|array',
+            'keterangan'     => 'nullable|string',
         ]);
 
         $lokasiMap = [
-            'gedung_dprd'        => 'Gedung DPRD Kota Bandung',
-            'balai_kota'         => 'Balai Kota Bandung',
-            'taman_sekeloa'      => 'Taman Sekeloa',
-            'kolam_retensi'      => 'Kolam Retensi Gedebage',
-            'ruang_rapat_tengah' => 'Ruang Rapat Tengah',
+            'pendopo'     => 'Pendopo Kota Bandung',
+            'balai_kota'  => 'Balai Kota Bandung',
+            'gedung_dprd' => 'Gedung DPRD Kota Bandung',
         ];
-        $lokasiName   = $lokasiMap[$request->lokasi] ?? $request->lokasi;
+        if ($request->lokasi === 'lainnya') {
+            $lokasiName = trim($request->lokasi_custom) ?: 'Lainnya';
+        } else {
+            $lokasiName = $lokasiMap[$request->lokasi] ?? $request->lokasi;
+        }
         $tanggalMulai = Carbon::parse($request->tanggal . ' ' . $request->waktu_mulai);
         $tanggalSelesai = $request->filled('waktu_selesai')
             ? Carbon::parse($request->tanggal . ' ' . $request->waktu_selesai)
@@ -145,6 +163,7 @@ class KegiatanPimpinanController extends Controller
 
         $kegiatan->update([
             'judul'           => $request->nama_kegiatan,
+            'leading_sektor'  => $request->leading_sektor,
             'deskripsi'       => $request->keterangan,
             'lokasi'          => $lokasiName,
             'tanggal_mulai'   => $tanggalMulai,
@@ -163,5 +182,19 @@ class KegiatanPimpinanController extends Controller
         $kegiatan->delete();
         return redirect()->route('kegiatan-pimpinan.index')
             ->with('success', 'Kegiatan berhasil dihapus.');
+    }
+
+    /**
+     * Export rekap kegiatan per bulan ke Excel
+     */
+    public function exportRekap(Request $request)
+    {
+        $tahun = (int) $request->get('tahun', now()->year);
+        if ($tahun < 2000 || $tahun > 2100) {
+            $tahun = (int) now()->year;
+        }
+
+        $export = new KegiatanPimpinanRekapExport($tahun);
+        return $export->download();
     }
 }

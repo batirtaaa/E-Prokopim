@@ -9,6 +9,25 @@ use Illuminate\Support\Facades\Storage;
 
 class GaleriArsipController extends Controller
 {
+    public function thumb($id)
+    {
+        $item = GaleriArsip::findOrFail($id);
+
+        if (!$item->file_path || !Storage::disk('public')->exists($item->file_path)) {
+            abort(404);
+        }
+
+        $fullPath = Storage::disk('public')->path($item->file_path);
+        $mime     = mime_content_type($fullPath) ?: 'image/jpeg';
+        $base64   = base64_encode(file_get_contents($fullPath));
+
+        // Kembalikan sebagai JSON agar IDM tidak bisa mencegat
+        // IDM hanya mencegat response dengan Content-Type media (image/*, video/*)
+        return response()->json([
+            'data' => 'data:' . $mime . ';base64,' . $base64,
+        ])->header('Cache-Control', 'public, max-age=86400');
+    }
+
     public function index(Request $request)
     {
         $tab = $request->get('tab', 'semua');
@@ -39,7 +58,25 @@ class GaleriArsipController extends Controller
 
         $items = $query->paginate(8)->withQueryString();
 
-        return view('sub-dokumentasi-pimpinan.galeri-arsip.index', compact('items', 'tab'));
+        // Hitung tahun yang tersedia dari data arsip
+        $dbYears = GaleriArsip::whereNotNull('tanggal_kegiatan')
+            ->selectRaw('YEAR(tanggal_kegiatan) as tahun')
+            ->distinct()->pluck('tahun')->map(fn($y) => (int)$y)->toArray();
+        $currentYear    = (int) now()->year;
+        $defaultRange   = range($currentYear - 3, $currentYear + 1);
+        $availableYears = collect(array_merge($defaultRange, $dbYears))->unique()->sortDesc()->values();
+
+        return view('sub-dokumentasi-pimpinan.galeri-arsip.index', compact('items', 'tab', 'availableYears'));
+    }
+
+    /**
+     * Export Rekap Notulensi Kegiatan Pimpinan ke format Excel (.xls SpreadsheetML)
+     */
+    public function exportNotulensi(Request $request)
+    {
+        $tahun = (int) $request->get('tahun', now()->year);
+        $export = new \App\Exports\NotulensiRekapExport($tahun);
+        return $export->download();
     }
 
     public function store(Request $request)
@@ -51,7 +88,6 @@ class GaleriArsipController extends Controller
         $request->validate([
             'judul'            => 'required|string|max:255',
             'tipe'             => 'required|in:foto,video,notulensi',
-            'akses'            => 'required|in:publik,internal',
             'tanggal_kegiatan' => 'required|date',
             'keterangan'       => 'nullable|string',
             'jumlah_foto'      => 'nullable|integer|min:1',
@@ -71,7 +107,7 @@ class GaleriArsipController extends Controller
             'kode'             => GaleriArsip::generateKode(),
             'judul'            => $request->judul,
             'tipe'             => $request->tipe,
-            'akses'            => $request->akses,
+            'akses'            => 'internal',
             'file_path'        => $filePath,
             'file_name'        => $fileName,
             'durasi_detik'     => $request->durasi_detik,
@@ -94,7 +130,6 @@ class GaleriArsipController extends Controller
         $request->validate([
             'judul'            => 'required|string|max:255',
             'tipe'             => 'required|in:foto,video,notulensi',
-            'akses'            => 'required|in:publik,internal',
             'tanggal_kegiatan' => 'required|date',
             'keterangan'       => 'nullable|string',
             'jumlah_foto'      => 'nullable|integer|min:1',
@@ -105,7 +140,7 @@ class GaleriArsipController extends Controller
         $data = [
             'judul'            => $request->judul,
             'tipe'             => $request->tipe,
-            'akses'            => $request->akses,
+            'akses'            => 'internal',
             'durasi_detik'     => $request->durasi_detik,
             'jumlah_foto'      => $request->jumlah_foto ?? 1,
             'keterangan'       => $request->keterangan,

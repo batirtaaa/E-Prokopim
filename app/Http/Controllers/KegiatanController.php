@@ -49,6 +49,7 @@ class KegiatanController extends Controller
 
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
+            'leading_sektor' => 'nullable|string|max:255',
             'deskripsi' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',
             'tanggal_mulai' => 'required|date',
@@ -88,6 +89,7 @@ class KegiatanController extends Controller
 
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
+            'leading_sektor' => 'nullable|string|max:255',
             'deskripsi' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',
             'tanggal_mulai' => 'required|date',

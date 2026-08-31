@@ -175,8 +175,11 @@
     </div>
 </div>
 
-<form id="form-kegiatan" method="POST" action="{{ route('kegiatan-pimpinan.store') }}">
+<form id="form-kegiatan" method="POST" action="{{ isset($kegiatan) ? route('kegiatan-pimpinan.update', $kegiatan) : route('kegiatan-pimpinan.store') }}">
 @csrf
+@if(isset($kegiatan))
+    @method('PUT')
+@endif
 
 {{-- Section 1: Informasi Dasar --}}
 <div class="form-card">
@@ -185,78 +188,149 @@
         <div class="form-row-2">
             <div class="form-group">
                 <label class="form-label">Nomor Surat / Agenda <span class="required">*</span></label>
-                <input type="text" class="form-input auto-generated" value="{{ old('nomor_agenda', $nomorAgenda ?? 'AG-'.date('Ymd').'-001') }}" name="nomor_agenda" readonly>
+                <input type="text" class="form-input auto-generated" value="{{ old('nomor_agenda', $kegiatan->nomor_agenda ?? $nomorAgenda ?? 'AG-'.date('Ymd').'-001') }}" name="nomor_agenda" readonly>
                 <span class="form-hint">Dihasilkan secara otomatis oleh sistem.</span>
             </div>
             <div class="form-group">
-                <label class="form-label">Nama Kegiatan <span class="required">*</span></label>
-                <input type="text" class="form-input" name="nama_kegiatan" placeholder="Masukkan nama kegiatan" required>
+                <label class="form-label">Leading Sektor / Dinas Pengampu</label>
+                <input type="text" class="form-input" name="leading_sektor" list="opdList" value="{{ old('leading_sektor', $kegiatan->leading_sektor ?? '') }}" placeholder="Pilih atau ketik dinas / OPD pengampu..." autocomplete="off">
+                <datalist id="opdList">
+                    <option value="Bagian Protokol dan Komunikasi Pimpinan (Prokopim)">
+                    <option value="Dinas Pendidikan (Disdik)">
+                    <option value="Dinas Kesehatan (Dinkes)">
+                    <option value="Dinas Komunikasi dan Informatika (Diskominfo)">
+                    <option value="Dinas Perhubungan (Dishub)">
+                    <option value="Dinas Sumber Daya Air dan Bina Marga (DSDABM)">
+                    <option value="Dinas Cipta Karya, Bina Konstruksi dan Tata Ruang (Disciptabintar)">
+                    <option value="Dinas Perumahan dan Kawasan Permukiman (DPKP)">
+                    <option value="Dinas Sosial (Dinsos)">
+                    <option value="Dinas Tenaga Kerja (Disnaker)">
+                    <option value="Dinas Kependudukan dan Pencatatan Sipil (Disdukcapil)">
+                    <option value="Dinas Koperasi dan Usaha Kecil dan Menengah (KUKM)">
+                    <option value="Dinas Perdagangan dan Perindustrian (Disdagin)">
+                    <option value="Dinas Kebudayaan dan Pariwisata (Disbudpar)">
+                    <option value="Dinas Pemuda dan Olahraga (Dispora)">
+                    <option value="Dinas Ketahanan Pangan dan Pertanian (DKPP)">
+                    <option value="Dinas Lingkungan Hidup (DLH)">
+                    <option value="Dinas Pengendalian Penduduk dan KB (DPPKB)">
+                    <option value="Dinas Pemberdayaan Perempuan dan Perlindungan Anak (DP3A)">
+                    <option value="Dinas Kebakaran dan Penanggulangan Bencana (Diskar PB)">
+                    <option value="Dinas Penanaman Modal dan PTSP (DPMPTSP)">
+                    <option value="Dinas Perpustakaan dan Kearsipan (Dispusip)">
+                    <option value="Satuan Polisi Pamong Praja (Satpol PP)">
+                    <option value="Badan Perencanaan Pembangunan, Penelitian dan Pengembangan (Bappelitbang)">
+                    <option value="Badan Pendapatan Daerah (Bapenda)">
+                    <option value="Badan Keuangan dan Aset Daerah (BKAD)">
+                    <option value="Badan Kepegawaian dan Pengembangan SDM (BKPSDM)">
+                    <option value="Badan Kesatuan Bangsa dan Politik (Bakesbangpol)">
+                    <option value="Badan Penanggulangan Bencana Daerah (BPBD)">
+                    <option value="Inspektorat Daerah Kota Bandung">
+                    <option value="Sekretariat Daerah (Setda)">
+                    <option value="Bagian Tata Pemerintahan">
+                    <option value="Bagian Kesejahteraan Rakyat">
+                    <option value="Bagian Hukum">
+                    <option value="Bagian Perekonomian">
+                    <option value="Bagian Pengadaan Barang dan Jasa">
+                    <option value="Bagian Organisasi">
+                    <option value="Bagian Umum">
+                    <option value="Bagian Perencanaan dan Keuangan">
+                    <option value="Bagian Sumber Daya Alam">
+                </datalist>
+                <span class="form-hint">Dinas, Badan, Bagian, atau Instansi yang menaungi acara.</span>
             </div>
         </div>
 
+        <div class="form-row-1">
+            <div class="form-group">
+                <label class="form-label">Nama Kegiatan <span class="required">*</span></label>
+                <input type="text" class="form-input" name="nama_kegiatan" value="{{ old('nama_kegiatan', $kegiatan->judul ?? '') }}" placeholder="Masukkan nama kegiatan" required>
+            </div>
+        </div>
+
+        @php
+            $selectedPimpinan = old('pimpinan', isset($kegiatan) ? (is_array($kegiatan->pimpinan) ? $kegiatan->pimpinan : []) : []);
+        @endphp
         <div class="form-group">
             <label class="form-label">Pimpinan / Pelaksana Kegiatan <span class="required">*</span></label>
             <div class="checkbox-group">
                 <label class="checkbox-item">
-                    <input type="checkbox" name="pimpinan[]" value="wali_kota"> Wali Kota (B1)
+                    <input type="checkbox" name="pimpinan[]" value="wali_kota" {{ in_array('wali_kota', $selectedPimpinan) ? 'checked' : '' }}> Wali Kota (B1)
                 </label>
                 <label class="checkbox-item">
-                    <input type="checkbox" name="pimpinan[]" value="wakil_wali_kota"> Wakil Wali Kota (B2)
+                    <input type="checkbox" name="pimpinan[]" value="wakil_wali_kota" {{ in_array('wakil_wali_kota', $selectedPimpinan) ? 'checked' : '' }}> Wakil Wali Kota (B2)
                 </label>
                 <label class="checkbox-item">
-                    <input type="checkbox" name="pimpinan[]" value="sekda"> Sekretaris Daerah (B3)
+                    <input type="checkbox" name="pimpinan[]" value="sekda" {{ in_array('sekda', $selectedPimpinan) ? 'checked' : '' }}> Sekretaris Daerah (B3)
                 </label>
                 <label class="checkbox-item">
-                    <input type="checkbox" name="pimpinan[]" value="pkk1"> Aryatri Benarto (PKK1)
+                    <input type="checkbox" name="pimpinan[]" value="pkk1" {{ in_array('pkk1', $selectedPimpinan) ? 'checked' : '' }}> Aryatri Benarto (PKK1)
                 </label>
                 <label class="checkbox-item">
-                    <input type="checkbox" name="pimpinan[]" value="pkk2"> Fitriana Dewi (PKK2)
+                    <input type="checkbox" name="pimpinan[]" value="pkk2" {{ in_array('pkk2', $selectedPimpinan) ? 'checked' : '' }}> Fitriana Dewi (PKK2)
                 </label>
                 <label class="checkbox-item">
-                    <input type="checkbox" name="pimpinan[]" value="dwp"> R. Dewi Pertiwi Zulkarnain (DWP)
+                    <input type="checkbox" name="pimpinan[]" value="dwp" {{ in_array('dwp', $selectedPimpinan) ? 'checked' : '' }}> R. Dewi Pertiwi Zulkarnain (DWP)
                 </label>
             </div>
         </div>
     </div>
 </div>
 
-{{-- Section 2: Waktu & Tempat --}}
+{{-- Section 2: Waktu & Lokasi --}}
 <div class="form-card">
-    <div class="form-card-section-title">Waktu &amp; Tempat Pelaksanaan</div>
+    <div class="form-card-section-title">Waktu &amp; Lokasi Pelaksanaan</div>
     <div class="form-card-body">
         <div class="form-row-2" style="margin-bottom:20px">
             <div class="form-group">
                 <label class="form-label">Tanggal Pelaksanaan <span class="required">*</span></label>
-                <input type="date" class="form-input" name="tanggal" required>
+                <input type="date" class="form-input" name="tanggal" value="{{ old('tanggal', isset($kegiatan) && $kegiatan->tanggal_mulai ? $kegiatan->tanggal_mulai->format('Y-m-d') : date('Y-m-d')) }}" required>
             </div>
             <div class="form-group">
                 <label class="form-label">Waktu Pelaksanaan <span class="required">*</span></label>
-                <div style="display:flex;align-items:center;gap:8px">
-                    <input type="time" class="form-input" name="waktu_mulai" style="flex:1">
-                    <span style="font-size:13px;color:var(--text-secondary);white-space:nowrap">s/d</span>
-                    <input type="time" class="form-input" name="waktu_selesai" style="flex:1">
+                <div style="display:flex;align-items:center;gap:10px">
+                    <input type="time" class="form-input" name="waktu_mulai" value="{{ old('waktu_mulai', isset($kegiatan) && $kegiatan->tanggal_mulai ? $kegiatan->tanggal_mulai->format('H:i') : '') }}" style="max-width:200px" required>
+                    <span style="font-size:13.5px;font-weight:600;color:var(--text-secondary,#64748b);white-space:nowrap">s/d Selesai</span>
                 </div>
             </div>
         </div>
 
         <div class="form-row-1">
             <div class="form-group">
-                <label class="form-label">Lokasi / Tempat <span class="required">*</span></label>
-                <select class="form-select" name="lokasi" required>
+                <label class="form-label">Lokasi <span class="required">*</span></label>
+                @php 
+                    $curLokasi = old('lokasi', $kegiatan->lokasi ?? ''); 
+                    $selectedKey = '';
+                    $isCustom = false;
+                    if (in_array($curLokasi, ['pendopo', 'Pendopo Kota Bandung'])) {
+                        $selectedKey = 'pendopo';
+                    } elseif (in_array($curLokasi, ['balai_kota', 'Balai Kota Bandung'])) {
+                        $selectedKey = 'balai_kota';
+                    } elseif (in_array($curLokasi, ['gedung_dprd', 'Gedung DPRD Kota Bandung'])) {
+                        $selectedKey = 'gedung_dprd';
+                    } elseif (!empty($curLokasi)) {
+                        $selectedKey = 'lainnya';
+                        $isCustom = true;
+                    }
+                @endphp
+                <select class="form-select" name="lokasi" id="selectLokasi" onchange="toggleLokasiCustom(this.value)" required>
                     <option value="">Pilih atau cari lokasi...</option>
-                    <option value="gedung_dprd">Gedung DPRD Kota Bandung</option>
-                    <option value="balai_kota">Balai Kota Bandung</option>
-                    <option value="taman_sekeloa">Taman Sekeloa</option>
-                    <option value="kolam_retensi">Kolam Retensi Gedebage</option>
-                    <option value="ruang_rapat_tengah">Ruang Rapat Tengah</option>
+                    <option value="pendopo" {{ $selectedKey === 'pendopo' ? 'selected' : '' }}>Pendopo Kota Bandung</option>
+                    <option value="balai_kota" {{ $selectedKey === 'balai_kota' ? 'selected' : '' }}>Balai Kota Bandung</option>
+                    <option value="gedung_dprd" {{ $selectedKey === 'gedung_dprd' ? 'selected' : '' }}>Gedung DPRD Kota Bandung</option>
+                    <option value="lainnya" {{ $selectedKey === 'lainnya' ? 'selected' : '' }}>Lokasi Lainnya (Ketik Manual)</option>
                 </select>
+                <div id="lokasiCustomWrapper" style="display: {{ $isCustom ? 'block' : 'none' }}; margin-top: 10px;">
+                    <input type="text" class="form-input" name="lokasi_custom" id="inputLokasiCustom" 
+                           value="{{ old('lokasi_custom', $isCustom ? $curLokasi : '') }}" 
+                           placeholder="Ketik nama lokasi..." {{ $isCustom ? 'required' : '' }}>
+                </div>
             </div>
         </div>
 
         <div class="form-row-1">
             <div class="form-group">
                 <label class="form-label">Detail Ruangan / Keterangan Tambahan</label>
-                <textarea class="form-textarea" name="keterangan" placeholder="Contoh: Ruang Rapat Tengah, Lantai 2"></textarea>
+                <textarea class="form-textarea" name="keterangan" placeholder="Contoh: Ruang Rapat Tengah, Lantai 2">{{ old('keterangan', $kegiatan->deskripsi ?? '') }}</textarea>
             </div>
         </div>
     </div>
@@ -270,3 +344,22 @@
 
 </form>
 @endsection
+
+@push('scripts')
+<script>
+function toggleLokasiCustom(val) {
+    const wrap = document.getElementById('lokasiCustomWrapper');
+    const input = document.getElementById('inputLokasiCustom');
+    if (wrap && input) {
+        if (val === 'lainnya') {
+            wrap.style.display = 'block';
+            input.required = true;
+            input.focus();
+        } else {
+            wrap.style.display = 'none';
+            input.required = false;
+        }
+    }
+}
+</script>
+@endpush

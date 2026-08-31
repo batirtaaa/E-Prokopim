@@ -118,9 +118,16 @@
 
         {{-- Kirim ke WhatsApp --}}
         @php
-            $waText = isset($kegiatan)
-                ? "Kegiatan: {$kegiatan->judul}\nTanggal: " . ($kegiatan->tanggal_mulai ? $kegiatan->tanggal_mulai->format('d M Y H:i') : '-') . " WIB\nLokasi: " . ($kegiatan->lokasi ?? '-')
-                : 'Kegiatan baru telah ditambahkan di E-PROKOPIM';
+            if (isset($kegiatan)) {
+                $waText = "Kegiatan: {$kegiatan->judul}";
+                if ($kegiatan->leading_sektor) {
+                    $waText .= "\nLeading Sektor: {$kegiatan->leading_sektor}";
+                }
+                $waText .= "\nTanggal: " . ($kegiatan->tanggal_mulai ? $kegiatan->tanggal_mulai->format('d M Y H:i') . ' WIB' : '-');
+                $waText .= "\nLokasi: " . ($kegiatan->lokasi ?? '-');
+            } else {
+                $waText = 'Kegiatan baru telah ditambahkan di E-PROKOPIM';
+            }
         @endphp
         <a href="https://wa.me/?text={{ urlencode($waText) }}" target="_blank" class="success-btn secondary">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="color:#25d366">

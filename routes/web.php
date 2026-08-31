@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
 
     // Kegiatan Pimpinan
     Route::get('/kegiatan-pimpinan', [KegiatanPimpinanController::class, 'index'])->name('kegiatan-pimpinan.index');
+    Route::get('/kegiatan-pimpinan/export-rekap', [KegiatanPimpinanController::class, 'exportRekap'])->name('kegiatan-pimpinan.export-rekap');
     Route::get('/kegiatan-pimpinan/create', [KegiatanPimpinanController::class, 'create'])->name('kegiatan-pimpinan.create');
     Route::post('/kegiatan-pimpinan', [KegiatanPimpinanController::class, 'store'])->name('kegiatan-pimpinan.store');
     Route::get('/kegiatan-pimpinan/{kegiatan}/success', [KegiatanPimpinanController::class, 'success'])->name('kegiatan-pimpinan.success');
@@ -66,6 +67,8 @@ Route::middleware('auth')->group(function () {
 
     // Komunikasi Pimpinan — Media Sosial
     Route::get('/komunikasi-pimpinan/media-sosial', [MediaSosialController::class, 'index'])->name('media-sosial.index');
+    Route::get('/komunikasi-pimpinan/media-sosial/export-rekap', [MediaSosialController::class, 'exportRekap'])->name('media-sosial.export-rekap');
+    Route::get('/komunikasi-pimpinan/media-sosial/infografis/{tahun}/{bulan}', [MediaSosialController::class, 'folderBulan'])->name('media-sosial.folder');
     Route::post('/komunikasi-pimpinan/media-sosial', [MediaSosialController::class, 'store'])->name('media-sosial.store');
     Route::put('/komunikasi-pimpinan/media-sosial/{mediaSosial}', [MediaSosialController::class, 'update'])->name('media-sosial.update');
     Route::delete('/komunikasi-pimpinan/media-sosial/{mediaSosial}', [MediaSosialController::class, 'destroy'])->name('media-sosial.destroy');
@@ -77,7 +80,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/sub-dokumentasi-pimpinan', [SubDokumentasiPimpinanController::class, 'index'])->name('sub-dokumentasi-pimpinan.index');
 
     // Dokumentasi Pimpinan — Galeri Arsip
+    Route::get('/dokumentasi-pimpinan/galeri-arsip/export-notulensi', [GaleriArsipController::class, 'exportNotulensi'])->name('galeri-arsip.export-notulensi');
     Route::get('/dokumentasi-pimpinan/galeri-arsip', [GaleriArsipController::class, 'index'])->name('galeri-arsip.index');
+    Route::get('/dokumentasi-pimpinan/galeri-arsip/thumb/{id}', [GaleriArsipController::class, 'thumb'])->name('galeri-arsip.thumb');
     Route::post('/dokumentasi-pimpinan/galeri-arsip', [GaleriArsipController::class, 'store'])->name('galeri-arsip.store');
     Route::put('/dokumentasi-pimpinan/galeri-arsip/{galeriArsip}', [GaleriArsipController::class, 'update'])->name('galeri-arsip.update');
     Route::delete('/dokumentasi-pimpinan/galeri-arsip/{galeriArsip}', [GaleriArsipController::class, 'destroy'])->name('galeri-arsip.destroy');

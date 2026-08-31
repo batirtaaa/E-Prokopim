@@ -86,6 +86,54 @@
             font-weight: 600;
             background: transparent !important;
         }
+
+        /* ── Sidebar Sub-Nav-Group (nested collapsible under sublink level) ── */
+        .sidebar-nav-subgroup { margin: 0; }
+        .sidebar-nav-subgroup-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 12px 6px 36px;
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            font-weight: 400;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+        .sidebar-nav-subgroup-header:hover {
+            color: #ffffff;
+            background: rgba(255,255,255,0.06);
+        }
+        .sidebar-nav-subgroup-header.active {
+            color: #22c55e !important;
+            font-weight: 600;
+        }
+        .sidebar-nav-subgroup-header .sub-chevron {
+            width: 11px;
+            height: 11px;
+            opacity: 0.5;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+        .sidebar-nav-subgroup-header.open .sub-chevron {
+            transform: rotate(180deg);
+        }
+        .sidebar-nav-subgroup-children {
+            display: none;
+            padding: 2px 0 4px 0;
+        }
+        .sidebar-nav-subgroup-children.open {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        .sidebar-nav-sublink--deep {
+            padding-left: 52px;
+            font-size: 12.5px;
+        }
+
         .sidebar-nav-label {
             font-size: 10px;
             font-weight: 700;
@@ -497,9 +545,15 @@
                     Dokumentasi Pimpinan
                     <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                 </div>
-                <div class="sidebar-nav-group-children {{ (request()->routeIs('sub-dokumentasi-pimpinan.*') || request()->routeIs('galeri-arsip.*')) ? 'open' : '' }}">
-                    <a href="{{ route('galeri-arsip.index') }}" class="sidebar-nav-sublink {{ request()->routeIs('galeri-arsip.*') ? 'active' : '' }}">
-                        Galeri Arsip
+                <div class="sidebar-nav-group-children {{ request()->routeIs('galeri-arsip.*') ? 'open' : '' }}">
+                    <a href="{{ route('galeri-arsip.index', ['tab'=>'foto']) }}" class="sidebar-nav-sublink {{ (request()->routeIs('galeri-arsip.*') && request()->get('tab') === 'foto') ? 'active' : '' }}">
+                        Foto
+                    </a>
+                    <a href="{{ route('galeri-arsip.index', ['tab'=>'video']) }}" class="sidebar-nav-sublink {{ (request()->routeIs('galeri-arsip.*') && request()->get('tab') === 'video') ? 'active' : '' }}">
+                        Video
+                    </a>
+                    <a href="{{ route('galeri-arsip.index', ['tab'=>'notulensi']) }}" class="sidebar-nav-sublink {{ (request()->routeIs('galeri-arsip.*') && request()->get('tab') === 'notulensi') ? 'active' : '' }}">
+                        Notulensi
                     </a>
                 </div>
             </div>
@@ -688,6 +742,12 @@
 <script src="{{ asset('js/sikopim.js') }}"></script>
 <script>
 function toggleNavGroup(header) {
+    header.classList.toggle('open');
+    const children = header.nextElementSibling;
+    if (children) children.classList.toggle('open');
+}
+
+function toggleSubNavGroup(header) {
     header.classList.toggle('open');
     const children = header.nextElementSibling;
     if (children) children.classList.toggle('open');
