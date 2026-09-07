@@ -254,9 +254,9 @@
                     <label class="pgw-label">Status Kepegawaian <span class="req">*</span></label>
                     <select name="status_kepegawaian" class="pgw-select" required>
                         <option value="PNS" {{ old('status_kepegawaian', $pegawai->status_kepegawaian) == 'PNS' ? 'selected' : '' }}>PNS</option>
-                        <option value="PPPK Penuh Waktu" {{ old('status_kepegawaian', $pegawai->status_kepegawaian) == 'PPPK Penuh Waktu' ? 'selected' : '' }}>PPPK Penuh Waktu</option>
+                        <option value="PPPK" {{ in_array(old('status_kepegawaian', $pegawai->status_kepegawaian), ['PPPK', 'PPPK Penuh Waktu']) ? 'selected' : '' }}>PPPK</option>
                         <option value="PPPK Paruh Waktu" {{ old('status_kepegawaian', $pegawai->status_kepegawaian) == 'PPPK Paruh Waktu' ? 'selected' : '' }}>PPPK Paruh Waktu</option>
-                        <option value="Outsourcing" {{ old('status_kepegawaian', $pegawai->status_kepegawaian) == 'Outsourcing' ? 'selected' : '' }}>Outsourcing</option>
+                        <option value="Outsourching" {{ in_array(old('status_kepegawaian', $pegawai->status_kepegawaian), ['Outsourching', 'Outsourcing']) ? 'selected' : '' }}>Outsourching</option>
                     </select>
                 </div>
             </div>

@@ -56,28 +56,35 @@ class PegawaiSeeder extends Seeder
             ['MAESYA ZORAYA NURAISHAH, S.H.', '199503162025212073', 'Penata Layanan Operasional', 'PPPK Paruh Waktu', 'protokol', 'maesya.zoraya@bandung.go.id'],
             ['MUHAMMAD FAHMI MUDZAKIR, S.Pd.', '199702152025211073', 'Penata Layanan Operasional', 'PPPK Paruh Waktu', 'protokol', 'muhammad.fahmi@bandung.go.id'],
             ['OLICH YUSUF EFFENDI', '198405082025211094', 'Operator Layanan Operasional', 'PPPK Paruh Waktu', 'lainnya', 'olich.yusuf@bandung.go.id'],
-            ['SHANDI ADISTIA HILMAWAN', '-', 'Tenaga Teknis Penunjang', 'Outsourching', 'lainnya', 'shandi.adistia@bandung.go.id'],
-            ['TOMMY ALEXANDER', '-', 'Tenaga Teknis Penunjang', 'Outsourching', 'lainnya', 'tommy.alexander@bandung.go.id'],
-            ['ABDUR', '-', 'Tenaga Teknis Penunjang', 'Outsourching', 'lainnya', 'abdur@bandung.go.id'],
+            ['DADAN RUSKADAR', '-', '-', 'Outsourching', 'lainnya', 'dadan.ruskadar@bandung.go.id'],
+            ['FIRMAN SETIAWAN', '-', '-', 'Outsourching', 'lainnya', 'firman.setiawan@bandung.go.id'],
+            ['TONSS SISWANDI PRA TAMARA', '-', '-', 'Outsourching', 'lainnya', 'tonss.siswandi@bandung.go.id'],
+            ['YUSWAN RIYADI', '-', '-', 'Outsourching', 'lainnya', 'yuswan.riyadi@bandung.go.id'],
+            ['SHANDI ADISTIA HILMAWAN', '-', '-', 'Outsourching', 'lainnya', 'shandi.adistia@bandung.go.id'],
+            ['RUDINI', '-', '-', 'Outsourching', 'lainnya', 'rudini@bandung.go.id'],
+            ['TOMMY ALEXANDER', '-', '-', 'Outsourching', 'lainnya', 'tommy.alexander@bandung.go.id'],
+            ['ABDURRAHMAN ROSYIDIN', '-', '-', 'Outsourching', 'lainnya', 'abdurrahman.rosyidin@bandung.go.id'],
         ];
 
-        // Disable foreign key checks to safely refresh personel
-        Schema::disableForeignKeyConstraints();
-        Personel::truncate();
-        Schema::enableForeignKeyConstraints();
-
-        foreach ($csvData as $item) {
-            Personel::create([
-                'nama_lengkap' => $item[0],
-                'nip' => $item[1],
-                'jabatan' => $item[2],
-                'status_kepegawaian' => $item[3],
-                'bidang' => $item[4],
-                'email' => $item[5],
-                'phone' => '08' . rand(11, 99) . rand(1000000, 9999999),
-                'status_ketersediaan' => 'standby',
-                'user_id' => $adminId,
-            ]);
+        foreach ($csvData as $index => $item) {
+            $id = $index + 1;
+            Personel::updateOrCreate(
+                ['id' => $id],
+                [
+                    'nama_lengkap' => $item[0],
+                    'nip' => $item[1],
+                    'jabatan' => $item[2],
+                    'status_kepegawaian' => $item[3],
+                    'bidang' => $item[4],
+                    'email' => $item[5],
+                    'phone' => '08' . rand(11, 99) . rand(1000000, 9999999),
+                    'status_ketersediaan' => 'standby',
+                    'user_id' => $adminId,
+                ]
+            );
         }
+
+        // Remove any extra records beyond the 48 rows if they exist
+        Personel::where('id', '>', count($csvData))->delete();
     }
 }

@@ -3,7 +3,7 @@
 
 @push('styles')
 <style>
-/* Page Header */
+
 .page-header-row { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:22px; }
 .page-header-left h1 { font-size:26px; font-weight:700; color:#111827; margin-bottom:4px; }
 .page-header-left p  { font-size:13.5px; color:#6b7280; }
@@ -18,7 +18,6 @@
 .btn-unggah:hover { background:#162f4f; }
 .btn-unggah svg { width:16px; height:16px; }
 
-/* Toolbar: Tabs + Filter buttons */
 .ga-toolbar-wrap {
     display:flex; align-items:center; justify-content:space-between;
     border-bottom: 1px solid #e5e7eb;
@@ -418,6 +417,104 @@
     border-radius: 99px;
 }
 #gaUploadStatus { font-size: 12px; color: #6b7280; margin-top: 6px; text-align: center; }
+
+/* ===== SELECT MODE / BULK DELETE ===== */
+.ga-btn-select {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 6px 12px; border: 1px solid #e5e7eb; border-radius: 7px;
+    background: white; font-size: 12.5px; color: #374151;
+    cursor: pointer; transition: all 0.15s;
+}
+.ga-btn-select:hover { border-color: #dc2626; color: #dc2626; }
+.ga-btn-select.active { border-color: #dc2626; background: #fef2f2; color: #dc2626; font-weight: 600; }
+.ga-btn-select svg { width: 13px; height: 13px; }
+
+/* Checkbox overlay on thumb */
+.ga-card-checkbox {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+.ga-card-checkbox input[type="checkbox"] {
+    width: 20px; height: 20px;
+    accent-color: #dc2626;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 2px solid white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+.select-mode .ga-card-checkbox { display: block; }
+.select-mode .ga-card { cursor: pointer; user-select: none; }
+.select-mode .ga-card.selected {
+    border: 2px solid #dc2626;
+    box-shadow: 0 0 0 3px rgba(220,38,38,0.15);
+}
+.select-mode .ga-card.selected .ga-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(220,38,38,0.18);
+    pointer-events: none;
+}
+
+/* Bulk action bar */
+#gaBulkBar {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9998;
+    background: #1e293b;
+    color: white;
+    border-radius: 12px;
+    padding: 12px 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+    align-items: center;
+    gap: 14px;
+    font-size: 13.5px;
+    min-width: 340px;
+    animation: barSlideUp 0.2s ease-out;
+}
+@keyframes barSlideUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+#gaBulkBar.show { display: flex; }
+.ga-bulk-count {
+    font-weight: 700;
+    background: #dc2626;
+    border-radius: 6px;
+    padding: 2px 9px;
+    font-size: 13px;
+}
+.ga-bulk-select-all {
+    background: none; border: 1px solid rgba(255,255,255,0.3);
+    color: white; border-radius: 7px;
+    padding: 5px 12px; font-size: 12.5px;
+    cursor: pointer; white-space: nowrap;
+    transition: all 0.15s;
+}
+.ga-bulk-select-all:hover { background: rgba(255,255,255,0.1); }
+.ga-bulk-delete {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #dc2626; color: white; border: none;
+    border-radius: 7px; padding: 7px 16px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; white-space: nowrap;
+    transition: background 0.15s;
+}
+.ga-bulk-delete:hover { background: #b91c1c; }
+.ga-bulk-delete svg { width: 14px; height: 14px; }
+.ga-bulk-cancel {
+    background: none; border: none;
+    color: rgba(255,255,255,0.55); font-size: 12px;
+    cursor: pointer; padding: 5px 8px;
+    border-radius: 6px; transition: color 0.15s;
+}
+.ga-bulk-cancel:hover { color: white; }
 </style>
 @endpush
 
@@ -505,20 +602,45 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25"/></svg>
             Terbaru
         </button>
+        @if(auth()->user()->isAdmin())
+        <button type="button" id="gaBtnSelectMode" class="ga-btn-select" onclick="toggleSelectMode()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Pilih Item
+        </button>
+        @endif
     </div>
 </div>
 
+{{-- Bulk Delete Form (hidden) --}}
+<form id="gaBulkDeleteForm" method="POST" action="{{ route('galeri-arsip.bulk-destroy') }}" style="display:none">
+    @csrf
+    @method('DELETE')
+    <input type="hidden" name="current_tab" value="{{ $tab }}">
+    <div id="gaBulkIdsContainer"></div>
+</form>
+
+{{-- Bulk Action Bar --}}
+<div id="gaBulkBar">
+    <span id="gaBulkCount" class="ga-bulk-count">0 dipilih</span>
+    <button type="button" class="ga-bulk-select-all" onclick="selectAllItems()">Pilih Semua</button>
+    <button type="button" class="ga-bulk-delete" onclick="confirmBulkDelete()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+        Hapus yang Dipilih
+    </button>
+    <button type="button" class="ga-bulk-cancel" onclick="toggleSelectMode(false)">Batal</button>
+</div>
+
 {{-- Grid --}}
-<div class="ga-grid">
+<div class="ga-grid" id="gaGrid">
     @forelse($items as $item)
-    <div class="ga-card">
+    <div class="ga-card" data-id="{{ $item->id }}" onclick="handleCardClick(event, this, {{ $item->id }})">
+        {{-- Checkbox Overlay (select mode only) --}}
+        <div class="ga-card-checkbox" onclick="event.stopPropagation()">
+            <input type="checkbox" class="ga-item-checkbox" data-id="{{ $item->id }}" onchange="onCheckboxChange()">
+        </div>
+
         {{-- Thumbnail - klik untuk preview --}}
-        <div class="ga-thumb" onclick="openViewer(
-            '{{ $item->tipe }}',
-            {{ $item->id }},
-            '{{ addslashes($item->judul) }}',
-            '{{ addslashes($item->file_name ?? '') }}'
-        )">
+        <div class="ga-thumb" id="gat-{{ $item->id }}" onclick="handleThumbClick(event, '{{ $item->tipe }}', {{ $item->id }}, '{{ addslashes($item->judul) }}', '{{ addslashes($item->file_name ?? '') }}')">
             @if($item->file_path)
                 @if(Str::endsWith($item->file_path, ['.mp4', '.mov']))
                     {{-- Video: placeholder gelap + ikon, tanpa <video src> agar IDM tidak mencegat --}}
@@ -733,6 +855,142 @@
 
 @push('scripts')
 <script>
+// ===== SELECT MODE / BULK DELETE =====
+let isSelectMode = false;
+
+function toggleSelectMode(forceState) {
+    if (typeof forceState === 'boolean') {
+        isSelectMode = forceState;
+    } else {
+        isSelectMode = !isSelectMode;
+    }
+
+    const grid = document.getElementById('gaGrid');
+    const btn = document.getElementById('gaBtnSelectMode');
+    const bar = document.getElementById('gaBulkBar');
+
+    if (isSelectMode) {
+        grid?.classList.add('select-mode');
+        btn?.classList.add('active');
+        if (btn) btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:13px;height:13px"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Batal Pilih`;
+        bar?.classList.add('show');
+        updateBulkCount();
+    } else {
+        grid?.classList.remove('select-mode');
+        btn?.classList.remove('active');
+        if (btn) btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:13px;height:13px"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Pilih Item`;
+        bar?.classList.remove('show');
+        
+        // Reset all checkboxes & cards
+        document.querySelectorAll('.ga-item-checkbox').forEach(cb => cb.checked = false);
+        document.querySelectorAll('.ga-card').forEach(c => c.classList.remove('selected'));
+        const selectAllBtn = document.querySelector('.ga-bulk-select-all');
+        if (selectAllBtn) selectAllBtn.textContent = 'Pilih Semua';
+        updateBulkCount();
+    }
+}
+
+function handleCardClick(event, cardEl, itemId) {
+    if (!isSelectMode) return;
+    
+    // If user clicked directly on dropdown menu, don't trigger select
+    if (event.target.closest('.ga-dropdown') || event.target.closest('.ga-more-btn')) {
+        return;
+    }
+
+    const cb = cardEl.querySelector('.ga-item-checkbox');
+    if (cb && event.target !== cb) {
+        cb.checked = !cb.checked;
+    }
+    onCheckboxChange();
+}
+
+function handleThumbClick(event, tipe, itemId, judul, fileName) {
+    if (isSelectMode) {
+        event.stopPropagation();
+        const card = event.target.closest('.ga-card');
+        if (card) {
+            const cb = card.querySelector('.ga-item-checkbox');
+            if (cb) cb.checked = !cb.checked;
+            onCheckboxChange();
+        }
+        return;
+    }
+    openViewer(tipe, itemId, judul, fileName);
+}
+
+function onCheckboxChange() {
+    let checkedCount = 0;
+    const allCbs = document.querySelectorAll('.ga-item-checkbox');
+    document.querySelectorAll('.ga-card').forEach(card => {
+        const cb = card.querySelector('.ga-item-checkbox');
+        if (cb && cb.checked) {
+            card.classList.add('selected');
+            checkedCount++;
+        } else {
+            card.classList.remove('selected');
+        }
+    });
+
+    const selectAllBtn = document.querySelector('.ga-bulk-select-all');
+    if (selectAllBtn && allCbs.length > 0) {
+        selectAllBtn.textContent = (checkedCount === allCbs.length) ? 'Batal Pilih Semua' : 'Pilih Semua';
+    }
+
+    updateBulkCount(checkedCount);
+}
+
+function updateBulkCount(count) {
+    if (typeof count === 'undefined') {
+        count = document.querySelectorAll('.ga-item-checkbox:checked').length;
+    }
+    const countEl = document.getElementById('gaBulkCount');
+    if (countEl) {
+        countEl.textContent = `${count} dipilih`;
+    }
+}
+
+function selectAllItems() {
+    const allCbs = document.querySelectorAll('.ga-item-checkbox');
+    const checkedCbs = document.querySelectorAll('.ga-item-checkbox:checked');
+    const selectAllBtn = document.querySelector('.ga-bulk-select-all');
+
+    const shouldCheck = checkedCbs.length < allCbs.length;
+    allCbs.forEach(cb => {
+        cb.checked = shouldCheck;
+    });
+
+    onCheckboxChange();
+    if (selectAllBtn) {
+        selectAllBtn.textContent = shouldCheck ? 'Batal Pilih Semua' : 'Pilih Semua';
+    }
+}
+
+function confirmBulkDelete() {
+    const checked = document.querySelectorAll('.ga-item-checkbox:checked');
+    if (checked.length === 0) {
+        alert('Silakan pilih minimal satu item untuk dihapus.');
+        return;
+    }
+
+    if (!confirm(`Apakah Anda yakin ingin menghapus ${checked.length} arsip yang dipilih? File fisik dan data yang dihapus tidak dapat dikembalikan.`)) {
+        return;
+    }
+
+    const container = document.getElementById('gaBulkIdsContainer');
+    container.innerHTML = '';
+    checked.forEach(cb => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'ids[]';
+        input.value = cb.getAttribute('data-id');
+        container.appendChild(input);
+    });
+
+    document.getElementById('gaBulkDeleteForm').submit();
+}
+
+
 function toggleGaMenu(e, id) {
     e.stopPropagation();
     document.querySelectorAll('.ga-dropdown').forEach(m => {

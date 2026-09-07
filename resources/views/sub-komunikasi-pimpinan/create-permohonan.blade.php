@@ -167,32 +167,31 @@
 
             <div class="form-row-2" style="margin-bottom:18px">
                 <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label">Tanggal Acara / Pelaksanaan <span class="req">*</span></label>
+                    <label class="form-label">Tanggal Acara <span class="req">*</span></label>
                     <input type="date" class="form-input" name="tanggal_acara" value="{{ old('tanggal_acara') }}" required>
                 </div>
                 <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label">Ditujukan Kepada (Tujuan Sambutan) <span class="req">*</span></label>
-                    <select class="form-select" name="tujuan" id="selectTujuan" onchange="toggleTujuanCustom(this.value)" required>
-                        <option value="">Pilih pimpinan tujuan...</option>
-                        <option value="Wali Kota (B1)" {{ old('tujuan') === 'Wali Kota (B1)' ? 'selected' : '' }}>Wali Kota (B1)</option>
-                        <option value="Wakil Wali Kota (B2)" {{ old('tujuan') === 'Wakil Wali Kota (B2)' ? 'selected' : '' }}>Wakil Wali Kota (B2)</option>
-                        <option value="Sekretaris Daerah (B3)" {{ old('tujuan') === 'Sekretaris Daerah (B3)' ? 'selected' : '' }}>Sekretaris Daerah (B3)</option>
-                        <option value="Ketua TP-PKK / Aryatri Benarto (PKK1)" {{ old('tujuan') === 'Ketua TP-PKK / Aryatri Benarto (PKK1)' ? 'selected' : '' }}>Ketua TP-PKK / Aryatri Benarto (PKK1)</option>
-                        <option value="Wakil Ketua TP-PKK / Fitriana Dewi (PKK2)" {{ old('tujuan') === 'Wakil Ketua TP-PKK / Fitriana Dewi (PKK2)' ? 'selected' : '' }}>Wakil Ketua TP-PKK / Fitriana Dewi (PKK2)</option>
-                        <option value="Ketua DWP / R. Dewi Pertiwi Zulkarnain (DWP)" {{ old('tujuan') === 'Ketua DWP / R. Dewi Pertiwi Zulkarnain (DWP)' ? 'selected' : '' }}>Ketua DWP / R. Dewi Pertiwi Zulkarnain (DWP)</option>
-                        <option value="Asisten Pemerintahan dan Kesra (Asisten 1)" {{ old('tujuan') === 'Asisten Pemerintahan dan Kesra (Asisten 1)' ? 'selected' : '' }}>Asisten Pemerintahan dan Kesra (Asisten 1)</option>
-                        <option value="Asisten Perekonomian dan Pembangunan (Asisten 2)" {{ old('tujuan') === 'Asisten Perekonomian dan Pembangunan (Asisten 2)' ? 'selected' : '' }}>Asisten Perekonomian dan Pembangunan (Asisten 2)</option>
-                        <option value="Asisten Administrasi Umum (Asisten 3)" {{ old('tujuan') === 'Asisten Administrasi Umum (Asisten 3)' ? 'selected' : '' }}>Asisten Administrasi Umum (Asisten 3)</option>
-                        <option value="lainnya" {{ old('tujuan') === 'lainnya' ? 'selected' : '' }}>Lainnya (Ketik Manual)</option>
-                    </select>
-                    <div id="tujuanCustomWrap" style="display: {{ old('tujuan') === 'lainnya' ? 'block' : 'none' }}; margin-top: 8px;">
-                        <input type="text" class="form-input" name="tujuan_custom" id="inputTujuanCustom" value="{{ old('tujuan_custom') }}" placeholder="Ketik tujuan / penerima naskah sambutan...">
-                    </div>
+                    <label class="form-label">Waktu Acara<span class="req">*</span></label>
+                    <input type="time" class="form-input" name="waktu_acara" value="{{ old('waktu_acara') }}" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label">Asal Instansi / Pengirim <span class="req">*</span></label>
+                <label class="form-label">Ditujukan Kepada (Tujuan Sambutan) <span class="req">*</span></label>
+                <select class="form-select" name="tujuan" id="selecttujuan" onchange="toggleTujuanCustom(this.value)" required>
+                    <option value="" disabled {{ old('tujuan') ? '' : 'selected' }}>Pilih pimpinan tujuan...</option>
+                    <option value="Wali Kota (B1)" {{ old('tujuan') === 'Wali Kota (B1)' ? 'selected' : '' }}>Wali Kota (B1)</option>
+                    <option value="Wakil Wali Kota (B2)" {{ old('tujuan') === 'Wakil Wali Kota (B2)' ? 'selected' : '' }}>Wakil Wali Kota (B2)</option>
+                    <option value="Sekretaris Daerah (B3)" {{ old('tujuan') === 'Sekretaris Daerah (B3)' ? 'selected' : '' }}>Sekretaris Daerah (Sekda / B3)</option>
+                    <option value="lainnya" {{ old('tujuan') === 'lainnya' ? 'selected' : '' }}>Lainnya (Ketik Manual)</option>
+                </select>
+                <div id="tujuanCustomWrap" style="display: {{ old('tujuan') === 'lainnya' ? 'block' : 'none' }}; margin-top: 8px;">
+                    <input type="text" class="form-input" name="tujuan_custom" id="inputTujuanCustom" value="{{ old('tujuan_custom') }}" placeholder="Ketik tujuan / penerima naskah sambutan...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Asal Instansi <span class="req">*</span></label>
                 <input type="text" class="form-input" name="asal_instansi" value="{{ old('asal_instansi') }}" placeholder="Masukkan nama instansi pengirim" required>
             </div>
             <div class="form-group">
@@ -247,7 +246,8 @@
             <div class="form-group" style="margin-bottom:0">
                 <label class="form-label">Status Permohonan <span class="req">*</span></label>
                 <select class="form-select" name="status" id="input-status">
-                    <option value="diproses" {{ old('status', 'diproses') === 'diproses' ? 'selected' : '' }}>Progres / Sedang Diproses</option>
+                    <option value="" disabled {{ old('status') ? '' : 'selected' }}> Status Progres</option>
+                    <option value="proses" {{ old('status') === 'proses' ? 'selected' : '' }}>proses</option>
                     <option value="selesai" {{ old('status') === 'selesai' ? 'selected' : '' }}>Selesai</option>
                     <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>Draft</option>
                 </select>
@@ -257,12 +257,10 @@
         {{-- Deadline Disposisi --}}
         <div class="form-group" style="margin-bottom:18px">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px">
-                <label class="form-label" style="margin-bottom:0 !important">Batas Waktu / Deadline Pengerjaan <span class="req">*</span></label>
+                <label class="form-label" style="margin-bottom:0 !important">Deadline Pengerjaan <span class="req">*</span></label>
                 <div style="display:flex;gap:6px;align-items:center;">
                     <span style="font-size:11.5px;color:#64748b;">Pintas:</span>
-                    <button type="button" onclick="setQuickDeadline(2)" style="font-size:11.5px;padding:3px 9px;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;border-radius:6px;cursor:pointer;font-weight:600">⚡ +2 Jam (Standar Disposisi)</button>
-                    <button type="button" onclick="setQuickTodayEnd()" style="font-size:11.5px;padding:3px 9px;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;border-radius:6px;cursor:pointer">Hari Ini 16:00</button>
-                    <button type="button" onclick="setQuickTomorrow()" style="font-size:11.5px;padding:3px 9px;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;border-radius:6px;cursor:pointer">Besok 10:00</button>
+                    <button type="button" onclick="setQuickDeadline(2)" style="font-size:11.5px;padding:3px 9px;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;border-radius:6px;cursor:pointer;font-weight:600"> +2 Jam (Standar Disposisi)</button>
                 </div>
             </div>
             <div class="form-row-2">

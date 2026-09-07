@@ -177,4 +177,30 @@ class GaleriArsipController extends Controller
         return redirect()->route('galeri-arsip.index', ['tab' => $tab])
                          ->with('success', 'Arsip berhasil dihapus.');
     }
+
+    public function bulkDestroy(Request $request)
+    {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $ids = $request->input('ids', []);
+        if (empty($ids) || !is_array($ids)) {
+            return back()->with('error', 'Tidak ada item yang dipilih.');
+        }
+
+        $items = GaleriArsip::whereIn('id', $ids)->get();
+        foreach ($items as $item) {
+            if ($item->file_path) {
+                Storage::disk('public')->delete($item->file_path);
+            }
+            $item->delete();
+        }
+
+        $count = $items->count();
+        $tab   = $request->input('current_tab', 'semua');
+
+        return redirect()->route('galeri-arsip.index', ['tab' => $tab])
+                         ->with('success', "{$count} arsip berhasil dihapus.");
+    }
 }

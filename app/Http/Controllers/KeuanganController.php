@@ -4,186 +4,288 @@ namespace App\Http\Controllers;
 
 use App\Models\Keuangan;
 use App\Models\Personel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class KeuanganController extends Controller
 {
+    const NAMA_BULAN = [
+        1  => 'Januari',  2  => 'Februari', 3  => 'Maret',
+        4  => 'April',    5  => 'Mei',       6  => 'Juni',
+        7  => 'Juli',     8  => 'Agustus',   9  => 'September',
+        10 => 'Oktober',  11 => 'November',  12 => 'Desember',
+    ];
+
     public function index(Request $request)
     {
-        $query = Keuangan::orderBy('id', 'asc');
+        $selectedTahun = (int) $request->get('tahun', now()->year);
 
+        // Fetch distinct available years
+        $dataYears = Keuangan::selectRaw('YEAR(COALESCE(tanggal_diterima, tanggal)) as tahun')
+            ->whereNotNull('tanggal_diterima')
+            ->orWhereNotNull('tanggal')
+            ->distinct()
+            ->orderByDesc('tahun')
+            ->pluck('tahun')
+            ->toArray();
+        $availableYears = array_unique(array_merge([$selectedTahun, now()->year], $dataYears));
+        rsort($availableYears);
+
+        $query = Keuangan::where(function ($q) use ($selectedTahun) {
+            $q->whereYear('tanggal_diterima', $selectedTahun)
+              ->orWhere(function ($sub) use ($selectedTahun) {
+                  $sub->whereNull('tanggal_diterima')->whereYear('tanggal', $selectedTahun);
+              });
+        })->orderByRaw('COALESCE(tanggal_diterima, tanggal) DESC')->orderBy('id', 'desc');
+
+        // Search
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('no_bukti', 'like', "%{$search}%")
-                  ->orWhere('uraian', 'like', "%{$search}%")
-                  ->orWhere('kategori', 'like', "%{$search}%")
-                  ->orWhere('penanggung_jawab', 'like', "%{$search}%");
+            $s = trim($request->search);
+            $query->where(function ($q) use ($s) {
+                $q->where('nomor_surat', 'like', "%{$s}%")
+                  ->orWhere('pengirim', 'like', "%{$s}%")
+                  ->orWhere('perihal', 'like', "%{$s}%")
+                  ->orWhere('disposisi', 'like', "%{$s}%")
+                  ->orWhere('no_bukti', 'like', "%{$s}%")
+                  ->orWhere('uraian', 'like', "%{$s}%");
             });
         }
 
-        if ($request->filled('kategori')) {
-            $query->where('kategori', $request->kategori);
+        // Filter Bulan
+        if ($request->filled('bulan')) {
+            $query->where(function ($q) use ($request) {
+                $q->whereMonth('tanggal_diterima', $request->bulan)
+                  ->orWhere(function ($sub) use ($request) {
+                      $sub->whereNull('tanggal_diterima')->whereMonth('tanggal', $request->bulan);
+                  });
+            });
         }
 
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
+        // Filter Status Print
+        if ($request->filled('status_print')) {
+            if ($request->status_print === '1' || $request->status_print === 'printed') {
+                $query->where('is_printed', true);
+            } elseif ($request->status_print === '0' || $request->status_print === 'unprinted') {
+                $query->where(function ($q) {
+                    $q->where('is_printed', false)->orWhereNull('is_printed');
+                });
+            }
         }
 
-        $transaksi = $query->paginate(10)->withQueryString();
-        $totalTransaksi = Keuangan::count();
-        $totalNominal = Keuangan::where('status', 'selesai')->sum('nominal');
+        // Statistics for current year
+        $yearQuery = Keuangan::where(function ($q) use ($selectedTahun) {
+            $q->whereYear('tanggal_diterima', $selectedTahun)
+              ->orWhere(function ($sub) use ($selectedTahun) {
+                  $sub->whereNull('tanggal_diterima')->whereYear('tanggal', $selectedTahun);
+              });
+        });
 
-        return view('keuangan.index', compact('transaksi', 'totalTransaksi', 'totalNominal'));
+        $totalSurat   = (clone $yearQuery)->count();
+        $totalPrinted = (clone $yearQuery)->where('is_printed', true)->count();
+        $totalUnprinted = $totalSurat - $totalPrinted;
+
+        $suratList = $query->paginate(15)->withQueryString();
+
+        return view('keuangan.index', compact(
+            'suratList',
+            'selectedTahun',
+            'availableYears',
+            'totalSurat',
+            'totalPrinted',
+            'totalUnprinted'
+        ));
     }
 
     public function create()
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menambah transaksi keuangan.');
-        }
-        $kodeOtomatis = Keuangan::generateNextCode();
         $pegawaiList = Personel::orderBy('nama_lengkap', 'asc')->get();
-
-        return view('keuangan.create', compact('kodeOtomatis', 'pegawaiList'));
+        return view('keuangan.create', compact('pegawaiList'));
     }
 
     public function store(Request $request)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menambah transaksi keuangan.');
-        }
-        $request->validate([
-            'no_bukti' => 'nullable|string|max:50|unique:keuangan,no_bukti',
-            'tanggal' => 'required|date',
-            'uraian' => 'required|string|max:255',
-            'kategori' => 'required|string|max:100',
-            'jenis' => 'required|string|max:50',
-            'nominal' => 'required|numeric|min:0',
-            'penanggung_jawab' => 'nullable|string|max:255',
-            'status' => 'required|string|max:50',
-            'file_bukti' => 'nullable|file|max:10240',
-            'catatan' => 'nullable|string',
+        $validated = $request->validate([
+            'tanggal_diterima' => 'required|date',
+            'nomor_surat'      => 'required|string|max:255',
+            'pengirim'         => 'required|string|max:255',
+            'perihal'          => 'required|string',
+            'disposisi'        => 'nullable|string|max:500',
+            'link_dokumen'     => 'nullable|string|max:500',
+            'file_dokumen'     => 'nullable|file|mimes:pdf,doc,docx|max:15360',
+            'is_printed'       => 'nullable|boolean',
+        ], [
+            'tanggal_diterima.required' => 'Tanggal Diterima wajib diisi.',
+            'nomor_surat.required'      => 'Nomor Surat wajib diisi.',
+            'pengirim.required'         => 'Asal Instansi wajib diisi.',
+            'perihal.required'          => 'Perihal Surat wajib diisi.',
+            'file_dokumen.mimes'        => 'Format berkas dokumen harus berupa PDF atau Word (.doc, .docx).',
+            'file_dokumen.max'          => 'Ukuran file dokumen maksimal 15MB.',
         ]);
 
         $filePath = null;
-        if ($request->hasFile('file_bukti')) {
-            $filePath = $request->file('file_bukti')->store('keuangan/bukti', 'public');
+        if ($request->hasFile('file_dokumen')) {
+            $filePath = $request->file('file_dokumen')->store('keuangan/dokumen', 'public');
         }
 
-        $noBukti = $request->no_bukti ?: Keuangan::generateNextCode();
+        $isPrinted = $request->boolean('is_printed');
 
         Keuangan::create([
-            'no_bukti' => $noBukti,
-            'tanggal' => $request->tanggal,
-            'uraian' => $request->uraian,
-            'kategori' => $request->kategori,
-            'jenis' => $request->jenis,
-            'nominal' => $request->nominal,
-            'penanggung_jawab' => $request->penanggung_jawab,
-            'status' => $request->status,
-            'file_bukti' => $filePath,
-            'catatan' => $request->catatan,
-            'created_by' => Auth::id(),
+            'tanggal_diterima' => $validated['tanggal_diterima'],
+            'nomor_surat'      => $validated['nomor_surat'],
+            'pengirim'         => $validated['pengirim'],
+            'perihal'          => $validated['perihal'],
+            'disposisi'        => $validated['disposisi'] ?? null,
+            'link_dokumen'     => $validated['link_dokumen'] ?? null,
+            'file_dokumen'     => $filePath,
+            'is_printed'       => $isPrinted,
+            'printed_at'       => $isPrinted ? now() : null,
+            // Fallback for legacy fields
+            'tanggal'          => $validated['tanggal_diterima'],
+            'uraian'           => $validated['perihal'],
+            'created_by'       => Auth::id(),
         ]);
 
         return redirect()->route('keuangan.index')
-            ->with('success', 'Data transaksi keuangan berhasil dicatat ke dalam sistem.');
+            ->with('success', 'Data surat masuk berhasil ditambahkan ke dalam sistem.');
     }
 
     public function edit(Keuangan $keuangan)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit transaksi keuangan.');
-        }
         $pegawaiList = Personel::orderBy('nama_lengkap', 'asc')->get();
         return view('keuangan.edit', compact('keuangan', 'pegawaiList'));
     }
 
     public function update(Request $request, Keuangan $keuangan)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit transaksi keuangan.');
-        }
-        $request->validate([
-            'tanggal' => 'required|date',
-            'uraian' => 'required|string|max:255',
-            'kategori' => 'required|string|max:100',
-            'jenis' => 'required|string|max:50',
-            'nominal' => 'required|numeric|min:0',
-            'penanggung_jawab' => 'nullable|string|max:255',
-            'status' => 'required|string|max:50',
-            'file_bukti' => 'nullable|file|max:10240',
-            'catatan' => 'nullable|string',
+        $validated = $request->validate([
+            'tanggal_diterima' => 'required|date',
+            'nomor_surat'      => 'required|string|max:255',
+            'pengirim'         => 'required|string|max:255',
+            'perihal'          => 'required|string',
+            'disposisi'        => 'nullable|string|max:500',
+            'link_dokumen'     => 'nullable|string|max:500',
+            'file_dokumen'     => 'nullable|file|mimes:pdf,doc,docx|max:15360',
+            'is_printed'       => 'nullable|boolean',
+        ], [
+            'tanggal_diterima.required' => 'Tanggal Diterima wajib diisi.',
+            'nomor_surat.required'      => 'Nomor Surat wajib diisi.',
+            'pengirim.required'         => 'Asal Instansi wajib diisi.',
+            'perihal.required'          => 'Perihal Surat wajib diisi.',
+            'file_dokumen.mimes'        => 'Format berkas dokumen harus berupa PDF atau Word (.doc, .docx).',
+            'file_dokumen.max'          => 'Ukuran file dokumen maksimal 15MB.',
         ]);
 
-        $filePath = $keuangan->file_bukti;
-        if ($request->hasFile('file_bukti')) {
-            if ($keuangan->file_bukti) {
-                Storage::disk('public')->delete($keuangan->file_bukti);
+        $filePath = $keuangan->file_dokumen;
+        if ($request->hasFile('file_dokumen')) {
+            if ($keuangan->file_dokumen && Storage::disk('public')->exists($keuangan->file_dokumen)) {
+                Storage::disk('public')->delete($keuangan->file_dokumen);
             }
-            $filePath = $request->file('file_bukti')->store('keuangan/bukti', 'public');
+            $filePath = $request->file('file_dokumen')->store('keuangan/dokumen', 'public');
         }
 
+        $isPrinted = $request->boolean('is_printed');
+
         $keuangan->update([
-            'tanggal' => $request->tanggal,
-            'uraian' => $request->uraian,
-            'kategori' => $request->kategori,
-            'jenis' => $request->jenis,
-            'nominal' => $request->nominal,
-            'penanggung_jawab' => $request->penanggung_jawab,
-            'status' => $request->status,
-            'file_bukti' => $filePath,
-            'catatan' => $request->catatan,
+            'tanggal_diterima' => $validated['tanggal_diterima'],
+            'nomor_surat'      => $validated['nomor_surat'],
+            'pengirim'         => $validated['pengirim'],
+            'perihal'          => $validated['perihal'],
+            'disposisi'        => $validated['disposisi'] ?? null,
+            'link_dokumen'     => $validated['link_dokumen'] ?? null,
+            'file_dokumen'     => $filePath,
+            'is_printed'       => $isPrinted,
+            'printed_at'       => $isPrinted ? ($keuangan->printed_at ?? now()) : null,
+            // Fallback for legacy
+            'tanggal'          => $validated['tanggal_diterima'],
+            'uraian'           => $validated['perihal'],
         ]);
 
         return redirect()->route('keuangan.index')
-            ->with('success', 'Data transaksi keuangan berhasil diperbarui.');
+            ->with('success', 'Data surat masuk berhasil diperbarui.');
     }
 
     public function destroy(Keuangan $keuangan)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menghapus transaksi keuangan.');
+        if ($keuangan->file_dokumen && Storage::disk('public')->exists($keuangan->file_dokumen)) {
+            Storage::disk('public')->delete($keuangan->file_dokumen);
         }
-        if ($keuangan->file_bukti) {
+        if ($keuangan->file_bukti && Storage::disk('public')->exists($keuangan->file_bukti)) {
             Storage::disk('public')->delete($keuangan->file_bukti);
         }
+
         $keuangan->delete();
 
         return redirect()->route('keuangan.index')
-            ->with('success', 'Data transaksi keuangan berhasil dihapus.');
+            ->with('success', 'Data surat masuk berhasil dihapus.');
     }
 
-    public function export(Request $request)
+    public function togglePrint(Keuangan $keuangan, Request $request)
     {
-        $data = Keuangan::orderBy('id', 'asc')->get();
-        $filename = 'laporan_keuangan_prokopim_' . date('Ymd_His') . '.csv';
+        $newStatus = !$keuangan->is_printed;
+        $keuangan->update([
+            'is_printed' => $newStatus,
+            'printed_at' => $newStatus ? now() : null,
+        ]);
 
-        $headers = [
-            'Content-Type' => 'text/csv; charset=utf-8',
-            'Content-Disposition' => "attachment; filename=\"$filename\"",
-        ];
+        $selectedTahun = $keuangan->tanggal_diterima ? $keuangan->tanggal_diterima->year : ($keuangan->tanggal ? $keuangan->tanggal->year : (int) $request->get('tahun', now()->year));
 
-        return response()->stream(function () use ($data) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, ['No', 'No Bukti', 'Tanggal', 'Uraian Kegiatan', 'Kategori', 'Jenis', 'Nominal (Rp)', 'Penanggung Jawab', 'Status']);
-            foreach ($data as $index => $row) {
-                fputcsv($file, [
-                    $index + 1,
-                    $row->no_bukti,
-                    $row->tanggal ? $row->tanggal->format('Y-m-d') : '-',
-                    $row->uraian,
-                    $row->kategori,
-                    ucfirst($row->jenis),
-                    $row->nominal,
-                    $row->penanggung_jawab ?? '-',
-                    $row->status_label,
-                ]);
+        $yearQuery = Keuangan::where(function ($q) use ($selectedTahun) {
+            $q->whereYear('tanggal_diterima', $selectedTahun)
+              ->orWhere(function ($sub) use ($selectedTahun) {
+                  $sub->whereNull('tanggal_diterima')->whereYear('tanggal', $selectedTahun);
+              });
+        });
+
+        $totalSurat     = (clone $yearQuery)->count();
+        $totalPrinted   = (clone $yearQuery)->where('is_printed', true)->count();
+        $totalUnprinted = $totalSurat - $totalPrinted;
+        $percentage     = $totalSurat > 0 ? round(($totalPrinted / $totalSurat) * 100) : 0;
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success'         => true,
+                'is_printed'      => $newStatus,
+                'total_surat'     => $totalSurat,
+                'total_printed'   => $totalPrinted,
+                'total_unprinted' => $totalUnprinted,
+                'percentage'      => $percentage,
+                'message'         => $newStatus ? 'Status diubah: Sudah Diprint' : 'Status diubah: Belum Diprint',
+            ]);
+        }
+
+        return back()->with('success', 'Status print berhasil diperbarui.');
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        $ids = $request->input('selected_ids', []);
+        if (!empty($ids)) {
+            $items = Keuangan::whereIn('id', $ids)->get();
+            foreach ($items as $item) {
+                if ($item->file_dokumen && Storage::disk('public')->exists($item->file_dokumen)) {
+                    Storage::disk('public')->delete($item->file_dokumen);
+                }
+                $item->delete();
             }
-            fclose($file);
-        }, 200, $headers);
+            return redirect()->route('keuangan.index')
+                ->with('success', count($ids) . ' data surat masuk berhasil dihapus.');
+        }
+
+        return redirect()->route('keuangan.index')
+            ->with('warning', 'Tidak ada data yang dipilih.');
+    }
+
+    public function export(Request $request): StreamedResponse
+    {
+        $selectedTahun = (int) $request->get('tahun', now()->year);
+        $selectedBulan = $request->filled('bulan') ? (int) $request->get('bulan') : null;
+        $statusPrint   = $request->get('status_print');
+        $search        = $request->get('search');
+
+        $exporter = new \App\Exports\SuratMasukRekapExport($selectedTahun, $selectedBulan, $statusPrint, $search);
+        return $exporter->stream();
     }
 }

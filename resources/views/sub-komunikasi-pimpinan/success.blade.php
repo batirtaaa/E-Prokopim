@@ -105,8 +105,16 @@
                 <div class="suc-field-value" style="color:#0369a1">{{ $sambutan->tujuan ?: '-' }}</div>
             </div>
             <div class="suc-field">
-                <div class="suc-field-label">Tanggal Pelaksanaan Acara</div>
+                <div class="suc-field-label">Tanggal Acara</div>
                 <div class="suc-field-value">{{ $sambutan->tanggal_acara ? $sambutan->tanggal_acara->translatedFormat('d F Y') : '-' }}</div>
+            </div>
+            <div class="suc-field">
+                <div class="suc-field-label">Waktu Acara</div>
+                <div class="suc-field-value">{{ $sambutan->waktu_acara ? $sambutan->waktu_acara . ' WIB' : '-' }}</div>
+            </div>
+            <div class="suc-field">
+                <div class="suc-field-label">Perihal / Topik Sambutan</div>
+                <div class="suc-field-value" style="font-weight:500;font-size:13px">{{ $sambutan->perihal }}</div>
             </div>
             <div class="suc-field">
                 <div class="suc-field-label">Petugas Disposisi</div>
@@ -149,6 +157,7 @@
         @php
             $docUrl = $sambutan->file_path ? url('storage/' . $sambutan->file_path) : null;
             $rowAcara = $sambutan->tanggal_acara ? $sambutan->tanggal_acara->translatedFormat('d F Y') : '-';
+            $rowWaktu = $sambutan->waktu_acara ? $sambutan->waktu_acara . ' WIB' : '-';
             $rowDeadline = $sambutan->deadline_at ? $sambutan->deadline_at->format('d F Y, H:i') : ($sambutan->tenggat_waktu ? $sambutan->tenggat_waktu->translatedFormat('d F Y') : '-');
 
             $waLines = [
@@ -157,6 +166,7 @@
                 "Instansi: " . $sambutan->asal_instansi,
                 "Ditujukan Kepada: " . ($sambutan->tujuan ?: '-'),
                 "Tanggal Acara: " . $rowAcara,
+                "Waktu Acara: " . $rowWaktu,
                 "Perihal: " . $sambutan->perihal,
                 "Petugas: " . ($sambutan->petugas ? $sambutan->petugas->nama_lengkap : '-'),
                 "Deadline Pengerjaan: " . $rowDeadline . " (Maks. 2 Jam)",

@@ -323,6 +323,9 @@
                 <td>
                     @if($item->tanggal_acara)
                         <div style="font-weight:600;color:#0f172a;font-size:12.5px">{{ $item->tanggal_acara->translatedFormat('d M Y') }}</div>
+                        @if($item->waktu_acara)
+                            <div style="font-size:11.5px;color:#64748b;margin-top:2px;">{{ $item->waktu_acara }} WIB</div>
+                        @endif
                     @elseif($item->tanggal_terima)
                         <div style="color:#64748b;font-size:12px">{{ $item->tanggal_terima->translatedFormat('d M Y') }}</div>
                     @else

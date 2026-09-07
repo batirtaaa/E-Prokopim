@@ -48,7 +48,7 @@ class SambutanController extends Controller
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengunggah permohonan sambutan.');
         }
 
-        $personelList = Personel::all();
+        $personelList = $this->getPetugasDisposisiList();
         return view('sub-komunikasi-pimpinan.create-permohonan', compact('personelList'));
     }
 
@@ -71,11 +71,12 @@ class SambutanController extends Controller
             'nomor_surat'    => 'required|string|max:100',
             'tanggal_surat'  => 'required|date',
             'tanggal_acara'  => 'nullable|date',
+            'waktu_acara'    => 'nullable|string|max:50',
             'asal_instansi'  => 'required|string|max:255',
             'tujuan'         => 'nullable|string|max:255',
             'tujuan_custom'  => 'nullable|string|max:255',
             'perihal'        => 'required|string',
-            'status'         => 'nullable|in:draft,diproses,selesai',
+            'status'         => 'nullable|in:draft,diproses,proses,selesai',
             'status_urgensi' => 'required|in:biasa,segera,penting',
             'jenis'          => 'required|in:permohonan,hasil',
             'tenggat_waktu'  => 'nullable|date',
@@ -104,6 +105,9 @@ class SambutanController extends Controller
         }
 
         $status = $request->input('status', 'diproses');
+        if ($status === 'proses') {
+            $status = 'diproses';
+        }
 
         $file     = $request->file('dokumen');
         $fileName = $file->getClientOriginalName();
@@ -113,6 +117,7 @@ class SambutanController extends Controller
             'nomor_surat'        => $request->nomor_surat,
             'tanggal_surat'      => $request->tanggal_surat,
             'tanggal_acara'      => $request->tanggal_acara,
+            'waktu_acara'        => $request->waktu_acara,
             'asal_instansi'      => $request->asal_instansi,
             'tujuan'             => $tujuan,
             'perihal'            => $request->perihal,
@@ -149,7 +154,7 @@ class SambutanController extends Controller
             return view('sub-komunikasi-pimpinan.edit-hasil', compact('sambutan'));
         }
 
-        $personelList = Personel::all();
+        $personelList = $this->getPetugasDisposisiList();
         return view('sub-komunikasi-pimpinan.edit-permohonan', compact('sambutan', 'personelList'));
     }
 
@@ -163,11 +168,12 @@ class SambutanController extends Controller
             'nomor_surat'    => 'required|string|max:100',
             'tanggal_surat'  => 'required|date',
             'tanggal_acara'  => 'nullable|date',
+            'waktu_acara'    => 'nullable|string|max:50',
             'asal_instansi'  => 'required|string|max:255',
             'tujuan'         => 'nullable|string|max:255',
             'tujuan_custom'  => 'nullable|string|max:255',
             'perihal'        => 'required|string',
-            'status'         => 'nullable|in:draft,diproses,selesai',
+            'status'         => 'nullable|in:draft,diproses,proses,selesai',
             'status_urgensi' => 'required|in:biasa,segera,penting',
             'tenggat_waktu'  => 'nullable|date',
             'deadline_jam'   => 'nullable|string',
@@ -189,17 +195,23 @@ class SambutanController extends Controller
             }
         }
 
+        $status = $request->input('status', $sambutan->status);
+        if ($status === 'proses') {
+            $status = 'diproses';
+        }
+
         $data = [
             'nomor_surat'        => $request->nomor_surat,
             'tanggal_surat'      => $request->tanggal_surat,
             'tanggal_acara'      => $request->tanggal_acara,
+            'waktu_acara'        => $request->waktu_acara,
             'asal_instansi'      => $request->asal_instansi,
             'tujuan'             => $tujuan,
             'perihal'            => $request->perihal,
             'deskripsi_singkat'  => $request->deskripsi_singkat,
             'tenggat_waktu'      => $request->tenggat_waktu,
             'deadline_at'        => $deadlineAt,
-            'status'             => $request->input('status', $sambutan->status),
+            'status'             => $status,
             'status_urgensi'     => $request->status_urgensi,
             'instruksi_disposisi'=> $request->instruksi,
             'petugas_id'         => $request->petugas_id ?: null,
@@ -254,5 +266,54 @@ class SambutanController extends Controller
 
         return redirect()->route('sambutan.index', ['tab' => $request->get('tab', 'permohonan')])
             ->with('success', count($items) . ' surat berhasil dihapus.');
+    }
+
+    /**
+     * Mendapatkan daftar 3 pegawai khusus disposisi sambutan:
+     * 1. AHMAD MUJADDID ABDURROYAN, S.Psi (NIP: 199702212025211055)
+     * 2. MOCHAMAD ANGGA PRATAMA, S.I.Kom. (NIP: 199609052025211070)
+     * 3. LIES RIKA FATIMAH, S.I.Kom (NIP: 197211232025212001)
+     */
+    private function getPetugasDisposisiList()
+    {
+        $targetNips = [
+            '199702212025211055', // AHMAD MUJADDID ABDURROYAN, S.Psi
+            '199609052025211070', // MOCHAMAD ANGGA PRATAMA, S.I.Kom.
+            '197211232025212001', // LIES RIKA FATIMAH, S.I.Kom
+        ];
+
+        $targetEmails = [
+            'ahmad.mujaddid@bandung.go.id',
+            'mochamad.angga@bandung.go.id',
+            'lies.rika@bandung.go.id',
+        ];
+
+        $personels = Personel::where(function ($query) use ($targetNips, $targetEmails) {
+            $query->whereIn('nip', $targetNips)
+                  ->orWhereIn('email', $targetEmails)
+                  ->orWhere('nama_lengkap', 'like', '%AHMAD MUJADDID%')
+                  ->orWhere('nama_lengkap', 'like', '%MOCHAMAD ANGGA PRATAMA%')
+                  ->orWhere('nama_lengkap', 'like', '%LIES RIKA FATIMAH%');
+        })->get();
+
+        if ($personels->isEmpty()) {
+            return Personel::all();
+        }
+
+        $orderMap = [
+            '199702212025211055' => 1,
+            '199609052025211070' => 2,
+            '197211232025212001' => 3,
+        ];
+
+        return $personels->sortBy(function ($p) use ($orderMap) {
+            if (isset($orderMap[$p->nip])) {
+                return $orderMap[$p->nip];
+            }
+            if (str_contains($p->nama_lengkap, 'AHMAD MUJADDID')) return 1;
+            if (str_contains($p->nama_lengkap, 'ANGGA PRATAMA')) return 2;
+            if (str_contains($p->nama_lengkap, 'LIES RIKA')) return 3;
+            return 99;
+        })->values();
     }
 }

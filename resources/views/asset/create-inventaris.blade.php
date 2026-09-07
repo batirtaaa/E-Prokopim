@@ -309,7 +309,7 @@
                     <div class="ast-label-row">
                         <label class="ast-label">Nama Barang <span class="req">*</span></label>
                     </div>
-                    <input type="text" name="nama_barang" class="ast-input-text" placeholder="e.g., Laptop Dell Latitude" value="{{ old('nama_barang') }}" required>
+                    <input type="text" name="nama_barang" class="ast-input-text" placeholder="Laptop Dell Latitude" value="{{ old('nama_barang') }}" required>
                 </div>
             </div>
 
@@ -353,7 +353,7 @@
                     <div class="ast-label-row">
                         <label class="ast-label">Lokasi / Ruangan <span class="req">*</span></label>
                     </div>
-                    <input type="text" name="lokasi" class="ast-input-text" placeholder="e.g., Ruang Rapat Utama" value="{{ old('lokasi') }}" required>
+                    <input type="text" name="lokasi" class="ast-input-text" placeholder="Ruang Rapat Utama" value="{{ old('lokasi') }}" required>
                 </div>
 
                 <div class="ast-form-group">

@@ -243,24 +243,24 @@
             <div class="pgw-form-grid-2">
                 <div class="pgw-form-group">
                     <label class="pgw-label">Nama Lengkap &amp; Gelar <span class="req">*</span></label>
-                    <input type="text" name="nama_lengkap" class="pgw-input-text" placeholder="e.g., Budi Santoso, S.IP., M.Si." value="{{ old('nama_lengkap') }}" required>
+                    <input type="text" name="nama_lengkap" class="pgw-input-text" placeholder="Budi Santoso, S.IP., M.Si." value="{{ old('nama_lengkap') }}" required>
                 </div>
 
                 <div class="pgw-form-group">
                     <label class="pgw-label">Email Kedinasan</label>
-                    <input type="email" name="email" class="pgw-input-text" placeholder="e.g., budisantoso@bandung.go.id" value="{{ old('email') }}">
+                    <input type="email" name="email" class="pgw-input-text" placeholder="budisantoso@bandung.go.id" value="{{ old('email') }}">
                 </div>
             </div>
 
             <div class="pgw-form-grid-2">
                 <div class="pgw-form-group">
                     <label class="pgw-label">NIP (Nomor Induk Pegawai)</label>
-                    <input type="text" name="nip" class="pgw-input-text" placeholder="e.g., 19800101 200501 1 001 atau -" value="{{ old('nip') }}">
+                    <input type="text" name="nip" class="pgw-input-text" placeholder="19800101 200501 1 001 atau -" value="{{ old('nip') }}">
                 </div>
 
                 <div class="pgw-form-group">
                     <label class="pgw-label">Nomor Telepon / WhatsApp</label>
-                    <input type="text" name="phone" class="pgw-input-text" placeholder="e.g., 0812-3456-7890" value="{{ old('phone') }}">
+                    <input type="text" name="phone" class="pgw-input-text" placeholder="0812-3456-7890" value="{{ old('phone') }}">
                 </div>
             </div>
         </div>
@@ -277,16 +277,16 @@
             <div class="pgw-form-grid-2">
                 <div class="pgw-form-group">
                     <label class="pgw-label">Jabatan <span class="req">*</span></label>
-                    <input type="text" name="jabatan" class="pgw-input-text" placeholder="e.g., Kepala Bagian / Kasubbag / Staf" value="{{ old('jabatan') }}" required>
+                    <input type="text" name="jabatan" class="pgw-input-text" placeholder="Kepala Bagian / Kasubbag / Staf" value="{{ old('jabatan') }}" required>
                 </div>
 
                 <div class="pgw-form-group">
                     <label class="pgw-label">Status Kepegawaian <span class="req">*</span></label>
                     <select name="status_kepegawaian" class="pgw-select" required>
                         <option value="PNS" {{ old('status_kepegawaian') == 'PNS' ? 'selected' : '' }}>PNS</option>
-                        <option value="PPPK Penuh Waktu" {{ old('status_kepegawaian') == 'PPPK Penuh Waktu' ? 'selected' : '' }}>PPPK Penuh Waktu</option>
+                        <option value="PPPK" {{ in_array(old('status_kepegawaian'), ['PPPK', 'PPPK Penuh Waktu']) ? 'selected' : '' }}>PPPK</option>
                         <option value="PPPK Paruh Waktu" {{ old('status_kepegawaian') == 'PPPK Paruh Waktu' ? 'selected' : '' }}>PPPK Paruh Waktu</option>
-                        <option value="Outsourcing" {{ old('status_kepegawaian') == 'Outsourcing' ? 'selected' : '' }}>Outsourcing</option>
+                        <option value="Outsourching" {{ in_array(old('status_kepegawaian'), ['Outsourching', 'Outsourcing']) ? 'selected' : '' }}>Outsourching</option>
                     </select>
                 </div>
             </div>

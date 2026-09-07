@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Personel;
 use App\Models\User;
+use App\Exports\PegawaiExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -164,30 +165,41 @@ class PegawaiController extends Controller
 
     public function export(Request $request)
     {
-        $data = Personel::orderBy('id', 'asc')->get();
-        $filename = 'daftar_pegawai_prokopim_' . date('Ymd_His') . '.csv';
+        $query = Personel::orderBy('id', 'asc');
 
-        $headers = [
-            'Content-Type' => 'text/csv; charset=utf-8',
-            'Content-Disposition' => "attachment; filename=\"$filename\"",
-        ];
-
-        return response()->stream(function () use ($data) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, ['No', 'Nama Pegawai', 'Email', 'NIP', 'Jabatan', 'Status Kepegawaian', 'Bidang', 'No Telepon']);
-            foreach ($data as $index => $row) {
-                fputcsv($file, [
-                    $index + 1,
-                    $row->nama_lengkap,
-                    $row->display_email,
-                    $row->nip ?? '-',
-                    $row->jabatan,
-                    $row->status_kepegawaian_label,
-                    $row->bidang_label,
-                    $row->phone ?? '-',
-                ]);
+        // Respect filters just like index
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_lengkap', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('nip', 'like', "%{$search}%")
+                  ->orWhere('jabatan', 'like', "%{$search}%");
+            });
+        }
+        if ($request->filled('status_kepegawaian')) {
+            $statusFilter = $request->status_kepegawaian;
+            if (in_array(strtolower($statusFilter), ['outsourcing', 'outsourching'])) {
+                $query->where('status_kepegawaian', 'like', '%outsourc%');
+            } else {
+                $query->where('status_kepegawaian', $statusFilter);
             }
-            fclose($file);
-        }, 200, $headers);
+        }
+        if ($request->filled('bidang')) {
+            $query->where('bidang', $request->bidang);
+        }
+
+        $data = $query->get();
+        $filename = 'daftar_pegawai_prokopim_' . date('Ymd_His') . '.xlsx';
+
+        // Build filter info string for title
+        $filterParts = [];
+        if ($request->filled('status_kepegawaian')) $filterParts[] = $request->status_kepegawaian;
+        if ($request->filled('bidang')) $filterParts[] = $request->bidang;
+        if ($request->filled('search')) $filterParts[] = 'Cari: ' . $request->search;
+        $filterInfo = implode(', ', $filterParts);
+
+        $export = new PegawaiExport($data, $filterInfo);
+        return $export->download($filename);
     }
 }

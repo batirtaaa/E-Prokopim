@@ -13,7 +13,7 @@ class Sambutan extends Model
     protected $table = 'sambutan';
 
     protected $fillable = [
-        'nomor_surat', 'tanggal_surat', 'tanggal_acara', 'asal_instansi', 'tujuan',
+        'nomor_surat', 'tanggal_surat', 'tanggal_acara', 'waktu_acara', 'asal_instansi', 'tujuan',
         'perihal', 'deskripsi_singkat', 'tanggal_terima', 'tenggat_waktu', 'deadline_at',
         'file_path', 'file_name', 'status_urgensi', 'instruksi_disposisi',
         'petugas_id', 'jenis', 'status', 'created_by',

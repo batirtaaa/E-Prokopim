@@ -533,6 +533,16 @@
     display: flex;
     flex-direction: column;
     gap: 14px;
+    max-height: 620px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+.pn-personel-items-list::-webkit-scrollbar {
+    width: 5px;
+}
+.pn-personel-items-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
 }
 .pn-personel-row-card {
     display: flex;

@@ -1,386 +1,337 @@
 @extends('layouts.app')
-@section('title', 'Tambah Transaksi Keuangan — E-PROKOPIM')
+@section('title', 'Tambah Surat Masuk — Bagian Protokol dan Komunikasi Pimpinan')
 
 @push('styles')
 <style>
-.keu-form-container {
-    max-width: 860px;
+.form-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 840px;
     margin: 0 auto;
-    color: #1e293b;
-    font-family: inherit;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
 }
-
-/* Page Header with Back Button */
-.keu-form-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+.form-header {
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 16px;
     margin-bottom: 24px;
 }
-.keu-back-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    border: 1px solid #cbd5e1;
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #334155;
-    text-decoration: none;
-    transition: all 0.15s ease;
-    flex-shrink: 0;
-}
-.keu-back-btn:hover {
-    border-color: #0f172a;
-    color: #0f172a;
-    background: #f8fafc;
-}
-.keu-form-title {
-    font-size: 22px;
+.form-header h2 {
+    font-size: 20px;
     font-weight: 700;
     color: #0f172a;
-    letter-spacing: -0.02em;
-    margin: 0 0 3px 0;
+    margin-bottom: 4px;
 }
-.keu-form-subtitle {
+.form-header p {
     font-size: 13px;
     color: #64748b;
     margin: 0;
 }
 
-/* Card */
-.keu-form-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-    padding: 24px 28px;
+.form-group {
     margin-bottom: 20px;
 }
-.keu-section-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14.5px;
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 18px;
-}
-.keu-section-icon {
-    width: 17px;
-    height: 17px;
-    color: #0f172a;
-    flex-shrink: 0;
-}
-
-/* Grid */
-.keu-form-grid-2 {
+.form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    margin-bottom: 16px;
-}
-.keu-form-grid-2:last-child {
-    margin-bottom: 0;
+    gap: 16px;
 }
 @media (max-width: 640px) {
-    .keu-form-grid-2 {
-        grid-template-columns: 1fr;
-    }
-}
-.keu-form-group {
-    display: flex;
-    flex-direction: column;
+    .form-row { grid-template-columns: 1fr; }
 }
 
-/* Labels and Inputs */
-.keu-label-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 6px;
-}
-.keu-label {
+.form-label {
+    display: block;
     font-size: 13px;
     font-weight: 600;
     color: #334155;
+    margin-bottom: 6px;
 }
-.keu-label .req {
-    color: #ef4444;
+.form-label .req {
+    color: #dc2626;
 }
-.keu-badge-auto {
-    background: #3b82f6;
-    color: #ffffff;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 9.5px;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-}
-.keu-input-text, .keu-select, .keu-textarea {
+.form-input, .form-textarea, .form-select {
     width: 100%;
-    padding: 9px 12px;
-    font-size: 13px;
+    padding: 10px 14px;
+    font-size: 13.5px;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
     background: #ffffff;
-    color: #1e293b;
+    color: #0f172a;
     outline: none;
     transition: all 0.15s ease;
     box-sizing: border-box;
-    font-family: inherit;
 }
-.keu-input-text:focus, .keu-select:focus, .keu-textarea:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
 }
-.keu-input-text.readonly-auto {
-    background: #f1f5f9;
+.form-textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+.form-hint {
+    font-size: 11.5px;
     color: #64748b;
-    border-color: #cbd5e1;
-    cursor: not-allowed;
+    margin-top: 4px;
 }
-.keu-select {
-    background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E") no-repeat right 12px center / 13px;
-    appearance: none;
-    cursor: pointer;
+.invalid-feedback {
+    font-size: 12px;
+    color: #dc2626;
+    margin-top: 4px;
 }
 
-/* Upload Drop Box */
-.keu-drop-box {
-    border: 1.5px dashed #cbd5e1;
-    border-radius: 10px;
-    padding: 24px 16px;
-    text-align: center;
-    background: #ffffff;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    position: relative;
-}
-.keu-drop-box:hover {
-    border-color: #3b82f6;
-    background: #f8fafc;
-}
-.keu-drop-box input[type="file"] {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    cursor: pointer;
+/* Drag & Drop Upload Zone */
+.upload-area {
     width: 100%;
-    height: 100%;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    background: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-sizing: border-box;
 }
-.keu-drop-icon {
-    width: 32px;
-    height: 32px;
+.upload-area:hover, .upload-area.dragover {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+.upload-area input[type="file"] {
+    display: none;
+}
+.upload-main {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 4px;
+}
+.upload-sub {
+    font-size: 12.5px;
+    color: #64748b;
+}
+.upload-hint {
+    font-size: 11.5px;
     color: #94a3b8;
-    margin: 0 auto 8px auto;
-    display: block;
-}
-
-/* Actions */
-.keu-form-actions {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 10px;
-    margin-bottom: 40px;
+    gap: 5px;
+    margin-top: 4px;
 }
-.keu-btn-cancel {
-    padding: 9px 22px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #475569;
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
+.upload-hint svg {
+    width: 13px;
+    height: 13px;
+}
+
+.current-file-badge {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
     border-radius: 8px;
-    text-decoration: none;
+    font-size: 12.5px;
+    color: #1e40af;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform: translateY(-4px); } to { opacity:1; transform: translateY(0); } }
+
+/* Checkbox Card for Print */
+.print-status-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px 16px;
     cursor: pointer;
     transition: all 0.15s ease;
 }
-.keu-btn-cancel:hover {
-    border-color: #94a3b8;
-    color: #0f172a;
+.print-status-box:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
 }
-.keu-btn-save {
-    padding: 9px 24px;
-    font-size: 13px;
+.print-status-box input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #16a34a;
+    cursor: pointer;
+}
+.print-status-info {
+    display: flex;
+    flex-direction: column;
+}
+.print-status-title {
+    font-size: 13.5px;
     font-weight: 600;
+    color: #1e293b;
+}
+.print-status-desc {
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* Footer Actions */
+.form-footer-card {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+.btn-submit {
+    padding: 10px 22px;
+    font-size: 13.5px;
+    font-weight: 600;
+    background: #1e3a5f;
     color: #ffffff;
-    background: #0f2942;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: all 0.15s ease;
 }
-.keu-btn-save:hover {
-    background: #081d30;
+.btn-submit:hover {
+    background: #162f4f;
+}
+.btn-cancel {
+    padding: 9px 18px;
+    font-size: 13.5px;
+    font-weight: 500;
+    background: #ffffff;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+.btn-cancel:hover {
+    background: #f8fafc;
+    color: #0f172a;
 }
 </style>
 @endpush
 
 @section('content')
-<div class="keu-form-container">
-
-    {{-- Error messages --}}
-    @if(isset($errors) && $errors->any())
-    <div style="background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; padding:12px 16px; border-radius:8px; margin-bottom:20px; font-size:13px;">
-        <div style="font-weight:600; margin-bottom:4px;">Terdapat kesalahan pada isian formulir:</div>
-        <ul style="margin:0; padding-left:20px;">
-            @foreach($errors->all() as $err)
-                <li>{{ $err }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
-
-    {{-- Header --}}
-    <div class="keu-form-header">
-        <a href="{{ route('keuangan.index') }}" class="keu-back-btn" title="Kembali ke Daftar Keuangan">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-            </svg>
-        </a>
-        <div>
-            <h1 class="keu-form-title">Tambah Transaksi Keuangan</h1>
-            <p class="keu-form-subtitle">Lengkapi formulir di bawah ini untuk mencatat transaksi keuangan atau realisasi anggaran.</p>
-        </div>
+<div class="form-card">
+    <div class="form-header">
+        <h2>Catat Surat Masuk Baru</h2>
+        <p>Lengkapi formulir di bawah ini untuk mencatat surat masuk, disposisi, dan berkas lampiran ke dalam buku agenda digital.</p>
     </div>
 
     <form method="POST" action="{{ route('keuangan.store') }}" enctype="multipart/form-data">
         @csrf
 
-        {{-- Card 1: Informasi Transaksi --}}
-        <div class="keu-form-card">
-            <div class="keu-section-header">
-                <svg class="keu-section-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
-                </svg>
-                <span>Informasi Transaksi &amp; Anggaran</span>
+        {{-- Row 1: Tanggal Diterima & Nomor Surat --}}
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Tanggal Diterima <span class="req">*</span></label>
+                <input type="date" name="tanggal_diterima" class="form-input @error('tanggal_diterima') is-invalid @enderror" value="{{ old('tanggal_diterima', date('Y-m-d')) }}" required>
+                @error('tanggal_diterima')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
-
-            <div class="keu-form-grid-2">
-                <div class="keu-form-group">
-                    <div class="keu-label-row">
-                        <label class="keu-label">No. Bukti / Kode Transaksi</label>
-                        <span class="keu-badge-auto">OTOMATIS</span>
-                    </div>
-                    <input type="text" name="no_bukti" class="keu-input-text readonly-auto" value="{{ old('no_bukti', $kodeOtomatis . ' (Auto-generated)') }}" readonly>
-                </div>
-
-                <div class="keu-form-group">
-                    <div class="keu-label-row">
-                        <label class="keu-label">Tanggal Transaksi <span class="req">*</span></label>
-                    </div>
-                    <input type="date" name="tanggal" class="keu-input-text" value="{{ old('tanggal', date('Y-m-d')) }}" required>
-                </div>
-            </div>
-
-            <div class="keu-form-group" style="margin-bottom: 16px;">
-                <div class="keu-label-row">
-                    <label class="keu-label">Uraian Transaksi / Kegiatan <span class="req">*</span></label>
-                </div>
-                <input type="text" name="uraian" class="keu-input-text" placeholder="e.g., Belanja Konsumsi Rapat Koordinasi Pimpinan" value="{{ old('uraian') }}" required>
-            </div>
-
-            <div class="keu-form-grid-2">
-                <div class="keu-form-group">
-                    <div class="keu-label-row">
-                        <label class="keu-label">Kategori <span class="req">*</span></label>
-                    </div>
-                    <select name="kategori" class="keu-select" required>
-                        <option value="">Pilih Kategori</option>
-                        <option value="Jamuan Tamu" {{ old('kategori') == 'Jamuan Tamu' ? 'selected' : '' }}>Jamuan Tamu</option>
-                        <option value="Perjalanan Dinas" {{ old('kategori') == 'Perjalanan Dinas' ? 'selected' : '' }}>Perjalanan Dinas</option>
-                        <option value="Honorarium" {{ old('kategori') == 'Honorarium' ? 'selected' : '' }}>Honorarium</option>
-                        <option value="Operasional" {{ old('kategori') == 'Operasional' ? 'selected' : '' }}>Operasional</option>
-                        <option value="Pemeliharaan" {{ old('kategori') == 'Pemeliharaan' ? 'selected' : '' }}>Pemeliharaan</option>
-                        <option value="Publikasi" {{ old('kategori') == 'Publikasi' ? 'selected' : '' }}>Publikasi</option>
-                    </select>
-                </div>
-
-                <div class="keu-form-group">
-                    <div class="keu-label-row">
-                        <label class="keu-label">Jenis Transaksi <span class="req">*</span></label>
-                    </div>
-                    <select name="jenis" class="keu-select" required>
-                        <option value="pengeluaran" {{ old('jenis', 'pengeluaran') == 'pengeluaran' ? 'selected' : '' }}>Pengeluaran (Realisasi Belanja)</option>
-                        <option value="pemasukan" {{ old('jenis') == 'pemasukan' ? 'selected' : '' }}>Pemasukan (Penerimaan / Droping)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="keu-form-grid-2">
-                <div class="keu-form-group">
-                    <div class="keu-label-row">
-                        <label class="keu-label">Nominal (Rp) <span class="req">*</span></label>
-                    </div>
-                    <input type="number" name="nominal" class="keu-input-text" placeholder="e.g., 4750000" min="0" step="100" value="{{ old('nominal') }}" required>
-                </div>
-
-                <div class="keu-form-group">
-                    <div class="keu-label-row">
-                        <label class="keu-label">Penanggung Jawab / Penerima</label>
-                    </div>
-                    <input type="text" name="penanggung_jawab" list="keuPegawaiList" class="keu-input-text" placeholder="Cari nama pegawai / pejabat..." value="{{ old('penanggung_jawab') }}">
-                    <datalist id="keuPegawaiList">
-                        @foreach($pegawaiList as $pgw)
-                            <option value="{{ $pgw->nama_lengkap }}">{{ $pgw->jabatan }}</option>
-                        @endforeach
-                    </datalist>
-                </div>
-            </div>
-
-            <div class="keu-form-grid-2">
-                <div class="keu-form-group">
-                    <div class="keu-label-row">
-                        <label class="keu-label">Status Transaksi <span class="req">*</span></label>
-                    </div>
-                    <select name="status" class="keu-select" required>
-                        <option value="selesai" {{ old('status', 'selesai') == 'selesai' ? 'selected' : '' }}>Selesai (Lunas / Diverifikasi)</option>
-                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Menunggu Verifikasi</option>
-                        <option value="proses" {{ old('status') == 'proses' ? 'selected' : '' }}>Sedang Diproses</option>
-                        <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label class="form-label">Nomor Surat <span class="req">*</span></label>
+                <input type="text" name="nomor_surat" class="form-input @error('nomor_surat') is-invalid @enderror" value="{{ old('nomor_surat') }}" placeholder="Contoh: 180-Bag.Tapem/2026 atau B/TU.04/002-Bag.Perkap/2026" required>
+                @error('nomor_surat')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
         </div>
 
-        {{-- Card 2: Bukti / LPJ & Catatan --}}
-        <div class="keu-form-card">
-            <div class="keu-section-header">
-                <svg class="keu-section-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.373L8.552 18.32a1.5 1.5 0 01-2.122-2.122l9.88-9.878" />
-                </svg>
-                <span>Lampiran Bukti &amp; Keterangan</span>
-            </div>
-
-            <div style="margin-bottom: 16px;">
-                <label class="keu-label" style="margin-bottom: 8px; display:block;">Scan Bukti / Kuitansi / LPJ</label>
-                <div class="keu-drop-box" onclick="document.getElementById('buktiInput').click()">
-                    <input type="file" id="buktiInput" name="file_bukti" accept=".pdf,.jpg,.jpeg,.png,.docx" onchange="previewUploadKeu(this)">
-                    <svg class="keu-drop-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                    </svg>
-                    <div style="font-size: 13px; font-weight: 500; color: #475569;" id="buktiLabel">
-                        <span style="color:#2563eb; font-weight:600;">Unggah dokumen bukti</span> atau tarik dan lepas
-                    </div>
-                    <div style="font-size: 11.5px; color: #94a3b8; margin-top: 3px;">PDF, JPG up to 10MB</div>
-                </div>
-            </div>
-
-            <div class="keu-form-group">
-                <label class="keu-label" style="margin-bottom: 6px;">Catatan Tambahan</label>
-                <textarea name="catatan" class="keu-textarea" rows="3" placeholder="Keterangan rincian pengeluaran, nomor rekening, catatan verifikator...">{{ old('catatan') }}</textarea>
-            </div>
+        {{-- Row 2: Asal Instansi --}}
+        <div class="form-group">
+            <label class="form-label">Asal Instansi <span class="req">*</span></label>
+            <input type="text" name="pengirim" class="form-input @error('pengirim') is-invalid @enderror" value="{{ old('pengirim') }}" placeholder="Contoh: Bagian Tata Pemerintahan Setda / Dinas Kesehatan / Polrestabes Bandung" required>
+            @error('pengirim')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
-        {{-- Actions --}}
-        <div class="keu-form-actions">
-            <a href="{{ route('keuangan.index') }}" class="keu-btn-cancel">Batal</a>
-            <button type="submit" class="keu-btn-save">Simpan Transaksi</button>
+        {{-- Row 3: Perihal --}}
+        <div class="form-group">
+            <label class="form-label">Perihal Surat <span class="req">*</span></label>
+            <textarea name="perihal" class="form-textarea @error('perihal') is-invalid @enderror" placeholder="Tuliskan ringkasan isi atau perihal surat masuk..." required>{{ old('perihal') }}</textarea>
+            @error('perihal')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        {{-- Row 4: Disposisi --}}
+        <div class="form-group">
+            <label class="form-label">Disposisi</label>
+            <input type="text" name="disposisi" list="disposisiList" class="form-input @error('disposisi') is-invalid @enderror" value="{{ old('disposisi') }}" placeholder="Contoh: Suhendro Drajad, S.T. / Andre Pratama, S.I.Kom, M.Si.">
+            <datalist id="disposisiList">
+                <option value="Suhendro Drajad, S.T.">
+                <option value="Andre Pratama, S.I.Kom, M.Si.">
+                <option value="Primanda Wijaksana, S.Sos.">
+                <option value="Yudha Pratama, S.Tr.Kom">
+                <option value="Andre Pratama, S.I.Kom, M.Si. dan Suhendro Drajad, S.T.">
+                @if(isset($pegawaiList))
+                    @foreach($pegawaiList as $p)
+                        <option value="{{ $p->nama_lengkap }}">
+                    @endforeach
+                @endif
+            </datalist>
+            <div class="form-hint">Pilih dari saran atau ketik nama/tim yang menerima disposisi.</div>
+            @error('disposisi')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        {{-- Row 5: Upload Dokumen (Drag & Drop Zone) --}}
+        <div class="form-group">
+            <label class="form-label">Dokumen Pendukung</label>
+            <label class="upload-area" for="input-dokumen" id="upload-label">
+                <input type="file" id="input-dokumen" name="file_dokumen" accept=".pdf,.doc,.docx" onchange="handleFile(this)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:38px;height:38px;color:#2563eb"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"/></svg>
+                <div class="upload-main" id="upload-main-text">Drag &amp; Drop file di sini</div>
+                <div class="upload-sub" id="upload-sub-text">atau klik untuk menelusuri dari perangkat</div>
+                <div class="upload-hint">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
+                    Format: PDF, DOC, DOCX. Maks: 15MB
+                </div>
+            </label>
+
+            {{-- Badge file terpilih --}}
+            <div id="selected-file-badge" class="current-file-badge" style="display:none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:16px;height:16px"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                <span>File terpilih: <strong id="selected-file-name">-</strong></span>
+                <button type="button" onclick="removeSelectedFile()" style="margin-left:auto;background:none;border:none;color:#dc2626;cursor:pointer;font-size:18px;line-height:1;font-weight:bold" title="Hapus file">&times;</button>
+            </div>
+
+            @error('file_dokumen')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        {{-- Row 6: Status Pencetakan --}}
+        <div class="form-group" style="margin-top: 10px;">
+            <label class="form-label">Status Pencetakan</label>
+            <label class="print-status-box" for="is_printed">
+                <input type="checkbox" name="is_printed" id="is_printed" value="1" {{ old('is_printed') ? 'checked' : '' }}>
+                <div class="print-status-info">
+                    <span class="print-status-title">Tandai Sudah Diprint</span>
+                    <span class="print-status-desc">Centang jika fisik surat sudah dicetak / didistribusikan.</span>
+                </div>
+            </label>
+        </div>
+
+        {{-- Footer --}}
+        <div class="form-footer-card">
+            <a href="{{ route('keuangan.index') }}" class="btn-cancel">Batal</a>
+            <button type="submit" class="btn-submit">Simpan Surat Masuk</button>
         </div>
     </form>
 </div>
@@ -388,11 +339,56 @@
 
 @push('scripts')
 <script>
-function previewUploadKeu(input) {
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        document.getElementById('buktiLabel').innerHTML = `<span style="color:#0f172a; font-weight:600;">✓ ${file.name}</span> (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+function handleFile(input) {
+    const file = input.files[0];
+    const badge = document.getElementById('selected-file-badge');
+    const nameEl = document.getElementById('selected-file-name');
+    const mainText = document.getElementById('upload-main-text');
+
+    if (file) {
+        if (nameEl) nameEl.textContent = file.name + ' (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB)';
+        if (badge) badge.style.display = 'flex';
+        if (mainText) mainText.textContent = 'File berhasil dipilih';
+    } else {
+        if (badge) badge.style.display = 'none';
+        if (mainText) mainText.textContent = 'Drag & Drop file di sini';
     }
+}
+
+function removeSelectedFile() {
+    const input = document.getElementById('input-dokumen');
+    if (input) input.value = '';
+    handleFile(input);
+}
+
+// Drag & Drop event handlers
+const uploadArea = document.getElementById('upload-label');
+if (uploadArea) {
+    ['dragover', 'dragenter'].forEach(e => {
+        uploadArea.addEventListener(e, ev => {
+            ev.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+    });
+
+    ['dragleave', 'dragend'].forEach(e => {
+        uploadArea.addEventListener(e, () => {
+            uploadArea.classList.remove('dragover');
+        });
+    });
+
+    uploadArea.addEventListener('drop', ev => {
+        ev.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const f = ev.dataTransfer.files[0];
+        if (f) {
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(f);
+            const fileInput = document.getElementById('input-dokumen');
+            fileInput.files = dataTransfer.files;
+            handleFile(fileInput);
+        }
+    });
 }
 </script>
 @endpush

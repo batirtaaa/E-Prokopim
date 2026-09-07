@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -10,6 +11,16 @@ class Keuangan extends Model
     protected $table = 'keuangan';
 
     protected $fillable = [
+        'tanggal_diterima',
+        'nomor_surat',
+        'pengirim',
+        'perihal',
+        'disposisi',
+        'file_dokumen',
+        'link_dokumen',
+        'is_printed',
+        'printed_at',
+        // Legacy fields retained for backward compatibility
         'no_bukti',
         'tanggal',
         'uraian',
@@ -24,7 +35,10 @@ class Keuangan extends Model
     ];
 
     protected $casts = [
+        'tanggal_diterima' => 'date',
         'tanggal' => 'date',
+        'is_printed' => 'boolean',
+        'printed_at' => 'datetime',
         'nominal' => 'decimal:2',
     ];
 
@@ -33,43 +47,32 @@ class Keuangan extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function getFormattedNominalAttribute(): string
+    public function getFormattedTanggalDiterimaAttribute(): string
     {
-        return 'Rp ' . number_format($this->nominal, 0, ',', '.');
-    }
-
-    public function getStatusLabelAttribute(): string
-    {
-        return match(strtolower($this->status)) {
-            'selesai', 'lunas' => 'Selesai',
-            'pending' => 'Menunggu Verifikasi',
-            'proses' => 'Sedang Diproses',
-            'draft' => 'Draft',
-            default => ucfirst($this->status),
-        };
-    }
-
-    public function getStatusBadgeClassAttribute(): string
-    {
-        return match(strtolower($this->status)) {
-            'selesai', 'lunas' => 'status-pns',      // soft blue pill
-            'pending' => 'status-pppk-paruh',        // soft slate pill
-            'proses' => 'status-pppk-penuh',         // soft purple pill
-            'draft' => 'status-outsourcing',         // soft gray pill
-            default => 'status-default',
-        };
-    }
-
-    public static function generateNextCode(): string
-    {
-        $year = date('Y');
-        $last = self::whereYear('tanggal', $year)->orderBy('id', 'desc')->first();
-        if ($last && preg_match('/TRX-' . $year . '-(\d+)/', $last->no_bukti, $matches)) {
-            $nextNum = intval($matches[1]) + 1;
-        } else {
-            $count = self::count() + 1;
-            $nextNum = $count;
+        $date = $this->tanggal_diterima ?? $this->tanggal;
+        if (!$date) {
+            return '-';
         }
-        return sprintf('TRX-%s-%03d', $year, $nextNum);
+
+        $bulanMap = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+        ];
+
+        $carbon = Carbon::parse($date);
+        $bulan = $bulanMap[$carbon->month] ?? $carbon->format('F');
+        return "{$carbon->format('d')} {$bulan} {$carbon->format('Y')}";
+    }
+
+    public function getFileUrlAttribute(): ?string
+    {
+        if ($this->file_dokumen) {
+            return asset('storage/' . $this->file_dokumen);
+        }
+        if ($this->file_bukti) {
+            return asset('storage/' . $this->file_bukti);
+        }
+        return null;
     }
 }

@@ -285,14 +285,14 @@
                     <div class="ast-label-row">
                         <label class="ast-label">Plat Nomor <span class="req">*</span></label>
                     </div>
-                    <input type="text" name="plat_nomor" class="ast-input-text" placeholder="e.g., D 1234 ABC" value="{{ old('plat_nomor') }}" required style="text-transform: uppercase;">
+                    <input type="text" name="plat_nomor" class="ast-input-text" placeholder="D 1234 ABC" value="{{ old('plat_nomor') }}" required style="text-transform: uppercase;">
                 </div>
 
                 <div class="ast-form-group">
                     <div class="ast-label-row">
                         <label class="ast-label">Nama Kendaraan <span class="req">*</span></label>
                     </div>
-                    <input type="text" name="nama_kendaraan" class="ast-input-text" placeholder="e.g., Toyota Innova Zenix" value="{{ old('nama_kendaraan') }}" required>
+                    <input type="text" name="nama_kendaraan" class="ast-input-text" placeholder="Toyota Innova Zenix" value="{{ old('nama_kendaraan') }}" required>
                 </div>
             </div>
 
@@ -316,7 +316,7 @@
                     <div class="ast-label-row">
                         <label class="ast-label">Tahun Pembuatan/Perolehan <span class="req">*</span></label>
                     </div>
-                    <input type="number" name="tahun" class="ast-input-text" placeholder="e.g., 2023" min="1990" max="2035" value="{{ old('tahun', date('Y')) }}" required>
+                    <input type="number" name="tahun" class="ast-input-text" placeholder="2023" min="1990" max="2035" value="{{ old('tahun', date('Y')) }}" required>
                 </div>
             </div>
         </div>
@@ -336,7 +336,7 @@
                     <div class="ast-label-row">
                         <label class="ast-label">Pemegang / Pengguna</label>
                     </div>
-                    <input type="text" name="pemegang_pengguna" list="pegawaiKendaraanSuggestions" class="ast-input-text" placeholder="e.g., Kabag Protokol / Nama Pegawai" value="{{ old('pemegang_pengguna') }}">
+                    <input type="text" name="pemegang_pengguna" list="pegawaiKendaraanSuggestions" class="ast-input-text" placeholder="Kabag Protokol / Nama Pegawai" value="{{ old('pemegang_pengguna') }}">
                     <datalist id="pegawaiKendaraanSuggestions">
                         <option value="Kabag Protokol">Kepala Bagian Protokol</option>
                         <option value="Tim Dokumentasi">Tim Dokumentasi</option>

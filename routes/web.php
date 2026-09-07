@@ -16,6 +16,7 @@ use App\Http\Controllers\ProfilAdminController;
 use App\Http\Controllers\KegiatanPimpinanController;
 use App\Http\Controllers\SambutanController;
 use App\Http\Controllers\MediaSosialController;
+use App\Http\Controllers\AnalisisIsuController;
 use App\Http\Controllers\SubKomunikasiPimpinanController;
 use App\Http\Controllers\SubDokumentasiPimpinanController;
 use App\Http\Controllers\GaleriArsipController;
@@ -73,6 +74,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/komunikasi-pimpinan/media-sosial/{mediaSosial}', [MediaSosialController::class, 'update'])->name('media-sosial.update');
     Route::delete('/komunikasi-pimpinan/media-sosial/{mediaSosial}', [MediaSosialController::class, 'destroy'])->name('media-sosial.destroy');
 
+    // Komunikasi Pimpinan — Analisis Isu & Media
+    Route::get('/komunikasi-pimpinan/analisis/export-rekap', [AnalisisIsuController::class, 'exportRekap'])->name('analisis.export-rekap');
+    Route::post('/komunikasi-pimpinan/analisis/bulk-destroy', [AnalisisIsuController::class, 'bulkDestroy'])->name('analisis.bulk-destroy');
+    Route::get('/komunikasi-pimpinan/analisis/{analisi}/cetak', [AnalisisIsuController::class, 'cetak'])->name('analisis.cetak');
+    Route::resource('/komunikasi-pimpinan/analisis', AnalisisIsuController::class)->names('analisis');
+
     // Sub Komunikasi Pimpinan (legacy)
     Route::get('/sub-komunikasi-pimpinan', [SubKomunikasiPimpinanController::class, 'index'])->name('sub-komunikasi-pimpinan.index');
 
@@ -86,6 +93,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/dokumentasi-pimpinan/galeri-arsip', [GaleriArsipController::class, 'store'])->name('galeri-arsip.store');
     Route::put('/dokumentasi-pimpinan/galeri-arsip/{galeriArsip}', [GaleriArsipController::class, 'update'])->name('galeri-arsip.update');
     Route::delete('/dokumentasi-pimpinan/galeri-arsip/{galeriArsip}', [GaleriArsipController::class, 'destroy'])->name('galeri-arsip.destroy');
+    Route::delete('/dokumentasi-pimpinan/galeri-arsip-bulk-delete', [GaleriArsipController::class, 'bulkDestroy'])->name('galeri-arsip.bulk-destroy');
+
 
     // Sub Protokol
     Route::get('/sub-protokol', [SubProtokolController::class, 'index'])->name('sub-protokol.index');
@@ -145,13 +154,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/administrasi/pegawai/export', [PegawaiController::class, 'export'])->name('pegawai.export');
     Route::get('/pegawai', fn() => redirect()->route('pegawai.index'));
 
-    // Keuangan Management (Administrasi)
+    // Keuangan / Surat Masuk Management (Administrasi)
     Route::get('/administrasi/keuangan', [KeuanganController::class, 'index'])->name('keuangan.index');
     Route::get('/administrasi/keuangan/create', [KeuanganController::class, 'create'])->name('keuangan.create');
     Route::post('/administrasi/keuangan', [KeuanganController::class, 'store'])->name('keuangan.store');
     Route::get('/administrasi/keuangan/{keuangan}/edit', [KeuanganController::class, 'edit'])->name('keuangan.edit');
     Route::put('/administrasi/keuangan/{keuangan}', [KeuanganController::class, 'update'])->name('keuangan.update');
     Route::delete('/administrasi/keuangan/{keuangan}', [KeuanganController::class, 'destroy'])->name('keuangan.destroy');
+    Route::post('/administrasi/keuangan/{keuangan}/toggle-print', [KeuanganController::class, 'togglePrint'])->name('keuangan.toggle-print');
+    Route::post('/administrasi/keuangan/bulk-destroy', [KeuanganController::class, 'bulkDestroy'])->name('keuangan.bulk-destroy');
     Route::get('/administrasi/keuangan/export', [KeuanganController::class, 'export'])->name('keuangan.export');
     Route::get('/keuangan', fn() => redirect()->route('keuangan.index'));
 

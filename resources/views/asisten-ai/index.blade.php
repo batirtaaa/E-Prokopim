@@ -761,7 +761,7 @@
                 <div style="margin-bottom:12px;">
                     <label style="font-size:12px; font-weight:600; color:#334155; margin-bottom:4px; display:block;">Gemini API Key</label>
                     <div style="position:relative;">
-                        <input type="password" name="gemini_api_key" id="geminiApiKeyInput" class="ai-modal-input" style="padding-right:40px;" placeholder="Masukkan Google Gemini API Key (e.g. AIzaSy...)" value="{{ $currentApiKey }}">
+                        <input type="password" name="gemini_api_key" id="geminiApiKeyInput" class="ai-modal-input" style="padding-right:40px;" placeholder="Masukkan Google Gemini API Key (AIzaSy...)" value="{{ $currentApiKey }}">
                         <button type="button" onclick="toggleApiKeyVisibility()" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:#64748b; cursor:pointer; font-size:12px;">
                             👁️
                         </button>
