@@ -441,5 +441,13 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
+
+        // Jalankan seeder modul lainnya
+        $this->call([
+            PegawaiSeeder::class,
+            KeuanganSeeder::class,
+            MediaSosialSeeder::class,
+            GaleriArsipSeeder::class,
+        ]);
     }
 }

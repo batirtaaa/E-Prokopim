@@ -26,16 +26,10 @@ class DashboardController extends Controller
                 $endDate   = Carbon::parse($endDateStr)->endOfDay();
                 $isCustom  = true;
                 $periode   = 'custom';
-
-                $diffDays      = max(1, $startDate->diffInDays($endDate) + 1);
-                $prevEndDate   = $startDate->copy()->subDay()->endOfDay();
-                $prevStartDate = $prevEndDate->copy()->subDays($diffDays)->startOfDay();
             } catch (\Exception $e) {
                 $periode = 1;
                 $startDate = Carbon::now()->subMonths(1)->startOfDay();
                 $endDate = Carbon::now()->endOfDay();
-                $prevStartDate = Carbon::now()->subMonths(2)->startOfDay();
-                $prevEndDate = Carbon::now()->subMonths(1)->endOfDay();
             }
         } else {
             $periode = (int) $periodeParam;
@@ -45,10 +39,6 @@ class DashboardController extends Controller
 
             $startDate = Carbon::now()->subMonths($periode)->startOfDay();
             $endDate = Carbon::now()->endOfDay();
-
-            // Previous period for comparison
-            $prevStartDate = Carbon::now()->subMonths($periode * 2)->startOfDay();
-            $prevEndDate = Carbon::now()->subMonths($periode)->endOfDay();
         }
 
         // 1. Agenda Hari Ini
@@ -64,18 +54,10 @@ class DashboardController extends Controller
         $wakilWaliKotaCount = $agendaHariIni->where('pimpinan', 'wakil_wali_kota')->count();
         $sekdaCount         = $agendaHariIni->where('pimpinan', 'sekda')->count();
 
-        // 2. Kegiatan Periode Ini & Perbandingan
+        // 2. Kegiatan Periode Ini
         $kegiatanBulanIni = Kegiatan::whereBetween('tanggal_mulai', [$startDate, $endDate])
             ->where('status', '!=', 'dibatalkan')
             ->count();
-
-        $kegiatanPeriodeLalu = Kegiatan::whereBetween('tanggal_mulai', [$prevStartDate, $prevEndDate])
-            ->where('status', '!=', 'dibatalkan')
-            ->count();
-
-        $kenaikanPersen = $kegiatanPeriodeLalu > 0
-            ? round((($kegiatanBulanIni - $kegiatanPeriodeLalu) / $kegiatanPeriodeLalu) * 100, 0)
-            : ($kegiatanBulanIni > 0 ? 100 : 0);
 
         // 3. Agenda Mendatang (7 hari ke depan, exclude hari ini)
         $agendaMendatang = Kegiatan::whereDate('tanggal_mulai', '>', $today)
@@ -156,7 +138,7 @@ class DashboardController extends Controller
         return view('dashboard.index', compact(
             'periode', 'isCustom', 'startDateStr', 'endDateStr',
             'agendaCount', 'waliKotaCount', 'wakilWaliKotaCount', 'sekdaCount',
-            'kegiatanBulanIni', 'kenaikanPersen',
+            'kegiatanBulanIni',
             'arahanBelumSelesai', 'arahanMelewatiDeadline',
             'totalArsip', 'agendaHariIni',
             'totalPegawai', 'agendaMendatang',
