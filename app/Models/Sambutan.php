@@ -15,17 +15,24 @@ class Sambutan extends Model
     protected $fillable = [
         'nomor_surat', 'tanggal_surat', 'tanggal_acara', 'waktu_acara', 'asal_instansi', 'tujuan',
         'perihal', 'deskripsi_singkat', 'tanggal_terima', 'tenggat_waktu', 'deadline_at',
-        'file_path', 'file_name', 'status_urgensi', 'instruksi_disposisi',
+        'file_path', 'file_name', 'file_hasil_path', 'file_hasil_name', 'tgl_upload_hasil', 'catatan_hasil',
+        'status_urgensi', 'instruksi_disposisi',
         'petugas_id', 'jenis', 'status', 'created_by',
     ];
 
     protected $casts = [
-        'tanggal_surat'  => 'date',
-        'tanggal_acara'  => 'date',
-        'tanggal_terima' => 'date',
-        'tenggat_waktu'  => 'date',
-        'deadline_at'    => 'datetime',
+        'tanggal_surat'    => 'date',
+        'tanggal_acara'    => 'date',
+        'tanggal_terima'   => 'date',
+        'tenggat_waktu'    => 'date',
+        'deadline_at'      => 'datetime',
+        'tgl_upload_hasil' => 'datetime',
     ];
+
+    public function getHasHasilAttribute(): bool
+    {
+        return !empty($this->file_hasil_path);
+    }
 
     public function petugas(): BelongsTo
     {

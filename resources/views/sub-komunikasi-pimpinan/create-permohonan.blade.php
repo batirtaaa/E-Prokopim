@@ -239,7 +239,7 @@
                 <select class="form-select" name="petugas_id" id="input-petugas">
                     <option value="">Pilih petugas...</option>
                     @foreach($personelList as $personel)
-                        <option value="{{ $personel->id }}" {{ old('petugas_id') == $personel->id ? 'selected' : '' }}>{{ $personel->nama_lengkap }} — {{ $personel->jabatan }}</option>
+                        <option value="{{ $personel->id }}" {{ old('petugas_id') == $personel->id ? 'selected' : '' }}>{{ $personel->nama_lengkap }} — {{ ($personel->jabatan && $personel->jabatan !== '-') ? $personel->jabatan : $personel->status_kepegawaian }}</option>
                     @endforeach
                 </select>
             </div>

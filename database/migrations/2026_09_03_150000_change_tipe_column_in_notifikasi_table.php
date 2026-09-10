@@ -26,3 +26,4 @@ return new class extends Migration
         DB::statement("ALTER TABLE `notifikasi` MODIFY COLUMN `tipe` ENUM('info','warning','success','error') NOT NULL DEFAULT 'info'");
     }
 };
+

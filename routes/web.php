@@ -57,9 +57,16 @@ Route::middleware('auth')->group(function () {
 
     // Komunikasi Pimpinan — Sambutan
     Route::get('/komunikasi-pimpinan/sambutan', [SambutanController::class, 'index'])->name('sambutan.index');
+    Route::get('/komunikasi-pimpinan/sambutan/export-rekap', [SambutanController::class, 'exportRekap'])->name('sambutan.export-rekap');
     Route::get('/komunikasi-pimpinan/sambutan/create', [SambutanController::class, 'createPermohonan'])->name('sambutan.create-permohonan');
     Route::get('/komunikasi-pimpinan/sambutan/hasil/create', [SambutanController::class, 'createHasil'])->name('sambutan.create-hasil');
     Route::post('/komunikasi-pimpinan/sambutan', [SambutanController::class, 'store'])->name('sambutan.store');
+    Route::post('/komunikasi-pimpinan/sambutan/upload-hasil-global', [SambutanController::class, 'uploadHasilGlobal'])->name('sambutan.upload-hasil-global');
+    Route::get('/komunikasi-pimpinan/sambutan/{sambutan}/lihat-hasil', [SambutanController::class, 'previewHasil'])->name('sambutan.preview-hasil');
+    Route::get('/komunikasi-pimpinan/sambutan/{sambutan}/stream-hasil', [SambutanController::class, 'streamHasil'])->name('sambutan.stream-hasil');
+    Route::get('/komunikasi-pimpinan/sambutan/{sambutan}/download-hasil', [SambutanController::class, 'downloadHasil'])->name('sambutan.download-hasil');
+    Route::post('/komunikasi-pimpinan/sambutan/{sambutan}/upload-hasil', [SambutanController::class, 'uploadHasil'])->name('sambutan.upload-hasil');
+    Route::delete('/komunikasi-pimpinan/sambutan/{sambutan}/delete-hasil', [SambutanController::class, 'deleteHasil'])->name('sambutan.delete-hasil');
     Route::get('/komunikasi-pimpinan/sambutan/{sambutan}/edit', [SambutanController::class, 'edit'])->name('sambutan.edit');
     Route::put('/komunikasi-pimpinan/sambutan/{sambutan}', [SambutanController::class, 'update'])->name('sambutan.update');
     Route::post('/komunikasi-pimpinan/sambutan/bulk-destroy', [SambutanController::class, 'bulkDestroy'])->name('sambutan.bulk-destroy');

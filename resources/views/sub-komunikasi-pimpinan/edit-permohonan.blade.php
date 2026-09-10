@@ -228,30 +228,50 @@
                 <textarea class="form-textarea" name="perihal" placeholder="Jelaskan secara singkat topik sambutan..." required>{{ old('perihal', $sambutan->perihal) }}</textarea>
             </div>
         </div>
-    </div>
-
-    {{-- 2. Upload Dokumen --}}
+    </div>    {{-- 2. Upload Dokumen --}}
     <div class="form-card" style="display:flex;flex-direction:column">
         <div class="form-card-title">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
-            2. Upload Dokumen
+            2. Dokumen Permohonan &amp; Naskah Hasil
         </div>
         <div class="upload-wrap">
-            <span class="upload-label-text">Dokumen Pendukung</span>
-            <label class="upload-area" for="input-dokumen" id="upload-label">
+            {{-- Surat Permohonan --}}
+            <span class="upload-label-text">1. Dokumen Surat Masuk / Permohonan</span>
+            <label class="upload-area" for="input-dokumen" id="upload-label" style="padding:16px 14px;min-height:auto">
                 <input type="file" id="input-dokumen" name="dokumen" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(this)">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:36px;height:36px;color:#2563eb"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"/></svg>
-                <div class="upload-main" id="upload-main-text">Drag & Drop file di sini untuk mengganti</div>
-                <div class="upload-sub" id="upload-sub-text">atau klik untuk menelusuri dari perangkat</div>
-                <div class="upload-hint">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
-                    Format: PDF, JPG, PNG. Maks: 10MB
-                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:30px;height:30px;color:#2563eb;margin-bottom:4px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"/></svg>
+                <div class="upload-main" id="upload-main-text">Klik / Drag &amp; Drop untuk mengganti surat masuk</div>
+                <div class="upload-sub" id="upload-sub-text">Format: PDF, JPG, PNG. Maks: 10MB</div>
             </label>
             @if($sambutan->file_name)
-                <div class="current-file-badge">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:16px;height:16px"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
-                    <span>File saat ini: <strong>{{ $sambutan->file_name }}</strong></span>
+                <div class="current-file-badge" style="justify-content:space-between;margin-bottom:18px;">
+                    <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:16px;height:16px;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                        <span>Surat: <strong>{{ $sambutan->file_name }}</strong></span>
+                    </div>
+                    <a href="{{ asset('storage/' . $sambutan->file_path) }}" target="_blank" style="color:#1d4ed8;font-weight:600;font-size:11.5px;text-decoration:none;margin-left:8px;flex-shrink:0;">Lihat/Unduh</a>
+                </div>
+            @endif
+
+            <hr style="border:none;border-top:1px solid #f1f5f9;margin:12px 0 14px;">
+
+            {{-- Naskah Hasil Sambutan --}}
+            <span class="upload-label-text">2. Dokumen Naskah Hasil Sambutan (Naskah Jadi)</span>
+            <label class="upload-area" for="input-dokumen-hasil" id="upload-label-hasil" style="padding:16px 14px;min-height:auto;border-color:{{ $sambutan->file_hasil_path ? '#a7f3d0' : '#d1d5db' }};background:{{ $sambutan->file_hasil_path ? '#f0fdf4' : '#fafafa' }};">
+                <input type="file" id="input-dokumen-hasil" name="dokumen_hasil" accept=".docx,.doc,.pdf" onchange="handleFileHasil(this)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor" style="width:30px;height:30px;color:#059669;margin-bottom:4px"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="upload-main" id="upload-main-text-hasil">{{ $sambutan->file_hasil_path ? 'Klik / Drag & Drop untuk mengganti naskah' : 'Unggah naskah hasil sambutan' }}</div>
+                <div class="upload-sub" id="upload-sub-text-hasil">Format: Word (.docx, .doc) atau PDF. Maks: 15MB</div>
+            </label>
+            @if($sambutan->file_hasil_name)
+                <div class="current-file-badge" style="background:#ecfdf5;border-color:#a7f3d0;color:#065f46;justify-content:space-between;">
+                    <div style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:16px;height:16px;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Naskah: <strong>{{ $sambutan->file_hasil_name }}</strong></span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+                        <a href="{{ asset('storage/' . $sambutan->file_hasil_path) }}" target="_blank" style="color:#047857;font-weight:600;font-size:11.5px;text-decoration:none;">Unduh</a>
+                    </div>
                 </div>
             @endif
         </div>
@@ -272,7 +292,7 @@
                     <option value="">Pilih petugas...</option>
                     @foreach($personelList as $personel)
                         <option value="{{ $personel->id }}" {{ old('petugas_id', $sambutan->petugas_id) == $personel->id ? 'selected' : '' }}>
-                            {{ $personel->nama_lengkap }} — {{ $personel->jabatan }}
+                            {{ $personel->nama_lengkap }} — {{ ($personel->jabatan && $personel->jabatan !== '-') ? $personel->jabatan : $personel->status_kepegawaian }}
                         </option>
                     @endforeach
                 </select>
@@ -353,6 +373,16 @@ function handleFile(input) {
         document.getElementById('upload-sub-text').textContent = 'File baru siap diunggah';
         document.getElementById('upload-label').style.borderColor = '#2563eb';
         document.getElementById('upload-label').style.background = '#eff6ff';
+    }
+}
+
+function handleFileHasil(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        document.getElementById('upload-main-text-hasil').textContent = file.name;
+        document.getElementById('upload-sub-text-hasil').textContent = 'Naskah siap diunggah (' + (file.size / 1024 / 1024).toFixed(2) + ' MB)';
+        document.getElementById('upload-label-hasil').style.borderColor = '#059669';
+        document.getElementById('upload-label-hasil').style.background = '#ecfdf5';
     }
 }
 
