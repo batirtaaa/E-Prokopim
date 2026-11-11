@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Penugasan Personel — E-PROKOPIM')
+@section('title', 'Penugasan Personel')
 
 @push('styles')
 <style>
@@ -794,7 +794,7 @@
                                                 @elseif($item->tanggal_mulai->isTomorrow())
                                                     Besok, {{ $item->tanggal_mulai->format('H:i') }} WIB
                                                 @else
-                                                    {{ $item->tanggal_mulai->format('d M Y, H:i') }} WIB
+                                                    {{ $item->tanggal_mulai->translatedFormat('d M Y, H:i') }} WIB
                                                 @endif
                                             @else
                                                 —

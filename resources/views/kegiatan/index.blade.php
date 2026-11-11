@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Kegiatan — SIKOPIM')
+@section('title', 'Kegiatan')
 @section('topbar-title', 'Kegiatan')
 
 @section('content')
@@ -58,7 +58,7 @@
                         <div class="text-sm text-muted">{{ ucfirst($k->kategori) }}</div>
                     </td>
                     <td>
-                        <div>{{ $k->tanggal_mulai->format('d M Y') }}</div>
+                        <div>{{ $k->tanggal_mulai->translatedFormat('d M Y') }}</div>
                         <div class="text-sm text-muted">{{ $k->tanggal_mulai->format('H:i') }} WIB</div>
                     </td>
                     <td class="text-muted">{{ $k->lokasi ?? '—' }}</td>

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Detail Kegiatan — SIKOPIM')
+@section('title', 'Detail Kegiatan')
 @section('topbar-title', 'Kegiatan')
 @section('content')
 <div class="page-header flex justify-between items-center">
@@ -66,13 +66,13 @@
                 <div style="display:flex;flex-direction:column;gap:14px;">
                     <div>
                         <div class="form-label" style="margin-bottom:4px;">Waktu Mulai</div>
-                        <div class="font-semibold">{{ $kegiatan->tanggal_mulai->format('d M Y') }}</div>
+                        <div class="font-semibold">{{ $kegiatan->tanggal_mulai->translatedFormat('d M Y') }}</div>
                         <div class="text-muted">{{ $kegiatan->tanggal_mulai->format('H:i') }} WIB</div>
                     </div>
                     @if($kegiatan->tanggal_selesai)
                     <div>
                         <div class="form-label" style="margin-bottom:4px;">Waktu Selesai</div>
-                        <div class="font-semibold">{{ $kegiatan->tanggal_selesai->format('d M Y') }}</div>
+                        <div class="font-semibold">{{ $kegiatan->tanggal_selesai->translatedFormat('d M Y') }}</div>
                         <div class="text-muted">{{ $kegiatan->tanggal_selesai->format('H:i') }} WIB</div>
                     </div>
                     @endif
@@ -93,7 +93,7 @@
                 @forelse($kegiatan->notulensi as $n)
                     <div style="padding:8px 0;border-bottom:1px solid var(--border);">
                         <div class="font-medium">{{ $n->judul }}</div>
-                        <div class="text-sm text-muted">{{ $n->tanggal_rapat->format('d M Y') }}</div>
+                        <div class="text-sm text-muted">{{ $n->tanggal_rapat->translatedFormat('d M Y') }}</div>
                     </div>
                 @empty
                     <p class="text-muted text-sm">Belum ada notulensi</p>

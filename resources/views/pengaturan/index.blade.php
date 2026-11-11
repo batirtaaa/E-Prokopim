@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Pengaturan Sistem — SIKOPIM')
+@section('title', 'Pengaturan Sistem')
 @section('topbar-title', 'Pengaturan Sistem')
 
 @section('content')
@@ -135,6 +135,19 @@
                                 <td>
                                     @if(auth()->user()->isAdmin())
                                     <div style="display:flex;gap:6px;">
+                                        <button type="button" class="btn btn-xs btn-outline" onclick="openEditUserModal({{ json_encode([
+                                            'id' => $user->id,
+                                            'name' => $user->name,
+                                            'nip' => $user->nip,
+                                            'username' => $user->username,
+                                            'email' => $user->email,
+                                            'phone' => $user->phone,
+                                            'role' => $user->role,
+                                            'jabatan' => $user->jabatan,
+                                            'update_url' => route('pengaturan.users.update', $user)
+                                        ]) }})" title="Edit Pengguna">
+                                            Edit
+                                        </button>
                                         <form method="POST" action="{{ route('pengaturan.users.toggle-status', $user) }}">
                                             @csrf @method('PATCH')
                                             <button type="submit" class="btn btn-xs btn-outline" title="{{ $user->is_active ? 'Nonaktifkan' : 'Aktifkan' }}">
@@ -409,6 +422,76 @@
     </div>
 </div>
 
+{{-- Modal Edit Pengguna --}}
+<div class="modal-overlay" id="modal-edit-user">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">Edit Data Pengguna</h2>
+            <button class="modal-close" data-modal-close>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+        <form method="POST" id="form-edit-user" action="">
+            @csrf
+            @method('PUT')
+            <div class="modal-body">
+                <div class="form-row cols-2">
+                    <div class="form-group">
+                        <label class="form-label">Nama Lengkap *</label>
+                        <input type="text" name="name" id="edit_user_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">NIP</label>
+                        <input type="text" name="nip" id="edit_user_nip" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row cols-2">
+                    <div class="form-group">
+                        <label class="form-label">Username *</label>
+                        <input type="text" name="username" id="edit_user_username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" name="email" id="edit_user_email" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-row cols-2">
+                    <div class="form-group">
+                        <label class="form-label">No. Telepon</label>
+                        <input type="text" name="phone" id="edit_user_phone" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Role *</label>
+                        <select name="role" id="edit_user_role" class="form-control" required>
+                            <option value="operator">Operator</option>
+                            <option value="admin">Admin</option>
+                            <option value="super_admin">Super Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Jabatan</label>
+                    <input type="text" name="jabatan" id="edit_user_jabatan" class="form-control">
+                </div>
+                <div class="form-row cols-2">
+                    <div class="form-group">
+                        <label class="form-label">Password Baru (Opsional)</label>
+                        <input type="password" name="password" class="form-control" minlength="8" placeholder="Kosongkan jika tidak diganti">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Konfirmasi Password Baru</label>
+                        <input type="password" name="password_confirmation" class="form-control" placeholder="Konfirmasi password baru">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" data-modal-close>Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -488,6 +571,24 @@ function showInlineToast(msg, type) {
     toast.style.color = '#fff';
     toast.style.opacity = '1';
     setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+}
+
+// ── Open Edit User Modal ──────────────────────────────────────────
+function openEditUserModal(user) {
+    const modal = document.getElementById('modal-edit-user');
+    const form = document.getElementById('form-edit-user');
+    if (!modal || !form) return;
+
+    form.action = user.update_url;
+    document.getElementById('edit_user_name').value = user.name || '';
+    document.getElementById('edit_user_nip').value = user.nip || '';
+    document.getElementById('edit_user_username').value = user.username || '';
+    document.getElementById('edit_user_email').value = user.email || '';
+    document.getElementById('edit_user_phone').value = user.phone || '';
+    document.getElementById('edit_user_role').value = user.role || 'operator';
+    document.getElementById('edit_user_jabatan').value = user.jabatan || '';
+
+    modal.classList.add('active');
 }
 </script>
 @endpush

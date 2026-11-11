@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Dokumentasi — SIKOPIM')
+@section('title', 'Dokumentasi')
 @section('topbar-title', 'Dokumentasi')
 @section('content')
 <div class="page-header flex justify-between items-center">
@@ -34,7 +34,7 @@
                     <td><div class="font-semibold">{{ $d->judul }}</div><div class="text-sm text-muted">{{ $d->file_name }}</div></td>
                     <td class="text-muted">{{ $d->kegiatan?->judul ?? '—' }}</td>
                     <td><span class="badge {{ ['foto'=>'badge-blue','video'=>'badge-green','dokumen'=>'badge-gray'][$d->tipe] }}">{{ ucfirst($d->tipe) }}</span></td>
-                    <td>{{ $d->tanggal_dokumentasi->format('d M Y') }}</td>
+                    <td>{{ $d->tanggal_dokumentasi->translatedFormat('d M Y') }}</td>
                     <td class="text-muted">{{ $d->fotografer ?? '—' }}</td>
                     <td>
                         <div style="display:flex;gap:6px;">
@@ -69,7 +69,11 @@
                     <div class="form-group"><label class="form-label">Tanggal *</label><input type="date" name="tanggal_dokumentasi" class="form-control" value="{{ date('Y-m-d') }}" required></div>
                     <div class="form-group"><label class="form-label">Fotografer/Pembuat</label><input type="text" name="fotografer" class="form-control"></div>
                 </div>
-                <div class="form-group"><label class="form-label">File *</label><input type="file" name="file" class="form-control" required></div>
+                <div class="form-group">
+                    <label class="form-label">File *</label>
+                    <input type="file" name="file" class="form-control" required>
+                    <div style="font-size:11.5px;color:#0284c7;margin-top:4px;">ℹ️ Disarankan format standar ISO: <code>Tanggal_Bulan_Tahun_Nama Kegiatan</code></div>
+                </div>
                 <div class="form-group"><label class="form-label">Deskripsi</label><textarea name="deskripsi" class="form-control" rows="2"></textarea></div>
             </div>
             <div class="modal-footer"><button type="button" class="btn btn-outline" data-modal-close>Batal</button><button type="submit" class="btn btn-primary">Upload</button></div>

@@ -1,7 +1,5 @@
 <?php
-
 namespace Database\Seeders;
-
 use App\Models\User;
 use App\Models\Instansi;
 use App\Models\Kegiatan;
@@ -201,8 +199,8 @@ class DatabaseSeeder extends Seeder
 
         Arahan::create([
             'nomor_arahan' => 'AR/002/2026',
-            'judul' => 'Peningkatan Kualitas Dokumentasi Kegiatan',
-            'isi_arahan' => 'Tim dokumentasi agar meningkatkan kualitas foto dan video kegiatan pimpinan, menggunakan standar yang telah ditetapkan.',
+            'judul' => 'Peningkatan Kualitas Kegiatan Himpunan Mahasiswa Teknik Informatika',
+            'isi_arahan' => 'Tim PDD meningkatkan kualitas foto dan video kegiatan, menggunakan standar yang telah ditetapkan.',
             'pimpinan' => 'sekda',
             'ditujukan_kepada' => 'Bagian Protokol dan Komunikasi Pimpinan',
             'tanggal_arahan' => Carbon::now()->subDays(10),

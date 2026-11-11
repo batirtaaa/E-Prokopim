@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Keuangan;
+use App\Models\SuratKeluar;
 use App\Models\Personel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -83,9 +84,9 @@ class KeuanganController extends Controller
               });
         });
 
-        $totalSurat   = (clone $yearQuery)->count();
-        $totalPrinted = (clone $yearQuery)->where('is_printed', true)->count();
-        $totalUnprinted = $totalSurat - $totalPrinted;
+        $totalSuratMasuk  = (clone $yearQuery)->count();
+        $totalSuratKeluar = SuratKeluar::whereYear('tanggal_surat', $selectedTahun)->count();
+        $totalSemua       = $totalSuratMasuk + $totalSuratKeluar;
 
         $suratList = $query->paginate(15)->withQueryString();
 
@@ -93,20 +94,28 @@ class KeuanganController extends Controller
             'suratList',
             'selectedTahun',
             'availableYears',
-            'totalSurat',
-            'totalPrinted',
-            'totalUnprinted'
+            'totalSuratMasuk',
+            'totalSuratKeluar',
+            'totalSemua'
         ));
     }
 
     public function create()
     {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin.');
+        }
+
         $pegawaiList = Personel::orderBy('nama_lengkap', 'asc')->get();
         return view('keuangan.create', compact('pegawaiList'));
     }
 
     public function store(Request $request)
     {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin.');
+        }
+
         $validated = $request->validate([
             'tanggal_diterima' => 'required|date',
             'nomor_surat'      => 'required|string|max:255',
@@ -154,12 +163,20 @@ class KeuanganController extends Controller
 
     public function edit(Keuangan $keuangan)
     {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin.');
+        }
+
         $pegawaiList = Personel::orderBy('nama_lengkap', 'asc')->get();
         return view('keuangan.edit', compact('keuangan', 'pegawaiList'));
     }
 
     public function update(Request $request, Keuangan $keuangan)
     {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin.');
+        }
+
         $validated = $request->validate([
             'tanggal_diterima' => 'required|date',
             'nomor_surat'      => 'required|string|max:255',
@@ -209,17 +226,14 @@ class KeuanganController extends Controller
 
     public function destroy(Keuangan $keuangan)
     {
-        if ($keuangan->file_dokumen && Storage::disk('public')->exists($keuangan->file_dokumen)) {
-            Storage::disk('public')->delete($keuangan->file_dokumen);
-        }
-        if ($keuangan->file_bukti && Storage::disk('public')->exists($keuangan->file_bukti)) {
-            Storage::disk('public')->delete($keuangan->file_bukti);
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin.');
         }
 
         $keuangan->delete();
 
         return redirect()->route('keuangan.index')
-            ->with('success', 'Data surat masuk berhasil dihapus.');
+            ->with('success', 'Data surat masuk berhasil dipindahkan ke Sampah (Trash).');
     }
 
     public function togglePrint(Keuangan $keuangan, Request $request)
@@ -261,17 +275,18 @@ class KeuanganController extends Controller
 
     public function bulkDestroy(Request $request)
     {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin.');
+        }
+
         $ids = $request->input('selected_ids', []);
         if (!empty($ids)) {
             $items = Keuangan::whereIn('id', $ids)->get();
             foreach ($items as $item) {
-                if ($item->file_dokumen && Storage::disk('public')->exists($item->file_dokumen)) {
-                    Storage::disk('public')->delete($item->file_dokumen);
-                }
                 $item->delete();
             }
             return redirect()->route('keuangan.index')
-                ->with('success', count($ids) . ' data surat masuk berhasil dihapus.');
+                ->with('success', count($ids) . ' data surat masuk berhasil dipindahkan ke Sampah (Trash).');
         }
 
         return redirect()->route('keuangan.index')

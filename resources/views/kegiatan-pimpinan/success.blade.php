@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Kegiatan Berhasil Disimpan — E-PROKOPIM')
+@section('title', 'Kegiatan Berhasil Disimpan')
 
 @push('styles')
 <style>
@@ -120,11 +120,18 @@
         @php
             if (isset($kegiatan)) {
                 $waText = "Kegiatan: {$kegiatan->judul}";
+                $pimpinan = $kegiatan->pimpinan_label;
+                if ($pimpinan && $pimpinan !== '—' && $pimpinan !== '-') {
+                    $waText .= "\nPimpinan: {$pimpinan}";
+                }
                 if ($kegiatan->leading_sektor) {
                     $waText .= "\nLeading Sektor: {$kegiatan->leading_sektor}";
                 }
-                $waText .= "\nTanggal: " . ($kegiatan->tanggal_mulai ? $kegiatan->tanggal_mulai->format('d M Y H:i') . ' WIB' : '-');
+                $waText .= "\nTanggal: " . ($kegiatan->tanggal_mulai ? $kegiatan->tanggal_mulai->translatedFormat('d M Y H:i') . ' WIB' : '-');
                 $waText .= "\nLokasi: " . ($kegiatan->lokasi ?? '-');
+                if ($kegiatan->deskripsi) {
+                    $waText .= "\nKeterangan: {$kegiatan->deskripsi}";
+                }
             } else {
                 $waText = 'Kegiatan baru telah ditambahkan di E-PROKOPIM';
             }

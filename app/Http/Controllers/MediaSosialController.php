@@ -291,13 +291,10 @@ class MediaSosialController extends Controller
         }
 
         $tab = $mediaSosial->kategori;
-        if ($mediaSosial->file_path) {
-            Storage::disk('public')->delete($mediaSosial->file_path);
-        }
         $mediaSosial->delete();
 
         return redirect()->route('media-sosial.index', ['tab' => $tab])
-            ->with('success', 'Media berhasil dihapus dari arsip.');
+            ->with('success', 'Media berhasil dipindahkan ke Sampah (Trash).');
     }
 
     /**

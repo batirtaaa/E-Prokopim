@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Daftar Pegawai — E-PROKOPIM')
+@section('title', 'Daftar Pegawai')
 
 @push('styles')
 <style>
@@ -44,6 +44,30 @@
     color: #ffffff;
 }
 
+/* Excel Download Button */
+.pgw-btn-excel {
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    background: #107c41;
+    border: 1px solid #0e6b37;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+    text-decoration: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.pgw-btn-excel:hover {
+    background: #0b5c2c;
+    border-color: #084320;
+    color: #ffffff;
+}
+
 /* Card Container */
 .pgw-card {
     background: #ffffff;
@@ -79,7 +103,7 @@
 }
 .pgw-search-input {
     width: 100%;
-    padding: 8px 12px 8px 36px;
+    padding: 8px 32px 8px 36px;
     font-size: 13px;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
@@ -95,6 +119,51 @@
 }
 .pgw-search-input::placeholder {
     color: #94a3b8;
+}
+
+.pgw-search-clear {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #e2e8f0;
+    color: #64748b;
+    border: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 0;
+}
+.pgw-search-clear:hover {
+    background: #cbd5e1;
+    color: #0f172a;
+}
+.pgw-search-spinner {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    margin-top: -7px;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #e2e8f0;
+    border-top-color: #0f2942;
+    border-radius: 50%;
+    animation: pgw-spin 0.6s linear infinite;
+}
+@keyframes pgw-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+#pgwTableArea {
+    transition: opacity 0.15s ease;
 }
 
 .pgw-actions-group {
@@ -426,14 +495,31 @@
     <div class="pgw-header-row">
         <h1 class="pgw-title">Daftar Pegawai</h1>
 
-        @if(auth()->user()->isAdmin())
-        <a href="{{ route('pegawai.create') }}" class="pgw-btn-add">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="14" height="14">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            <span>Tambah Pegawai</span>
-        </a>
-        @endif
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            @php
+                $topExportParams = array_filter([
+                    'search'            => request('search'),
+                    'status_kepegawaian'=> request('status_kepegawaian'),
+                    'bidang'            => request('bidang'),
+                ]);
+                $topExportUrl = route('pegawai.export', $topExportParams);
+            @endphp
+            <a href="{{ $topExportUrl }}" class="pgw-btn-excel" id="pgwTopExportBtn" title="Download Daftar Pegawai (.xlsx)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="15" height="15">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                <span>Download Daftar Pegawai</span>
+            </a>
+
+            @if(auth()->user()->isAdmin())
+            <a href="{{ route('pegawai.create') }}" class="pgw-btn-add">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="14" height="14">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <span>Tambah Pegawai</span>
+            </a>
+            @endif
+        </div>
     </div>
 
     {{-- Main Card --}}
@@ -452,7 +538,9 @@
                     <svg class="pgw-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>
-                    <input type="text" name="search" class="pgw-search-input" placeholder="Cari pegawai..." value="{{ request('search') }}">
+                    <input type="text" name="search" id="pgwSearchInput" class="pgw-search-input" placeholder="Cari pegawai..." value="{{ request('search') }}" autocomplete="off">
+                    <button type="button" id="pgwSearchClear" class="pgw-search-clear" title="Hapus pencarian" style="{{ request('search') ? 'display:flex;' : 'display:none;' }}">&times;</button>
+                    <div id="pgwSearchSpinner" class="pgw-search-spinner" style="display:none;"></div>
                 </div>
 
                 {{-- Right Actions --}}
@@ -488,7 +576,7 @@
                         ]);
                         $exportUrl = route('pegawai.export', $exportParams);
                     @endphp
-                    <a href="{{ $exportUrl }}" class="pgw-btn-icon-export" title="Unduh Excel (.xlsx)">
+                    <a href="{{ $exportUrl }}" id="pgwExportBtn" class="pgw-btn-icon-export" title="Unduh Excel (.xlsx)">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="15" height="15">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                         </svg>
@@ -522,8 +610,9 @@
             </form>
         </div>
 
-        {{-- Table --}}
-        <div class="pgw-table-wrap">
+        <div id="pgwTableArea">
+            {{-- Table --}}
+            <div class="pgw-table-wrap">
             <table class="pgw-table">
                 <thead>
                     <tr>
@@ -650,6 +739,7 @@
             </div>
             @endif
         </div>
+        </div>
     </div>
 </div>
 
@@ -696,6 +786,162 @@ document.addEventListener('click', function(e) {
     }
 });
 
+// Live Search & Instant Filter Implementation
+const searchInput = document.getElementById('pgwSearchInput');
+const searchForm = document.getElementById('pgwSearchForm');
+const searchClear = document.getElementById('pgwSearchClear');
+const searchSpinner = document.getElementById('pgwSearchSpinner');
+const tableArea = document.getElementById('pgwTableArea');
+const exportBtn = document.getElementById('pgwExportBtn');
+
+let searchDebounceTimer = null;
+let searchAbortController = null;
+
+function updateSearchClearBtn() {
+    if (searchClear && searchInput) {
+        if (searchInput.value.trim().length > 0) {
+            searchClear.style.display = 'flex';
+        } else {
+            searchClear.style.display = 'none';
+        }
+    }
+}
+
+function fetchPegawaiData(urlStr, pushHistory = true) {
+    if (searchAbortController) {
+        searchAbortController.abort();
+    }
+    searchAbortController = new AbortController();
+
+    if (searchSpinner) searchSpinner.style.display = 'block';
+    if (searchClear) searchClear.style.display = 'none';
+    if (tableArea) tableArea.style.opacity = '0.5';
+
+    fetch(urlStr, {
+        signal: searchAbortController.signal,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(res => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.text();
+    })
+    .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newTableArea = doc.getElementById('pgwTableArea');
+        if (newTableArea && tableArea) {
+            tableArea.innerHTML = newTableArea.innerHTML;
+        }
+
+        // Update export button URL
+        const newExportBtn = doc.getElementById('pgwExportBtn');
+        if (newExportBtn && exportBtn) {
+            exportBtn.href = newExportBtn.href;
+        }
+        const topExportBtn = document.getElementById('pgwTopExportBtn');
+        if (newExportBtn && topExportBtn) {
+            topExportBtn.href = newExportBtn.href;
+        }
+
+        // Update hidden search inputs in filter modal if present
+        const filterSearchInput = document.querySelector('#pgwFilterDropdown input[name="search"]');
+        if (filterSearchInput && searchInput) {
+            filterSearchInput.value = searchInput.value;
+        }
+
+        if (pushHistory) {
+            window.history.pushState(null, '', urlStr);
+        }
+    })
+    .catch(err => {
+        if (err.name !== 'AbortError') {
+            console.error('Pencarian gagal:', err);
+        }
+    })
+    .finally(() => {
+        if (searchSpinner) searchSpinner.style.display = 'none';
+        updateSearchClearBtn();
+        if (tableArea) tableArea.style.opacity = '1';
+    });
+}
+
+function doSearch(keyword) {
+    const url = new URL(window.location.href);
+    keyword = (keyword || '').trim();
+    if (keyword) {
+        url.searchParams.set('search', keyword);
+    } else {
+        url.searchParams.delete('search');
+    }
+    url.searchParams.delete('page'); // Reset to page 1
+
+    fetchPegawaiData(url.toString(), true);
+}
+
+if (searchInput) {
+    // Realtime search while typing (debounce 300ms)
+    searchInput.addEventListener('input', function() {
+        updateSearchClearBtn();
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(() => {
+            doSearch(searchInput.value);
+        }, 300);
+    });
+
+    // Escape clears search
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            searchInput.value = '';
+            updateSearchClearBtn();
+            clearTimeout(searchDebounceTimer);
+            doSearch('');
+        }
+    });
+}
+
+if (searchClear) {
+    searchClear.addEventListener('click', function() {
+        searchInput.value = '';
+        updateSearchClearBtn();
+        searchInput.focus();
+        clearTimeout(searchDebounceTimer);
+        doSearch('');
+    });
+}
+
+if (searchForm) {
+    // Prevent full reload on pressing Enter
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearTimeout(searchDebounceTimer);
+        doSearch(searchInput.value);
+    });
+}
+
+// AJAX Pagination link interceptor
+if (tableArea) {
+    tableArea.addEventListener('click', function(e) {
+        const pageBtn = e.target.closest('a.pgw-p-btn');
+        if (pageBtn && pageBtn.href) {
+            e.preventDefault();
+            fetchPegawaiData(pageBtn.href, true);
+        }
+    });
+}
+
+// Support browser Back and Forward navigation
+window.addEventListener('popstate', function() {
+    const currentUrl = new URL(window.location.href);
+    const searchVal = currentUrl.searchParams.get('search') || '';
+    if (searchInput) {
+        searchInput.value = searchVal;
+        updateSearchClearBtn();
+    }
+    fetchPegawaiData(window.location.href, false);
+});
+
 // Handle per page change
 function handlePerPageChange(val) {
     if (val === 'custom') {
@@ -718,7 +964,7 @@ function applyPerPage(val) {
     const url = new URL(window.location.href);
     url.searchParams.set('per_page', val);
     url.searchParams.delete('page'); // Reset to page 1
-    window.location.href = url.toString();
+    fetchPegawaiData(url.toString(), true);
 }
 
 function closeCustomPerPageModal(e) {

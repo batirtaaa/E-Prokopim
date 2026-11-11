@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Tambah Kegiatan Pimpinan — E-PROKOPIM')
+@section('title', isset($kegiatan) ? 'Edit Kegiatan Pimpinan — E-PROKOPIM' : 'Tambah Kegiatan Pimpinan — E-PROKOPIM')
 
 @push('styles')
 <style>
@@ -107,6 +107,134 @@
 .form-textarea { resize: vertical; min-height: 90px; }
 .form-select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; background-size: 16px; padding-right: 36px; }
 
+/* Dokumentasi Tabs */
+.dok-tab-nav {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+}
+.dok-tab-btn {
+    padding: 10px 20px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.dok-tab-btn:hover { color: var(--text-primary); }
+.dok-tab-btn.active { color: #1e3a5f; font-weight: 600; border-bottom-color: #1e3a5f; }
+.dok-tab-btn .tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 20px;
+    font-size: 10.5px;
+    font-weight: 700;
+    background: #e5e7eb;
+    color: #374151;
+}
+.dok-tab-btn.active .tab-badge { background: #1e3a5f; color: white; }
+
+.dok-tab-pane { display: none; }
+.dok-tab-pane.active { display: block; }
+
+/* File Upload Area */
+.file-drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fafafa;
+    position: relative;
+}
+.file-drop-zone:hover, .file-drop-zone.dragging {
+    border-color: #1e3a5f;
+    background: #eff6ff;
+}
+.file-drop-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+.file-drop-icon { margin-bottom: 8px; }
+.file-drop-icon svg { width: 32px; height: 32px; color: #94a3b8; }
+.file-drop-label { font-size: 13.5px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+.file-drop-hint { font-size: 11.5px; color: var(--text-muted); }
+
+/* File Preview List */
+.file-preview-list {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.file-preview-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+}
+.file-preview-item .file-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+.file-preview-item .file-icon.foto { background: #dbeafe; color: #1e40af; }
+.file-preview-item .file-icon.video { background: #fce7f3; color: #9d174d; }
+.file-preview-item .file-icon.notulensi { background: #d1fae5; color: #065f46; }
+.file-preview-item .file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-primary); font-weight: 500; }
+.file-preview-item .file-size { font-size: 11.5px; color: var(--text-muted); flex-shrink: 0; }
+.file-preview-item .file-remove { flex-shrink: 0; width: 20px; height: 20px; border: none; background: none; cursor: pointer; color: #ef4444; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+.file-preview-item .file-remove:hover { background: #fee2e2; }
+
+/* Keterangan dok */
+.dok-keterangan-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+}
+@media (max-width: 700px) { .dok-keterangan-row { grid-template-columns: 1fr; } }
+
+/* Existing docs list */
+.existing-docs {
+    margin-bottom: 16px;
+}
+.existing-doc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    font-size: 12.5px;
+    margin-bottom: 6px;
+}
+.existing-doc-item .ed-name { flex: 1; color: #065f46; font-weight: 500; }
+.existing-doc-item .ed-badge { font-size: 10.5px; padding: 2px 7px; border-radius: 10px; font-weight: 600; }
+.ed-badge.foto { background: #dbeafe; color: #1e40af; }
+.ed-badge.video { background: #fce7f3; color: #9d174d; }
+.ed-badge.notulensi { background: #d1fae5; color: #065f46; }
+.ed-del-btn { border: none; background: none; cursor: pointer; color: #ef4444; font-size: 11px; padding: 3px 8px; border-radius: 5px; }
+.ed-del-btn:hover { background: #fee2e2; }
+
 /* Checkbox group */
 .checkbox-group {
     display: flex;
@@ -175,7 +303,7 @@
     </div>
 </div>
 
-<form id="form-kegiatan" method="POST" action="{{ isset($kegiatan) ? route('kegiatan-pimpinan.update', $kegiatan) : route('kegiatan-pimpinan.store') }}">
+<form id="form-kegiatan" method="POST" action="{{ isset($kegiatan) ? route('kegiatan-pimpinan.update', $kegiatan) : route('kegiatan-pimpinan.store') }}" enctype="multipart/form-data">
 @csrf
 @if(isset($kegiatan))
     @method('PUT')
@@ -427,6 +555,165 @@
     </div>
 </div>
 
+{{-- Section 3: Dokumentasi Kegiatan --}}
+<div class="form-card" id="card-dokumentasi">
+    <div class="form-card-section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span>Dokumentasi Kegiatan</span>
+        <span style="font-size:12px;font-weight:400;color:var(--text-muted)">Opsional — dapat ditambahkan setelah kegiatan berlangsung</span>
+    </div>
+    <div class="form-card-body">
+
+        {{-- Banner Rekomendasi Standar ISO Penamaan File --}}
+        <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:12px;color:#0369a1;display:flex;align-items:flex-start;gap:8px;line-height:1.45;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:16px;height:16px;flex-shrink:0;margin-top:2px;color:#0284c7;"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
+            <div>
+                <strong style="color:#0c4a6e;">Standar ISO Penamaan File:</strong> Format penamaan foto &amp; dokumen disarankan <code>Tanggal_Bulan_Tahun_Nama Kegiatan</code> (contoh: <code>11_11_2026_Nama_Kegiatan.jpg</code>). Sistem otomatis menerapkan penamaan standar ini saat disimpan.
+            </div>
+        </div>
+
+        {{-- Tabs --}}
+        <div class="dok-tab-nav">
+            <button type="button" class="dok-tab-btn active" onclick="switchDokTab('foto', this)" id="tab-btn-foto">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
+                Foto
+                <span class="tab-badge" id="badge-foto">0</span>
+            </button>
+            <button type="button" class="dok-tab-btn" onclick="switchDokTab('video', this)" id="tab-btn-video">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                Video
+                <span class="tab-badge" id="badge-video">0</span>
+            </button>
+            <button type="button" class="dok-tab-btn" onclick="switchDokTab('notulensi', this)" id="tab-btn-notulensi">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
+                Notulensi
+                <span class="tab-badge" id="badge-notulensi">0</span>
+            </button>
+        </div>
+
+        {{-- ========== TAB: FOTO ========== --}}
+        <div class="dok-tab-pane active" id="pane-foto">
+
+            @if(isset($kegiatan) && $kegiatan->galeriArsip->where('tipe','foto')->count() > 0)
+            <div class="existing-docs">
+                <div style="font-size:12.5px;font-weight:600;color:#065f46;margin-bottom:8px;">📁 Foto yang sudah tersimpan:</div>
+                @foreach($kegiatan->galeriArsip->where('tipe','foto') as $doc)
+                <div class="existing-doc-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#3b82f6" style="width:15px;height:15px"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
+                    <span class="ed-name">{{ $doc->judul }} {{ $doc->file_name ? '(' . $doc->file_name . ')' : '' }}</span>
+                    <span class="ed-badge foto">Foto</span>
+                    <a href="{{ route('galeri-arsip.index', ['tab' => 'foto', 'kegiatan' => $kegiatan->id]) }}" target="_blank" style="font-size:11px;color:#1e40af;text-decoration:none;">Lihat →</a>
+                </div>
+                @endforeach
+            </div>
+            @endif
+
+            <div class="file-drop-zone" id="dropFoto" onclick="document.getElementById('inputFoto').click()">
+                <input type="file" id="inputFoto" name="dok_foto[]" accept="image/jpeg,image/png,image/webp" multiple onchange="handleFileSelect('foto', this.files)" style="display:none">
+                <div class="file-drop-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="#94a3b8"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
+                </div>
+                <div class="file-drop-label">Klik untuk unggah Foto Kegiatan</div>
+                <div class="file-drop-hint">Format: JPG, PNG, WebP &bull; Bisa pilih banyak file sekaligus</div>
+            </div>
+            <div class="file-preview-list" id="preview-foto"></div>
+
+            <div class="dok-keterangan-row">
+                <div class="form-group">
+                    <label class="form-label">Judul / Keterangan Foto</label>
+                    <input type="text" class="form-input" name="dok_foto_judul" id="dok_foto_judul" placeholder="Contoh: Foto Kegiatan Rapat Koordinasi">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Jumlah Foto (total)</label>
+                    <input type="number" class="form-input" name="dok_foto_jumlah" id="dok_foto_jumlah" placeholder="Contoh: 25" min="1">
+                </div>
+            </div>
+        </div>
+
+        {{-- ========== TAB: VIDEO ========== --}}
+        <div class="dok-tab-pane" id="pane-video">
+
+            @if(isset($kegiatan) && $kegiatan->galeriArsip->where('tipe','video')->count() > 0)
+            <div class="existing-docs">
+                <div style="font-size:12.5px;font-weight:600;color:#065f46;margin-bottom:8px;">📁 Video yang sudah tersimpan:</div>
+                @foreach($kegiatan->galeriArsip->where('tipe','video') as $doc)
+                <div class="existing-doc-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ec4899" style="width:15px;height:15px"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                    <span class="ed-name">{{ $doc->judul }} {{ $doc->file_name ? '(' . $doc->file_name . ')' : '' }}</span>
+                    <span class="ed-badge video">Video</span>
+                    <a href="{{ route('galeri-arsip.index', ['tab' => 'video', 'kegiatan' => $kegiatan->id]) }}" target="_blank" style="font-size:11px;color:#9d174d;text-decoration:none;">Lihat →</a>
+                </div>
+                @endforeach
+            </div>
+            @endif
+
+            <div class="file-drop-zone" id="dropVideo" onclick="document.getElementById('inputVideo').click()">
+                <input type="file" id="inputVideo" name="dok_video[]" accept="video/mp4,video/quicktime,video/x-msvideo" multiple onchange="handleFileSelect('video', this.files)" style="display:none">
+                <div class="file-drop-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="#94a3b8"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                </div>
+                <div class="file-drop-label">Klik untuk unggah Video Kegiatan</div>
+                <div class="file-drop-hint">Format: MP4, MOV, AVI &bull; Bisa pilih banyak file sekaligus</div>
+            </div>
+            <div class="file-preview-list" id="preview-video"></div>
+
+            <div class="dok-keterangan-row">
+                <div class="form-group">
+                    <label class="form-label">Judul / Keterangan Video</label>
+                    <input type="text" class="form-input" name="dok_video_judul" id="dok_video_judul" placeholder="Contoh: Rekaman Rapat Koordinasi OPD">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Durasi (menit)</label>
+                    <input type="number" class="form-input" name="dok_video_durasi" id="dok_video_durasi" placeholder="Contoh: 45" min="1">
+                </div>
+            </div>
+        </div>
+
+        {{-- ========== TAB: NOTULENSI ========== --}}
+        <div class="dok-tab-pane" id="pane-notulensi">
+
+            @if(isset($kegiatan) && $kegiatan->galeriArsip->where('tipe','notulensi')->count() > 0)
+            <div class="existing-docs">
+                <div style="font-size:12.5px;font-weight:600;color:#065f46;margin-bottom:8px;">📁 Notulensi yang sudah tersimpan:</div>
+                @foreach($kegiatan->galeriArsip->where('tipe','notulensi') as $doc)
+                <div class="existing-doc-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#10b981" style="width:15px;height:15px"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
+                    <span class="ed-name">{{ $doc->judul }} {{ $doc->file_name ? '(' . $doc->file_name . ')' : '' }}</span>
+                    <span class="ed-badge notulensi">Notulensi</span>
+                    <a href="{{ route('galeri-arsip.index', ['tab' => 'notulensi', 'kegiatan' => $kegiatan->id]) }}" target="_blank" style="font-size:11px;color:#065f46;text-decoration:none;">Lihat →</a>
+                </div>
+                @endforeach
+            </div>
+            @endif
+
+            <div class="file-drop-zone" id="dropNotulensi" onclick="document.getElementById('inputNotulensi').click()">
+                <input type="file" id="inputNotulensi" name="dok_notulensi[]" accept=".pdf,.doc,.docx,.ppt,.pptx" multiple onchange="handleFileSelect('notulensi', this.files)" style="display:none">
+                <div class="file-drop-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.2" stroke="#94a3b8"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
+                </div>
+                <div class="file-drop-label">Klik untuk unggah Notulensi / Dokumen</div>
+                <div class="file-drop-hint">Format: PDF, Word (.doc, .docx), PowerPoint (.ppt, .pptx)</div>
+            </div>
+            <div class="file-preview-list" id="preview-notulensi"></div>
+
+            <div class="form-row-1" style="margin-top:16px">
+                <div class="form-group">
+                    <label class="form-label">Judul / Keterangan Notulensi</label>
+                    <input type="text" class="form-input" name="dok_notulensi_judul" id="dok_notulensi_judul" placeholder="Contoh: Notulensi Rapat Koordinasi OPD — Oktober 2026">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {{-- Footer Buttons bawah --}}
+    <div class="form-footer">
+        <button type="submit" form="form-kegiatan" name="action" value="draft" class="btn btn-secondary">Simpan Draft</button>
+        <button type="submit" form="form-kegiatan" name="action" value="publish" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:15px;height:15px"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3.75H6.912a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859M12 3v8.25m0 0l-3-3m3 3l3-3" /></svg>
+            Simpan &amp; Publikasikan
+        </button>
+    </div>
+</div>
+
 </form>
 @endsection
 
@@ -461,5 +748,90 @@ function toggleLeadingCustom(val) {
         }
     }
 }
+
+// =============================================
+// Dokumentasi Tabs
+// =============================================
+const dokFilesMap = { foto: [], video: [], notulensi: [] };
+
+function switchDokTab(tab, btn) {
+    document.querySelectorAll('.dok-tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.dok-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('pane-' + tab).classList.add('active');
+    btn.classList.add('active');
+}
+
+function handleFileSelect(tipe, files) {
+    if (!files || files.length === 0) return;
+    Array.from(files).forEach(f => {
+        if (!dokFilesMap[tipe].find(x => x.name === f.name && x.size === f.size)) {
+            dokFilesMap[tipe].push(f);
+        }
+    });
+    renderPreview(tipe);
+    updateBadge(tipe);
+    rebuildFileInput(tipe);
+}
+
+function renderPreview(tipe) {
+    const list = document.getElementById('preview-' + tipe);
+    list.innerHTML = '';
+    dokFilesMap[tipe].forEach((f, idx) => {
+        const ext = f.name.split('.').pop().toLowerCase();
+        const iconClass = tipe;
+        const size = f.size < 1024 * 1024
+            ? (f.size / 1024).toFixed(1) + ' KB'
+            : (f.size / 1024 / 1024).toFixed(1) + ' MB';
+        const item = document.createElement('div');
+        item.className = 'file-preview-item';
+        item.innerHTML = `
+            <span class="file-icon ${iconClass}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+            </span>
+            <span class="file-name" title="${f.name}">${f.name}</span>
+            <span class="file-size">${size}</span>
+            <button type="button" class="file-remove" onclick="removeFile('${tipe}', ${idx})" title="Hapus">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:12px;height:12px"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+            </button>
+        `;
+        list.appendChild(item);
+    });
+}
+
+function removeFile(tipe, idx) {
+    dokFilesMap[tipe].splice(idx, 1);
+    renderPreview(tipe);
+    updateBadge(tipe);
+    rebuildFileInput(tipe);
+}
+
+function updateBadge(tipe) {
+    const badge = document.getElementById('badge-' + tipe);
+    if (badge) badge.textContent = dokFilesMap[tipe].length;
+}
+
+function rebuildFileInput(tipe) {
+    const inputId = 'input' + tipe.charAt(0).toUpperCase() + tipe.slice(1);
+    const originalInput = document.getElementById(inputId);
+    if (!originalInput) return;
+    // Build a DataTransfer to sync the file input
+    const dt = new DataTransfer();
+    dokFilesMap[tipe].forEach(f => dt.items.add(f));
+    originalInput.files = dt.files;
+}
+
+// Drag & Drop
+['Foto', 'Video', 'Notulensi'].forEach(t => {
+    const tLow = t.toLowerCase();
+    const zone = document.getElementById('drop' + t);
+    if (!zone) return;
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragging'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragging'));
+    zone.addEventListener('drop', e => {
+        e.preventDefault();
+        zone.classList.remove('dragging');
+        handleFileSelect(tLow, e.dataTransfer.files);
+    });
+});
 </script>
 @endpush

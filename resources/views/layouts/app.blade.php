@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') — E-PROKOPIM Kota Bandung</title>
+    <title>E-PROKOPIM</title>
     <meta name="description" content="Sistem Informasi Komunikasi Pimpinan Pemerintah Kota Bandung">
     <link rel="stylesheet" href="{{ asset('css/sikopim.css') }}">
+    <script>
+        if (localStorage.getItem('prokopim_sidebar_collapsed') === 'true') {
+            document.documentElement.classList.add('sidebar-collapsed');
+        }
+    </script>
     <style>
         /* ── Sidebar Navigation Group (Collapsible) ── */
         .sidebar-nav-group { margin-bottom: 2px; }
@@ -482,6 +487,117 @@
             font-size: 13px;
         }
         .notif-empty svg { width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.4; }
+
+        /* ── Sidebar Collapsible Feature ── */
+        :root {
+            --sidebar-width: 220px;
+            --sidebar-collapsed-width: 68px;
+        }
+        .sidebar {
+            transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .main-content {
+            transition: margin-left 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        html.sidebar-collapsed .sidebar,
+        body.sidebar-collapsed .sidebar {
+            width: var(--sidebar-collapsed-width) !important;
+        }
+        html.sidebar-collapsed .main-content,
+        body.sidebar-collapsed .main-content {
+            margin-left: var(--sidebar-collapsed-width) !important;
+        }
+        html.sidebar-collapsed .sidebar-brand-text,
+        body.sidebar-collapsed .sidebar-brand-text,
+        html.sidebar-collapsed .nav-text,
+        body.sidebar-collapsed .nav-text,
+        html.sidebar-collapsed .sidebar-nav-label,
+        body.sidebar-collapsed .sidebar-nav-label,
+        html.sidebar-collapsed .sidebar-nav-group-header .chevron,
+        body.sidebar-collapsed .sidebar-nav-group-header .chevron,
+        html.sidebar-collapsed .sidebar-nav-group-children,
+        body.sidebar-collapsed .sidebar-nav-group-children,
+        html.sidebar-collapsed .ext-icon,
+        body.sidebar-collapsed .ext-icon,
+        html.sidebar-collapsed .sidebar-brand-collapse-btn,
+        body.sidebar-collapsed .sidebar-brand-collapse-btn {
+            display: none !important;
+        }
+        html.sidebar-collapsed .sidebar-brand,
+        body.sidebar-collapsed .sidebar-brand {
+            padding: 16px 8px;
+            justify-content: center;
+        }
+        html.sidebar-collapsed .sidebar-nav-link,
+        body.sidebar-collapsed .sidebar-nav-link,
+        html.sidebar-collapsed .sidebar-nav-group-header,
+        body.sidebar-collapsed .sidebar-nav-group-header {
+            justify-content: center;
+            padding: 10px 0;
+            border-radius: 8px;
+        }
+        html.sidebar-collapsed .sidebar-nav-link svg,
+        body.sidebar-collapsed .sidebar-nav-link svg,
+        html.sidebar-collapsed .sidebar-nav-group-header svg.main-icon,
+        body.sidebar-collapsed .sidebar-nav-group-header svg.main-icon {
+            margin: 0;
+        }
+        html.sidebar-collapsed .sidebar-footer a,
+        body.sidebar-collapsed .sidebar-footer a {
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        /* Topbar Toggle Button */
+        .sidebar-toggle-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+            margin-right: 14px;
+        }
+        .sidebar-toggle-btn:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .sidebar-toggle-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Sidebar Brand Inline Collapse Button */
+        .sidebar-brand-collapse-btn {
+            margin-left: auto;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .sidebar-brand-collapse-btn:hover {
+            background: rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+        }
+        .sidebar-brand-collapse-btn svg {
+            width: 14px;
+            height: 14px;
+        }
     </style>
     @stack('styles')
 </head>
@@ -492,7 +608,7 @@
     <aside class="sidebar">
         {{-- Brand --}}
         <div class="sidebar-brand">
-            <div class="sidebar-brand-icon">
+            <div class="sidebar-brand-icon" onclick="if(document.body.classList.contains('sidebar-collapsed')) toggleSidebarCollapse()" style="cursor:pointer;" title="E-PROKOPIM">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z"/>
                 </svg>
@@ -501,28 +617,29 @@
                 <h2>E-PROKOPIM</h2>
                 <p>Kota Bandung</p>
             </div>
+
         </div>
 
         {{-- Navigation --}}
         <nav class="sidebar-nav">
 
             {{-- 1. Dashboard --}}
-            <a href="{{ route('dashboard') }}" class="sidebar-nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <a href="{{ route('dashboard') }}" class="sidebar-nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" title="Dashboard">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
-                Dashboard
+                <span class="nav-text">Dashboard</span>
             </a>
 
             {{-- 2. Kegiatan Pimpinan --}}
-            <a href="{{ route('kegiatan-pimpinan.index') }}" class="sidebar-nav-link {{ request()->routeIs('kegiatan-pimpinan.*') ? 'active' : '' }}">
+            <a href="{{ route('kegiatan-pimpinan.index') }}" class="sidebar-nav-link {{ request()->routeIs('kegiatan-pimpinan.*') ? 'active' : '' }}" title="Kegiatan Pimpinan">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-                Kegiatan Pimpinan
+                <span class="nav-text">Kegiatan Pimpinan</span>
             </a>
 
             {{-- 3. Komunikasi Pimpinan (dropdown) --}}
             <div class="sidebar-nav-group">
-                <div class="sidebar-nav-group-header {{ (request()->routeIs('sambutan.*') || request()->routeIs('media-sosial.*') || request()->routeIs('analisis.*')) ? 'active open' : '' }}" onclick="toggleNavGroup(this)">
+                <div class="sidebar-nav-group-header {{ (request()->routeIs('sambutan.*') || request()->routeIs('media-sosial.*') || request()->routeIs('analisis.*')) ? 'active open' : '' }}" onclick="toggleNavGroup(this)" title="Komunikasi Pimpinan">
                     <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46"/></svg>
-                    Komunikasi Pimpinan
+                    <span class="nav-text">Komunikasi Pimpinan</span>
                     <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
                 </div>
                 <div class="sidebar-nav-group-children {{ (request()->routeIs('sambutan.*') || request()->routeIs('media-sosial.*') || request()->routeIs('analisis.*')) ? 'open' : '' }}">
@@ -540,9 +657,9 @@
 
             {{-- 4. Dokumentasi Pimpinan (dropdown) --}}
             <div class="sidebar-nav-group">
-                <div class="sidebar-nav-group-header {{ (request()->routeIs('sub-dokumentasi-pimpinan.*') || request()->routeIs('galeri-arsip.*')) ? 'active open' : '' }}" onclick="toggleNavGroup(this)">
+                <div class="sidebar-nav-group-header {{ (request()->routeIs('sub-dokumentasi-pimpinan.*') || request()->routeIs('galeri-arsip.*')) ? 'active open' : '' }}" onclick="toggleNavGroup(this)" title="Dokumentasi Pimpinan">
                     <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" /></svg>
-                    Dokumentasi Pimpinan
+                    <span class="nav-text">Dokumentasi Pimpinan</span>
                     <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                 </div>
                 <div class="sidebar-nav-group-children {{ request()->routeIs('galeri-arsip.*') ? 'open' : '' }}">
@@ -560,26 +677,29 @@
 
             {{-- 5. Protokol Pimpinan (dropdown) --}}
             <div class="sidebar-nav-group">
-                <div class="sidebar-nav-group-header {{ (request()->routeIs('penugasan.*') || request()->routeIs('protokol-pimpinan.penugasan.*') || request()->routeIs('sub-protokol.*')) ? 'active open' : '' }}" onclick="toggleNavGroup(this)">
+                <div class="sidebar-nav-group-header {{ (request()->routeIs('penugasan.*') || request()->routeIs('protokol-pimpinan.penugasan.*') || request()->routeIs('sub-protokol.*') || request()->routeIs('arahan.*')) ? 'active open' : '' }}" onclick="toggleNavGroup(this)" title="Protokol Pimpinan">
                     <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
-                    Protokol Pimpinan
+                    <span class="nav-text">Protokol Pimpinan</span>
                     <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                 </div>
-                <div class="sidebar-nav-group-children {{ (request()->routeIs('penugasan.*') || request()->routeIs('protokol-pimpinan.penugasan.*') || request()->routeIs('sub-protokol.*')) ? 'open' : '' }}">
+                <div class="sidebar-nav-group-children {{ (request()->routeIs('penugasan.*') || request()->routeIs('protokol-pimpinan.penugasan.*') || request()->routeIs('sub-protokol.*') || request()->routeIs('arahan.*')) ? 'open' : '' }}">
                     <a href="{{ route('protokol-pimpinan.penugasan.index') }}" class="sidebar-nav-sublink {{ (request()->routeIs('penugasan.*') || request()->routeIs('protokol-pimpinan.penugasan.*')) ? 'active' : '' }}">
                         Penugasan
+                    </a>
+                    <a href="{{ route('arahan.index') }}" class="sidebar-nav-sublink {{ request()->routeIs('arahan.*') ? 'active' : '' }}">
+                        Arahan Pimpinan
                     </a>
                 </div>
             </div>
 
             {{-- 6. Administrasi (dropdown) --}}
             <div class="sidebar-nav-group">
-                <div class="sidebar-nav-group-header {{ (request()->routeIs('arsip.*') || request()->routeIs('asset.*') || request()->routeIs('pegawai.*') || request()->routeIs('keuangan.*')) ? 'active open' : '' }}" onclick="toggleNavGroup(this)">
+                <div class="sidebar-nav-group-header {{ (request()->routeIs('arsip.*') || request()->routeIs('asset.*') || request()->routeIs('pegawai.*') || request()->routeIs('keuangan.*') || request()->routeIs('surat-keluar.*')) ? 'active open' : '' }}" onclick="toggleNavGroup(this)" title="Administrasi">
                     <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" /></svg>
-                    Administrasi
+                    <span class="nav-text">Administrasi</span>
                     <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                 </div>
-                <div class="sidebar-nav-group-children {{ (request()->routeIs('arsip.*') || request()->routeIs('asset.*') || request()->routeIs('pegawai.*') || request()->routeIs('keuangan.*')) ? 'open' : '' }}">
+                <div class="sidebar-nav-group-children {{ (request()->routeIs('arsip.*') || request()->routeIs('asset.*') || request()->routeIs('pegawai.*') || request()->routeIs('keuangan.*') || request()->routeIs('surat-keluar.*')) ? 'open' : '' }}">
                     <a href="{{ route('arsip.index') }}" class="sidebar-nav-sublink {{ request()->routeIs('arsip.*') ? 'active' : '' }}">
                         Arsip Surat
                     </a>
@@ -590,24 +710,33 @@
                         Pegawai
                     </a>
                     <a href="{{ route('keuangan.index') }}" class="sidebar-nav-sublink {{ request()->routeIs('keuangan.*') ? 'active' : '' }}">
-                        Keuangan
+                        Surat Masuk
+                    </a>
+                    <a href="{{ route('surat-keluar.index') }}" class="sidebar-nav-sublink {{ request()->routeIs('surat-keluar.*') ? 'active' : '' }}">
+                        Surat Keluar
                     </a>
                 </div>
             </div>
 
             {{-- 7. Asisten AI --}}
-            <a href="{{ route('asisten-ai.index') }}" class="sidebar-nav-link {{ request()->routeIs('asisten-ai.*') ? 'active' : '' }}">
+            <a href="{{ route('asisten-ai.index') }}" class="sidebar-nav-link {{ request()->routeIs('asisten-ai.*') ? 'active' : '' }}" title="Asisten AI">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" /></svg>
-                Asisten AI
+                <span class="nav-text">Asisten AI</span>
+            </a>
+
+            {{-- 8. Arsip Terhapus (Recycle Bin) --}}
+            <a href="{{ route('trash.index') }}" class="sidebar-nav-link {{ request()->routeIs('trash.*') ? 'active' : '' }}" title="Arsip Terhapus">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                <span class="nav-text">Arsip Terhapus</span>
             </a>
 
             {{-- Tautan Sistem --}}
             <div class="sidebar-divider"></div>
             <div class="sidebar-nav-label">Tautan Sistem</div>
 
-            <a href="https://prokopim.bandung.go.id" class="sidebar-nav-link" target="_blank">
+            <a href="https://prokopim.bandung.go.id" class="sidebar-nav-link" target="_blank" title="Website Prokopim">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" /></svg>
-                Website Prokopim
+                <span class="nav-text">Website Prokopim</span>
                 <svg class="ext-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
             </a>
 
@@ -615,13 +744,13 @@
 
         {{-- Footer: Pengaturan & Profil --}}
         <div class="sidebar-footer">
-            <a href="{{ route('pengaturan.index') }}" class="sidebar-nav-link {{ request()->routeIs('pengaturan.*') ? 'active' : '' }}">
+            <a href="{{ route('pengaturan.index') }}" class="sidebar-nav-link {{ request()->routeIs('pengaturan.*') ? 'active' : '' }}" title="Pengaturan">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                Pengaturan
+                <span class="nav-text">Pengaturan</span>
             </a>
-            <a href="{{ route('profil-admin.index') }}" class="sidebar-nav-link {{ request()->routeIs('profil-admin.*') ? 'active' : '' }}">
+            <a href="{{ route('profil-admin.index') }}" class="sidebar-nav-link {{ request()->routeIs('profil-admin.*') ? 'active' : '' }}" title="Profil">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                Profil
+                <span class="nav-text">Profil</span>
             </a>
         </div>
     </aside>
@@ -631,13 +760,8 @@
 
         {{-- TOPBAR --}}
         <header class="topbar">
-            {{-- Left: Pill Search --}}
-            <div class="topbar-left">
-                <form method="GET" action="{{ route('arsip.index') }}" class="topbar-search-pill">
-                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
-                    <input type="text" name="search" placeholder="Cari data..." id="topbar-search-input" value="{{ request('search') }}">
-                </form>
-            </div>
+            {{-- Left --}}
+            <div class="topbar-left"></div>
 
             {{-- Right: Notification, Help, Apps Grid, Profile --}}
             <div class="topbar-right">
@@ -741,7 +865,23 @@
 
 <script src="{{ asset('js/sikopim.js') }}"></script>
 <script>
+function toggleSidebarCollapse() {
+    const isCollapsed = document.body.classList.toggle('sidebar-collapsed');
+    document.documentElement.classList.toggle('sidebar-collapsed', isCollapsed);
+    localStorage.setItem('prokopim_sidebar_collapsed', isCollapsed ? 'true' : 'false');
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    if (toggleBtn) {
+        toggleBtn.setAttribute('title', isCollapsed ? 'Buka Sidebar' : 'Lipat Sidebar');
+    }
+}
+if (localStorage.getItem('prokopim_sidebar_collapsed') === 'true') {
+    document.body.classList.add('sidebar-collapsed');
+}
+
 function toggleNavGroup(header) {
+    if (document.body.classList.contains('sidebar-collapsed')) {
+        toggleSidebarCollapse();
+    }
     header.classList.toggle('open');
     const children = header.nextElementSibling;
     if (children) children.classList.toggle('open');

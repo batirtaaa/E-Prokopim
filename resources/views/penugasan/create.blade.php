@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Buat Penugasan Baru — E-PROKOPIM')
+@section('title', 'Buat Penugasan Baru')
 
 @push('styles')
 <style>
@@ -366,7 +366,7 @@
                         <option value="">Pilih agenda pimpinan...</option>
                         @foreach($kegiatan as $k)
                             <option value="{{ $k->id }}" {{ old('kegiatan_id') == $k->id ? 'selected' : '' }}>
-                                {{ $k->judul }} ({{ $k->tanggal_mulai ? $k->tanggal_mulai->format('d M Y, H:i') : '' }} WIB) — {{ $k->lokasi }}
+                                {{ $k->judul }} ({{ $k->tanggal_mulai ? $k->tanggal_mulai->translatedFormat('d M Y, H:i') : '' }} WIB) — {{ $k->lokasi }}
                             </option>
                         @endforeach
                     </select>

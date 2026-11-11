@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Carbon\Carbon;
+use App\Models\GaleriArsip;
 
 class Kegiatan extends Model
 {
@@ -44,6 +45,11 @@ class Kegiatan extends Model
         return $this->hasMany(DaftarHadir::class);
     }
 
+    public function galeriArsip(): HasMany
+    {
+        return $this->hasMany(GaleriArsip::class, 'kegiatan_id');
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -69,21 +75,25 @@ class Kegiatan extends Model
     {
         $list = $this->pimpinan_list;
         $map = [
-            'wali_kota'       => ['initial' => 'WK', 'name' => 'Wali Kota'],
-            'wakil_wali_kota' => ['initial' => 'VW', 'name' => 'Wakil Wali Kota'],
-            'sekda'           => ['initial' => 'SD', 'name' => 'Sekretaris Daerah'],
+            'wali_kota'       => ['initial' => 'WK', 'name' => 'Wali Kota (B1)'],
+            'wakil_wali_kota' => ['initial' => 'VW', 'name' => 'Wakil Wali Kota (B2)'],
+            'sekda'           => ['initial' => 'SD', 'name' => 'Sekretaris Daerah (B3)'],
             'pkk1'            => ['initial' => 'PK1', 'name' => 'Aryatri Benarto (PKK1)'],
             'pkk2'            => ['initial' => 'PK2', 'name' => 'Fitriana Dewi (PKK2)'],
             'dwp'             => ['initial' => 'DWP', 'name' => 'R. Dewi Pertiwi Zulkarnain (DWP)'],
             'asisten'         => ['initial' => 'AS', 'name' => 'Asisten'],
+            'b1'              => ['initial' => 'WK', 'name' => 'Wali Kota (B1)'],
+            'b2'              => ['initial' => 'VW', 'name' => 'Wakil Wali Kota (B2)'],
+            'b3'              => ['initial' => 'SD', 'name' => 'Sekretaris Daerah (B3)'],
         ];
 
         $badges = [];
         foreach ($list as $p) {
-            if (isset($map[$p])) {
-                $badges[] = $map[$p];
+            $key = strtolower(trim((string)$p));
+            if (isset($map[$key])) {
+                $badges[] = $map[$key];
             } elseif (!empty($p)) {
-                $badges[] = ['initial' => strtoupper(substr($p, 0, 2)), 'name' => ucfirst($p)];
+                $badges[] = ['initial' => strtoupper(substr(trim((string)$p), 0, 2)), 'name' => (string)$p];
             }
         }
         return $badges;

@@ -12,12 +12,18 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function showLogin()
+    public function showLogin(Request $request)
     {
         if (Auth::check()) {
             return redirect()->route('dashboard');
         }
-        return view('auth.login');
+
+        $rememberedUsername = $request->cookie('remember_username', '');
+        $rememberedPassword = $request->cookie('remember_password', '');
+        $rememberChecked    = (bool) $request->cookie('remember_checked', false);
+        $savedAccounts      = json_decode($request->cookie('remember_accounts_history', '[]'), true) ?: [];
+
+        return view('auth.login', compact('rememberedUsername', 'rememberedPassword', 'rememberChecked', 'savedAccounts'));
     }
 
     public function login(Request $request)
@@ -34,7 +40,8 @@ class AuthController extends Controller
 
         $status = 'gagal';
         if ($user && Hash::check($request->password, $user->password) && $user->is_active) {
-            Auth::login($user, $request->remember ?? false);
+            $remember = $request->boolean('remember');
+            Auth::login($user, $remember);
             $status = 'berhasil';
 
             // Log login history realtime (WIB)
@@ -48,7 +55,29 @@ class AuthController extends Controller
             ]);
 
             $request->session()->regenerate();
-            return redirect()->intended(route('dashboard'));
+            $response = redirect()->intended(route('dashboard'));
+
+            // Fitur Ingat Saya: simpan kredensial & riwayat inputan form
+            if ($remember) {
+                $response->cookie('remember_username', $request->username, 60 * 24 * 30);
+                $response->cookie('remember_password', $request->password, 60 * 24 * 30);
+                $response->cookie('remember_checked', '1', 60 * 24 * 30);
+
+                $accounts = json_decode($request->cookie('remember_accounts_history', '[]'), true) ?: [];
+                $accounts[$request->username] = [
+                    'username' => $request->username,
+                    'password' => $request->password,
+                    'name'     => $user->name,
+                    'saved_at' => Carbon::now('Asia/Jakarta')->toIso8601String(),
+                ];
+                $response->cookie('remember_accounts_history', json_encode($accounts), 60 * 24 * 30);
+            } else {
+                $response->withoutCookie('remember_username');
+                $response->withoutCookie('remember_password');
+                $response->withoutCookie('remember_checked');
+            }
+
+            return $response;
         }
 
         // Log failed attempt realtime (WIB)

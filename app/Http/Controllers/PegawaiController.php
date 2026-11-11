@@ -16,7 +16,7 @@ class PegawaiController extends Controller
         $query = Personel::orderBy('id', 'asc');
 
         if ($request->filled('search')) {
-            $search = $request->search;
+            $search = trim($request->search);
             $query->where(function($q) use ($search) {
                 $q->where('nama_lengkap', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
@@ -95,7 +95,7 @@ class PegawaiController extends Controller
             'phone' => $request->phone,
             'photo' => $photoPath,
             'status_ketersediaan' => 'standby',
-            'user_id' => Auth::id(),
+            'user_id' => null,
         ]);
 
         return redirect()->route('pegawai.index')
@@ -154,13 +154,11 @@ class PegawaiController extends Controller
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menghapus data pegawai.');
         }
-        if ($pegawai->photo) {
-            Storage::disk('public')->delete($pegawai->photo);
-        }
+
         $pegawai->delete();
 
         return redirect()->route('pegawai.index')
-            ->with('success', 'Data pegawai berhasil dihapus.');
+            ->with('success', 'Data pegawai berhasil dipindahkan ke Sampah (Trash).');
     }
 
     public function export(Request $request)

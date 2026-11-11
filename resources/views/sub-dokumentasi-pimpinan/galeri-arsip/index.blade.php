@@ -201,6 +201,118 @@
     overflow: hidden;
 }
 
+/* Keywords row & tags */
+.ga-keywords-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+.ga-kw-badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: #0369a1;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    padding: 1px 6px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.15s;
+    line-height: 1.4;
+}
+.ga-kw-badge:hover {
+    background: #e0f2fe;
+    border-color: #7dd3fc;
+    color: #0284c7;
+}
+.ga-kw-badge.more {
+    color: #64748b;
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    cursor: default;
+}
+
+/* File attachments row on card */
+.ga-files-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+.ga-file-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: all 0.15s;
+}
+.ga-file-badge.notulensi {
+    color: #047857;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+}
+.ga-file-badge.notulensi:hover {
+    background: #d1fae5;
+}
+.ga-file-badge.paparan {
+    color: #1d4ed8;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+}
+.ga-file-badge.paparan:hover {
+    background: #dbeafe;
+}
+.ga-file-badge svg {
+    width: 12px;
+    height: 12px;
+}
+
+/* Search bar inside toolbar */
+.ga-search-form { display:inline-flex; align-items:center; }
+.ga-search-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.ga-search-icon {
+    position: absolute;
+    left: 10px;
+    width: 14px;
+    height: 14px;
+    color: #9ca3af;
+    pointer-events: none;
+}
+.ga-search-inp {
+    padding: 6px 28px 6px 30px;
+    border: 1px solid #e5e7eb;
+    border-radius: 7px;
+    font-size: 12.5px;
+    color: #1f2937;
+    background: white;
+    width: 230px;
+    transition: all 0.15s ease;
+    outline: none;
+}
+.ga-search-inp:focus {
+    border-color: #1e3a5f;
+    box-shadow: 0 0 0 2px rgba(30,58,95,0.1);
+    width: 290px;
+}
+.ga-search-clear {
+    position: absolute;
+    right: 8px;
+    color: #9ca3af;
+    font-size: 16px;
+    line-height: 1;
+    text-decoration: none;
+    font-weight: 700;
+}
+.ga-search-clear:hover { color: #dc2626; }
+
 .ga-footer {
     display: flex;
     align-items: center;
@@ -546,7 +658,7 @@
         @if(auth()->user()->isAdmin())
         <button type="button" class="btn-unggah" onclick="openGaleriModal('{{ $tab !== 'semua' ? $tab : 'foto' }}')">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
-            Unggah Arsip Baru
+            {{ $tab === 'notulensi' ? 'Unggah Notulensi Baru' : ($tab === 'video' ? 'Unggah Video Baru' : ($tab === 'foto' ? 'Unggah Foto Baru' : 'Unggah Arsip Baru')) }}
         </button>
         @endif
     </div>
@@ -586,22 +698,66 @@
 </div>
 
 {{-- Tabs + Right Filters --}}
-<div class="ga-toolbar-wrap">
+<div class="ga-toolbar-wrap" style="flex-wrap:wrap;gap:0;">
     <div class="ga-tabs">
-        <a href="{{ route('galeri-arsip.index', ['tab' => 'semua']) }}" class="ga-tab {{ $tab === 'semua' ? 'active' : '' }}">Semua</a>
-        <a href="{{ route('galeri-arsip.index', ['tab' => 'foto']) }}"  class="ga-tab {{ $tab === 'foto' ? 'active' : '' }}">Foto</a>
-        <a href="{{ route('galeri-arsip.index', ['tab' => 'video']) }}" class="ga-tab {{ $tab === 'video' ? 'active' : '' }}">Video</a>
-        <a href="{{ route('galeri-arsip.index', ['tab' => 'notulensi']) }}" class="ga-tab {{ $tab === 'notulensi' ? 'active' : '' }}">Notulensi</a>
+        <a href="{{ route('galeri-arsip.index', array_merge(request()->query(), ['tab' => 'semua'])) }}" class="ga-tab {{ $tab === 'semua' ? 'active' : '' }}">Semua</a>
+        <a href="{{ route('galeri-arsip.index', array_merge(request()->query(), ['tab' => 'foto'])) }}"  class="ga-tab {{ $tab === 'foto' ? 'active' : '' }}">Foto</a>
+        <a href="{{ route('galeri-arsip.index', array_merge(request()->query(), ['tab' => 'video'])) }}" class="ga-tab {{ $tab === 'video' ? 'active' : '' }}">Video</a>
+        <a href="{{ route('galeri-arsip.index', array_merge(request()->query(), ['tab' => 'notulensi'])) }}" class="ga-tab {{ $tab === 'notulensi' ? 'active' : '' }}">Notulensi</a>
     </div>
-    <div class="ga-toolbar-right">
-        <button type="button" class="ga-btn-action">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"/></svg>
-            Filter
-        </button>
-        <button type="button" class="ga-btn-action">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25"/></svg>
-            Terbaru
-        </button>
+    <div class="ga-toolbar-right" style="flex-wrap:wrap;gap:8px;">
+        {{-- Form Filter Tanggal / Bulan / Tahun & Pencarian --}}
+        <form method="GET" action="{{ route('galeri-arsip.index') }}" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;" id="gaFilterForm">
+            <input type="hidden" name="tab" value="{{ $tab }}">
+            @if(request('kegiatan'))
+            <input type="hidden" name="kegiatan" value="{{ request('kegiatan') }}">
+            @endif
+            @if(request('keyword'))
+            <input type="hidden" name="keyword" value="{{ request('keyword') }}">
+            @endif
+
+            {{-- Search Box Toolbar --}}
+            <div class="ga-search-wrap">
+                <svg class="ga-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+                </svg>
+                <input type="text" name="search" class="ga-search-inp" placeholder="{{ $tab === 'notulensi' ? 'Cari judul notulensi, instansi...' : 'Cari arsip, nama instansi...' }}" value="{{ request('search') }}">
+                @if(request('search'))
+                <a href="{{ route('galeri-arsip.index', array_merge(request()->except('search'), ['tab' => $tab])) }}" class="ga-search-clear" title="Hapus pencarian">&times;</a>
+                @endif
+            </div>
+
+            {{-- Filter Tanggal Spesifik --}}
+            <div style="display:flex;align-items:center;gap:6px;background:white;border:1px solid #e5e7eb;border-radius:8px;padding:2px 10px;height:36px;" title="Filter berdasarkan tanggal kegiatan">
+                <span style="font-size:12px;color:#6b7280;font-weight:600;white-space:nowrap;">📅 Tanggal:</span>
+                <input type="date" name="tanggal" value="{{ request('tanggal') }}" onchange="document.getElementById('gaFilterForm').submit()" style="border:none;outline:none;font-size:12.5px;color:#374151;background:transparent;cursor:pointer;">
+            </div>
+
+            {{-- Filter Bulan --}}
+            <select name="bulan" id="gaFilterBulan" onchange="document.getElementById('gaFilterForm').submit()" style="padding:6px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:12.5px;color:#374151;background:white;outline:none;cursor:pointer;height:36px;" title="Filter berdasarkan bulan">
+                <option value="">Semua Bulan</option>
+                @foreach(['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'] as $idx => $namaBulan)
+                <option value="{{ $idx + 1 }}" {{ request('bulan') == ($idx + 1) ? 'selected' : '' }}>{{ $namaBulan }}</option>
+                @endforeach
+            </select>
+
+            {{-- Filter Tahun --}}
+            <select name="tahun" id="gaFilterTahun" onchange="document.getElementById('gaFilterForm').submit()" style="padding:6px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:12.5px;color:#374151;background:white;outline:none;cursor:pointer;height:36px;" title="Filter berdasarkan tahun">
+                <option value="">Semua Tahun</option>
+                @foreach($availableYears as $yr)
+                <option value="{{ $yr }}" {{ request('tahun') == $yr ? 'selected' : '' }}>{{ $yr }}</option>
+                @endforeach
+            </select>
+
+            {{-- Reset jika ada filter aktif --}}
+            @if(request('search') || request('keyword') || request('tanggal') || request('bulan') || request('tahun') || request('kegiatan'))
+            <a href="{{ route('galeri-arsip.index', ['tab' => $tab]) }}" style="padding:6px 12px;border:1px solid #fecaca;background:#fef2f2;border-radius:8px;font-size:12.5px;color:#dc2626;text-decoration:none;display:inline-flex;align-items:center;gap:4px;height:36px;font-weight:600;" title="Reset semua filter">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                Reset
+            </a>
+            @endif
+        </form>
+
         @if(auth()->user()->isAdmin())
         <button type="button" id="gaBtnSelectMode" class="ga-btn-select" onclick="toggleSelectMode()">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -610,6 +766,55 @@
         @endif
     </div>
 </div>
+
+{{-- Active Filter Banner --}}
+@php
+    $hasFilter = request('search') || request('keyword') || request('tanggal') || request('bulan') || request('tahun') || request('kegiatan');
+    $namaBulanList = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+@endphp
+@if($hasFilter)
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;background:#f0f9ff;border:1px solid #bae6fd;padding:9px 16px;border-radius:8px;font-size:13px;color:#0369a1;flex-wrap:wrap;">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:15px;height:15px;flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"/></svg>
+    <span style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+        Filter aktif:
+        @if($filterKegiatan)
+        <span style="background:#e0e7ff;border:1px solid #c7d2fe;border-radius:6px;padding:2px 8px;font-weight:600;display:inline-flex;align-items:center;gap:5px;color:#3730a3;" title="Hanya menampilkan dokumentasi kegiatan ini">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:13px;height:13px"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.253 3.75h18M4.5 7.5h15a2.25 2.25 0 012.25 2.25v10.5A2.25 2.25 0 0119.5 22.5H4.5A2.25 2.25 0 012.25 20.25V9.75A2.25 2.25 0 014.5 7.5z"/></svg>
+            Kegiatan: {{ $filterKegiatan->nomor_agenda ? '['.$filterKegiatan->nomor_agenda.'] ' : '' }}{{ Str::limit($filterKegiatan->judul, 36) }}
+            <a href="{{ route('galeri-arsip.index', array_merge(request()->except(['kegiatan']), ['tab' => $tab])) }}" style="color:#4338ca;text-decoration:none;font-weight:bold;margin-left:2px;" title="Hapus filter kegiatan">&times;</a>
+        </span>
+        @endif
+        @if(request('search') || request('keyword'))
+        <span style="background:#dbeafe;border-radius:6px;padding:2px 8px;font-weight:600;display:inline-flex;align-items:center;gap:4px;">
+            🔍 {{ request('search') ?: request('keyword') }}
+            <a href="{{ route('galeri-arsip.index', array_merge(request()->except(['search','keyword']), ['tab' => $tab])) }}" style="color:#2563eb;text-decoration:none;font-weight:bold;margin-left:2px;" title="Hapus filter kata kunci">&times;</a>
+        </span>
+        @endif
+        @if(request('tanggal'))
+        <span style="background:#dbeafe;border-radius:6px;padding:2px 8px;font-weight:600;display:inline-flex;align-items:center;gap:4px;">
+            📅 Tgl: {{ \Carbon\Carbon::parse(request('tanggal'))->translatedFormat('d M Y') }}
+            <a href="{{ route('galeri-arsip.index', array_merge(request()->except(['tanggal']), ['tab' => $tab])) }}" style="color:#2563eb;text-decoration:none;font-weight:bold;margin-left:2px;" title="Hapus filter tanggal">&times;</a>
+        </span>
+        @endif
+        @if(request('bulan'))
+        <span style="background:#dbeafe;border-radius:6px;padding:2px 8px;font-weight:600;display:inline-flex;align-items:center;gap:4px;">
+            🗓️ Bulan: {{ $namaBulanList[(int)request('bulan')] ?? '' }}
+            <a href="{{ route('galeri-arsip.index', array_merge(request()->except(['bulan']), ['tab' => $tab])) }}" style="color:#2563eb;text-decoration:none;font-weight:bold;margin-left:2px;" title="Hapus filter bulan">&times;</a>
+        </span>
+        @endif
+        @if(request('tahun'))
+        <span style="background:#dbeafe;border-radius:6px;padding:2px 8px;font-weight:600;display:inline-flex;align-items:center;gap:4px;">
+            📆 Tahun: {{ request('tahun') }}
+            <a href="{{ route('galeri-arsip.index', array_merge(request()->except(['tahun']), ['tab' => $tab])) }}" style="color:#2563eb;text-decoration:none;font-weight:bold;margin-left:2px;" title="Hapus filter tahun">&times;</a>
+        </span>
+        @endif
+        <span style="color:#4b5563;">— Ditemukan <strong style="color:#0369a1;">{{ $items->total() }}</strong> arsip</span>
+    </span>
+    <a href="{{ route('galeri-arsip.index', ['tab' => $tab]) }}" style="margin-left:auto;color:#ef4444;text-decoration:none;font-weight:600;font-size:12.5px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Reset Semua Filter
+    </a>
+</div>
+@endif
 
 {{-- Bulk Delete Form (hidden) --}}
 <form id="gaBulkDeleteForm" method="POST" action="{{ route('galeri-arsip.bulk-destroy') }}" style="display:none">
@@ -640,15 +845,26 @@
         </div>
 
         {{-- Thumbnail - klik untuk preview --}}
-        <div class="ga-thumb" id="gat-{{ $item->id }}" onclick="handleThumbClick(event, '{{ $item->tipe }}', {{ $item->id }}, '{{ addslashes($item->judul) }}', '{{ addslashes($item->file_name ?? '') }}')">
+        <div class="ga-thumb" id="gat-{{ $item->id }}" onclick="handleThumbClick(event, '{{ $item->tipe }}', {{ $item->id }}, '{{ addslashes($item->judul) }}', '{{ addslashes($item->file_name ?? '') }}', '{{ $item->file_paparan_path ? asset('storage/' . $item->file_paparan_path) : '' }}', '{{ addslashes($item->file_paparan_name ?? '') }}')">
             @if($item->file_path)
                 @if(Str::endsWith($item->file_path, ['.mp4', '.mov']))
                     {{-- Video: placeholder gelap + ikon, tanpa <video src> agar IDM tidak mencegat --}}
                     <div class="ga-thumb-placeholder ga-video-placeholder">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/></svg>
                     </div>
+                @elseif($item->tipe === 'notulensi' && !Str::endsWith(strtolower($item->file_path), ['.jpg', '.jpeg', '.png', '.webp']))
+                    {{-- Notulensi Dokumen Non-Gambar --}}
+                    <div class="ga-thumb-placeholder" style="background:linear-gradient(135deg, #f0fdf4, #e2e8f0);color:#047857;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px;text-align:center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.3" stroke="currentColor" style="width:44px;height:44px;color:#059669;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+                        </svg>
+                        <span style="font-size:11.5px;font-weight:700;color:#047857;letter-spacing:0.02em;">DOKUMEN NOTULENSI</span>
+                        @if($item->file_paparan_path)
+                        <span style="font-size:10px;font-weight:600;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:10px;border:1px solid #bfdbfe;">+ Paparan PPT</span>
+                        @endif
+                    </div>
                 @else
-                    {{-- Foto: URL disimpan di data attribute, dimuat via JS fetch() → Blob URL --}}
+                    {{-- Foto / Media Gambar: URL disimpan di data attribute, dimuat via JS fetch() → Blob URL --}}
                     <div class="ga-thumb-bg" data-thumb="{{ route('galeri-arsip.thumb', $item->id) }}"></div>
                 @endif
             @else
@@ -703,9 +919,51 @@
         <div class="ga-card-body">
             <div class="ga-meta-row">
                 <span class="ga-kode">{{ $item->kode }}</span>
-                <span class="ga-date">{{ $item->tanggal_kegiatan ? $item->tanggal_kegiatan->format('d M Y') : '—' }}</span>
+                <span class="ga-date">{{ $item->tanggal_kegiatan ? $item->tanggal_kegiatan->translatedFormat('d M Y') : '—' }}</span>
             </div>
             <div class="ga-title" title="{{ $item->judul }}">{{ $item->judul }}</div>
+
+            {{-- Nama Instansi Badge --}}
+            @php
+                $itemInstansi = $item->instansi ?: ($item->kegiatan?->leading_sektor ?? null);
+            @endphp
+            @if($itemInstansi)
+            <div style="margin-top:5px;display:flex;align-items:center;gap:5px;font-size:11.5px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:13px;height:13px;color:#2563eb;flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21"/></svg>
+                <a href="{{ route('galeri-arsip.index', ['tab' => $tab, 'search' => $itemInstansi]) }}" onclick="event.stopPropagation()" style="font-weight:600;color:#1e40af;background:#eff6ff;padding:2px 8px;border-radius:6px;border:1px solid #bfdbfe;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:inline-block;" title="Cari arsip dari: {{ $itemInstansi }}">
+                    {{ $itemInstansi }}
+                </a>
+            </div>
+            @endif
+
+            {{-- Kegiatan Pimpinan Terkait Badge --}}
+            @if($item->kegiatan)
+            <div style="margin-top:5px;display:flex;align-items:center;gap:5px;font-size:11.5px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="#059669" style="width:13px;height:13px;flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.253 3.75h18M4.5 7.5h15a2.25 2.25 0 012.25 2.25v10.5A2.25 2.25 0 0119.5 22.5H4.5A2.25 2.25 0 012.25 20.25V9.75A2.25 2.25 0 014.5 7.5z"/></svg>
+                <a href="{{ route('galeri-arsip.index', ['tab' => $tab, 'kegiatan' => $item->kegiatan_id]) }}" onclick="event.stopPropagation()" style="font-weight:600;color:#047857;background:#ecfdf5;padding:2px 8px;border-radius:6px;border:1px solid #a7f3d0;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:inline-block;" title="Agenda: {{ $item->kegiatan->judul }}">
+                    📋 {{ $item->kegiatan->nomor_agenda ? '['.$item->kegiatan->nomor_agenda.'] ' : '' }}{{ Str::limit($item->kegiatan->judul, 28) }}
+                </a>
+            </div>
+            @endif
+
+            {{-- File Attachment Badges (Khususnya Notulensi & Paparan) --}}
+            @if($item->tipe === 'notulensi' && ($item->file_path || $item->file_paparan_path))
+            <div class="ga-files-row" onclick="event.stopPropagation()">
+                @if($item->file_path)
+                <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank" class="ga-file-badge notulensi" title="{{ $item->file_name ?? 'Dokumen Notulensi Dinas' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                    Notulensi
+                </a>
+                @endif
+                @if($item->file_paparan_path)
+                <a href="{{ asset('storage/' . $item->file_paparan_path) }}" target="_blank" class="ga-file-badge paparan" title="{{ $item->file_paparan_name ?? 'File Paparan Rapat' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.143 2.143L15.429 6"/></svg>
+                    Paparan PPT
+                </a>
+                @endif
+            </div>
+            @endif
+
             <div class="ga-footer">
                 <div class="ga-akses">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"/></svg>
@@ -725,7 +983,13 @@
                         @if($item->file_path)
                         <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank" class="ga-dd-item">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-                            Unduh File
+                            {{ $item->tipe === 'notulensi' ? 'Unduh Notulensi' : 'Unduh File' }}
+                        </a>
+                        @endif
+                        @if($item->file_paparan_path)
+                        <a href="{{ asset('storage/' . $item->file_paparan_path) }}" target="_blank" class="ga-dd-item" style="color:#2563eb;">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                            Unduh Paparan Dinas
                         </a>
                         @endif
                         @if(auth()->user()->isAdmin())
@@ -784,10 +1048,16 @@
     <div class="viewer-doc-wrap" onclick="event.stopPropagation()">
         <div class="viewer-doc-toolbar">
             <span id="viewerDocName" style="font-size:13px;font-weight:500"></span>
-            <a id="viewerDocDownload" href="#" target="_blank">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:13px;height:13px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-                Unduh
-            </a>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <a id="viewerDocDownload" href="#" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:13px;height:13px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                    Unduh Notulensi
+                </a>
+                <a id="viewerPaparanDownload" href="#" target="_blank" style="display:none;background:#2563eb;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:13px;height:13px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                    Unduh Paparan Dinas
+                </a>
+            </div>
         </div>
         <iframe id="viewerDocFrame" src="" allowfullscreen></iframe>
     </div>
@@ -804,16 +1074,38 @@
             @csrf
             <div id="galeriMethodField"></div>
             <div class="modal-body">
-                <div class="form-g">
-                    <label class="form-lbl">Judul Arsip <span class="req">*</span></label>
-                    <input type="text" class="form-inp" name="judul" id="gaJudul" placeholder="Contoh: Peresmian Taman Kota..." required>
+                {{-- Pilihan Kegiatan Pimpinan Terkait --}}
+                <div class="form-g" id="gaKegiatanWrap">
+                    <label class="form-lbl">
+                        <span style="display:inline-flex;align-items:center;gap:6px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="#1e3a5f" style="width:15px;height:15px"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.253 3.75h18M4.5 7.5h15a2.25 2.25 0 012.25 2.25v10.5A2.25 2.25 0 0119.5 22.5H4.5A2.25 2.25 0 012.25 20.25V9.75A2.25 2.25 0 014.5 7.5z"/></svg>
+                            Kegiatan Pimpinan Terkait
+                        </span>
+                        <span style="font-size:11.5px;font-weight:normal;color:#6b7280;">(Opsional)</span>
+                    </label>
+                    <select class="form-sel" name="kegiatan_id" id="gaKegiatanId" onchange="onKegiatanSelected(this)">
+                        <option value="">-- Tidak Terhubung / Pilih Kegiatan Pimpinan --</option>
+                        @if(isset($kegiatanList))
+                            @foreach($kegiatanList as $k)
+                                <option value="{{ $k->id }}" data-judul="{{ addslashes($k->judul) }}" data-tanggal="{{ $k->tanggal_mulai ? $k->tanggal_mulai->format('Y-m-d') : '' }}" {{ (isset($filterKegiatanId) && $filterKegiatanId == $k->id) ? 'selected' : '' }}>
+                                    {{ $k->nomor_agenda ? '['.$k->nomor_agenda.'] ' : '' }}{{ $k->judul }} ({{ $k->tanggal_mulai ? $k->tanggal_mulai->format('d/m/Y') : '-' }})
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
+                    <div style="font-size:11.5px;color:#9ca3af;margin-top:4px">Hubungkan dokumentasi ini langsung ke agenda kegiatan pimpinan terkait.</div>
                 </div>
+
                 <div class="form-g">
+                    <label class="form-lbl" id="gaJudulLabel">{{ $tab === 'notulensi' ? 'Judul Notulensi Rapat' : ($tab === 'video' ? 'Judul Video' : ($tab === 'foto' ? 'Judul Foto' : 'Judul Arsip')) }} <span class="req">*</span></label>
+                    <input type="text" class="form-inp" name="judul" id="gaJudul" placeholder="{{ $tab === 'notulensi' ? 'Contoh: Notulensi Rapat Evaluasi Dinas...' : 'Contoh: Rapat Koordinasi Dinas...' }}" required>
+                </div>
+                <div class="form-g" id="gaTipeWrap" style="{{ $tab !== 'semua' ? 'display:none;' : '' }}">
                     <label class="form-lbl">Tipe <span class="req">*</span></label>
                     <select class="form-sel" name="tipe" id="gaTipe" required onchange="toggleExtraFields()">
-                        <option value="foto">Foto</option>
-                        <option value="video">Video</option>
-                        <option value="notulensi">Notulensi</option>
+                        <option value="foto" {{ $tab === 'foto' ? 'selected' : '' }}>Foto</option>
+                        <option value="video" {{ $tab === 'video' ? 'selected' : '' }}>Video</option>
+                        <option value="notulensi" {{ $tab === 'notulensi' ? 'selected' : '' }}>Notulensi</option>
                     </select>
                 </div>
                 <div class="form-g">
@@ -833,14 +1125,50 @@
                     <div id="gaDurasiInfo" style="font-size:11.5px;color:#9ca3af;margin-top:4px">Durasi akan terisi otomatis setelah memilih file video.</div>
                 </div>
                 <div class="form-g">
-                    <label class="form-lbl" id="gaKeteranganLabel">Keterangan</label>
+                    <label class="form-lbl" id="gaKeteranganLabel">Keterangan / Ringkasan</label>
                     <textarea class="form-txa" name="keterangan" id="gaKeterangan" placeholder="Keterangan singkat mengenai arsip..."></textarea>
                 </div>
-                <div class="form-g">
-                    <label class="form-lbl">File Arsip (.jpg, .png, .mp4, .pdf, .docx)</label>
-                    <input type="file" class="form-inp" name="file_arsip" id="gaFile" accept=".jpg,.jpeg,.png,.webp,.mp4,.mov,.pdf,.doc,.docx">
+
+                {{-- Input Nama Instansi / Dinas --}}
+                <div class="form-g" id="gaInstansiWrap">
+                    <label class="form-lbl">
+                        Nama Instansi / Perangkat Daerah / Dinas
+                        <span style="font-size:11.5px;font-weight:normal;color:#6b7280;">(Opsional)</span>
+                    </label>
+                    <input type="text" class="form-inp" name="instansi" id="gaInstansi" placeholder="Contoh: Dinas Pendidikan, Bappelitbang, Diskominfo, Bagian Umum...">
+                    <input type="hidden" name="keywords" id="gaKeywords">
+                    <div style="font-size:11.5px;color:#9ca3af;margin-top:4px">Memudahkan pencarian notulensi & arsip berdasarkan nama instansi terkait.</div>
+                </div>
+
+                {{-- Banner Standar ISO Penamaan File --}}
+                <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#0369a1;display:flex;align-items:flex-start;gap:8px;line-height:1.45;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:16px;height:16px;flex-shrink:0;margin-top:2px;color:#0284c7;"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
+                    <div>
+                        <strong style="color:#0c4a6e;">Standar ISO Penamaan File:</strong> Format penamaan foto &amp; dokumen disarankan <code>Tanggal_Bulan_Tahun_Nama Kegiatan</code> (contoh: <code>11_11_2026_Rapat_Koordinasi_Pimpinan.jpg</code>). <span style="display:block;margin-top:2px;font-size:11.5px;color:#0284c7;">Sistem secara otomatis menerapkan standardisasi nama file ini saat disimpan.</span>
+                    </div>
+                </div>
+
+                {{-- Input File Utama (Foto / Video / Dokumen Notulensi) --}}
+                <div class="form-g" id="gaFileArsipWrap">
+                    <label class="form-lbl" id="gaFileLabel">File Arsip (.jpg, .png, .mp4, .pdf, .docx)</label>
+                    <input type="file" class="form-inp" name="file_arsip" id="gaFile" accept=".jpg,.jpeg,.png,.webp,.mp4,.mov,.pdf,.doc,.docx,.ppt,.pptx">
+                    <div id="gaCurrentFileIndicator" style="display:none;font-size:12px;color:#059669;margin-top:5px;"></div>
                     <div id="gaUploadProgress"><div id="gaUploadBar"></div></div>
                     <div id="gaUploadStatus" style="font-size:11.5px;color:#9ca3af;margin-top:4px">Maksimal 150MB</div>
+                </div>
+
+                {{-- Input File Paparan / Presentasi PPT Rapat Dinas (Khusus Notulensi) --}}
+                <div class="form-g" id="gaPaparanWrap" style="display:none">
+                    <label class="form-lbl">
+                        <span style="display:inline-flex;align-items:center;gap:6px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="#2563eb" style="width:16px;height:16px"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.143 2.143L15.429 6"/></svg>
+                            File Paparan / Materi Presentasi Rapat Dinas (.ppt, .pptx, .pdf)
+                        </span>
+                        <span style="font-size:11.5px;font-weight:normal;color:#6b7280;">(Opsional)</span>
+                    </label>
+                    <input type="file" class="form-inp" name="file_paparan" id="gaFilePaparan" accept=".ppt,.pptx,.pdf,.doc,.docx,.odp">
+                    <div id="gaCurrentPaparanIndicator" style="display:none;font-size:12px;color:#2563eb;margin-top:5px;"></div>
+                    <div style="font-size:11.5px;color:#9ca3af;margin-top:4px">Materi presentasi/paparan slide dari instansi atau dinas terkait.</div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -905,7 +1233,7 @@ function handleCardClick(event, cardEl, itemId) {
     onCheckboxChange();
 }
 
-function handleThumbClick(event, tipe, itemId, judul, fileName) {
+function handleThumbClick(event, tipe, itemId, judul, fileName, paparanUrl, paparanName) {
     if (isSelectMode) {
         event.stopPropagation();
         const card = event.target.closest('.ga-card');
@@ -916,7 +1244,7 @@ function handleThumbClick(event, tipe, itemId, judul, fileName) {
         }
         return;
     }
-    openViewer(tipe, itemId, judul, fileName);
+    openViewer(tipe, itemId, judul, fileName, paparanUrl, paparanName);
 }
 
 function onCheckboxChange() {
@@ -1006,13 +1334,46 @@ function openGaleriModal(defaultTipe) {
     document.getElementById('galeriForm').reset();
     document.getElementById('galeriForm').action = "{{ route('galeri-arsip.store') }}";
     document.getElementById('galeriMethodField').innerHTML = '';
-    document.getElementById('galeriModalTitle').textContent = 'Unggah Arsip Baru';
+    const pageTab = defaultTipe || '{{ $tab }}';
+    if (pageTab === 'notulensi') {
+        document.getElementById('galeriModalTitle').textContent = 'Unggah Notulensi Baru';
+        if (document.getElementById('gaTipeWrap')) document.getElementById('gaTipeWrap').style.display = 'none';
+        if (document.getElementById('gaJudulLabel')) document.getElementById('gaJudulLabel').innerHTML = 'Judul Notulensi Rapat <span class="req">*</span>';
+        if (document.getElementById('gaJudul')) document.getElementById('gaJudul').placeholder = 'Contoh: Notulensi Rapat Evaluasi Dinas...';
+    } else if (pageTab === 'video') {
+        document.getElementById('galeriModalTitle').textContent = 'Unggah Video Baru';
+        if (document.getElementById('gaTipeWrap')) document.getElementById('gaTipeWrap').style.display = 'none';
+        if (document.getElementById('gaJudulLabel')) document.getElementById('gaJudulLabel').innerHTML = 'Judul Video Arsip <span class="req">*</span>';
+    } else if (pageTab === 'foto') {
+        document.getElementById('galeriModalTitle').textContent = 'Unggah Foto Baru';
+        if (document.getElementById('gaTipeWrap')) document.getElementById('gaTipeWrap').style.display = 'none';
+        if (document.getElementById('gaJudulLabel')) document.getElementById('gaJudulLabel').innerHTML = 'Judul Foto Arsip <span class="req">*</span>';
+    } else {
+        document.getElementById('galeriModalTitle').textContent = 'Unggah Arsip Baru';
+        if (document.getElementById('gaTipeWrap')) document.getElementById('gaTipeWrap').style.display = '';
+        if (document.getElementById('gaJudulLabel')) document.getElementById('gaJudulLabel').innerHTML = 'Judul Arsip <span class="req">*</span>';
+    }
+
     document.getElementById('gaSubmitBtn').textContent = 'Simpan Arsip';
     document.getElementById('gaSubmitBtn').disabled = false;
     document.getElementById('gaUploadProgress').style.display = 'none';
     document.getElementById('gaUploadBar').style.width = '0%';
     document.getElementById('gaUploadStatus').textContent = 'Maksimal 150MB';
     document.getElementById('gaUploadStatus').style.color = '#9ca3af';
+    
+    if (document.getElementById('gaInstansi')) document.getElementById('gaInstansi').value = '';
+    if (document.getElementById('gaKeywords')) document.getElementById('gaKeywords').value = '';
+    const gaKegiatanId = document.getElementById('gaKegiatanId');
+    if (gaKegiatanId) {
+        gaKegiatanId.value = '{{ $filterKegiatanId ?? '' }}';
+    }
+    document.getElementById('gaFile').value = '';
+    if (document.getElementById('gaFilePaparan')) document.getElementById('gaFilePaparan').value = '';
+    const curFile = document.getElementById('gaCurrentFileIndicator');
+    if (curFile) curFile.style.display = 'none';
+    const curPaparan = document.getElementById('gaCurrentPaparanIndicator');
+    if (curPaparan) curPaparan.style.display = 'none';
+
     if (defaultTipe) document.getElementById('gaTipe').value = defaultTipe;
     document.getElementById('gaTanggal').value = new Date().toISOString().split('T')[0];
     toggleExtraFields();
@@ -1023,18 +1384,87 @@ function editGaleri(item) {
     document.getElementById('galeriForm').reset();
     document.getElementById('galeriForm').action = '/dokumentasi-pimpinan/galeri-arsip/' + item.id;
     document.getElementById('galeriMethodField').innerHTML = '<input type="hidden" name="_method" value="PUT">';
-    document.getElementById('galeriModalTitle').textContent = 'Edit Data Arsip';
+    
+    const pageTab = '{{ $tab }}';
+    if (pageTab === 'notulensi' || item.tipe === 'notulensi') {
+        document.getElementById('galeriModalTitle').textContent = 'Edit Data Notulensi';
+        if (pageTab === 'notulensi' && document.getElementById('gaTipeWrap')) {
+            document.getElementById('gaTipeWrap').style.display = 'none';
+        }
+        if (document.getElementById('gaJudulLabel')) document.getElementById('gaJudulLabel').innerHTML = 'Judul Notulensi Rapat <span class="req">*</span>';
+    } else if (pageTab === 'video' || item.tipe === 'video') {
+        document.getElementById('galeriModalTitle').textContent = 'Edit Data Video';
+        if (pageTab === 'video' && document.getElementById('gaTipeWrap')) {
+            document.getElementById('gaTipeWrap').style.display = 'none';
+        }
+    } else if (pageTab === 'foto' || item.tipe === 'foto') {
+        document.getElementById('galeriModalTitle').textContent = 'Edit Data Foto';
+        if (pageTab === 'foto' && document.getElementById('gaTipeWrap')) {
+            document.getElementById('gaTipeWrap').style.display = 'none';
+        }
+    } else {
+        document.getElementById('galeriModalTitle').textContent = 'Edit Data Arsip';
+        if (document.getElementById('gaTipeWrap')) document.getElementById('gaTipeWrap').style.display = '';
+    }
+
     document.getElementById('gaSubmitBtn').textContent = 'Perbarui Arsip';
 
     document.getElementById('gaJudul').value = item.judul || '';
+    if (document.getElementById('gaInstansi')) document.getElementById('gaInstansi').value = item.instansi || '';
+    const gaKegiatanId = document.getElementById('gaKegiatanId');
+    if (gaKegiatanId) gaKegiatanId.value = item.kegiatan_id || '';
     document.getElementById('gaTipe').value = item.tipe || 'foto';
     document.getElementById('gaTanggal').value = item.tanggal_kegiatan ? item.tanggal_kegiatan.split('T')[0] : '';
     document.getElementById('gaJumlahFoto').value = item.jumlah_foto || 1;
     document.getElementById('gaDurasi').value = item.durasi_detik || '';
     document.getElementById('gaKeterangan').value = item.keterangan || '';
+    if (document.getElementById('gaKeywords')) document.getElementById('gaKeywords').value = item.keywords || '';
+
+    const curFile = document.getElementById('gaCurrentFileIndicator');
+    if (curFile) {
+        if (item.file_name) {
+            curFile.style.display = 'block';
+            curFile.innerHTML = `File saat ini: <strong>${item.file_name}</strong> (Pilih file baru jika ingin mengganti)`;
+        } else {
+            curFile.style.display = 'none';
+        }
+    }
+
+    const curPaparan = document.getElementById('gaCurrentPaparanIndicator');
+    if (curPaparan) {
+        if (item.file_paparan_name) {
+            curPaparan.style.display = 'block';
+            curPaparan.innerHTML = `File paparan saat ini: <strong>${item.file_paparan_name}</strong> (Pilih file baru jika ingin mengganti)`;
+        } else {
+            curPaparan.style.display = 'none';
+        }
+    }
 
     toggleExtraFields();
     document.getElementById('galeriModal').style.display = 'flex';
+}
+
+function onKegiatanSelected(sel) {
+    const opt = sel.options[sel.selectedIndex];
+    if (opt && opt.value) {
+        const gaJudul = document.getElementById('gaJudul');
+        const gaTanggal = document.getElementById('gaTanggal');
+        const defaultTipe = document.getElementById('gaTipe') ? document.getElementById('gaTipe').value : 'foto';
+        const judulKegiatan = opt.getAttribute('data-judul') || '';
+        
+        if (gaJudul && (!gaJudul.value || gaJudul.value.trim() === '')) {
+            if (defaultTipe === 'notulensi') {
+                gaJudul.value = 'Notulensi: ' + judulKegiatan;
+            } else if (defaultTipe === 'video') {
+                gaJudul.value = 'Video: ' + judulKegiatan;
+            } else {
+                gaJudul.value = 'Dokumentasi: ' + judulKegiatan;
+            }
+        }
+        if (gaTanggal && opt.getAttribute('data-tanggal')) {
+            gaTanggal.value = opt.getAttribute('data-tanggal');
+        }
+    }
 }
 
 function toggleExtraFields() {
@@ -1042,12 +1472,28 @@ function toggleExtraFields() {
     document.getElementById('gaFotoCountWrap').style.display = (tipe === 'foto') ? '' : 'none';
     document.getElementById('gaDurasiWrap').style.display = (tipe === 'video') ? '' : 'none';
 
+    const gaPaparanWrap = document.getElementById('gaPaparanWrap');
+    if (gaPaparanWrap) {
+        gaPaparanWrap.style.display = (tipe === 'notulensi') ? '' : 'none';
+    }
+
+    const gaFileLabel = document.getElementById('gaFileLabel');
+    if (gaFileLabel) {
+        if (tipe === 'notulensi') {
+            gaFileLabel.innerHTML = 'File Dokumen Notulensi Rapat Dinas <span style="font-size:11.5px;font-weight:normal;color:#6b7280;">(.pdf, .doc, .docx)</span>';
+        } else if (tipe === 'video') {
+            gaFileLabel.innerHTML = 'File Video <span style="font-size:11.5px;font-weight:normal;color:#6b7280;">(.mp4, .mov)</span>';
+        } else {
+            gaFileLabel.innerHTML = 'File Foto <span style="font-size:11.5px;font-weight:normal;color:#6b7280;">(.jpg, .png, .webp)</span>';
+        }
+    }
+
     const ketLabel = document.getElementById('gaKeteranganLabel');
     const ketInput = document.getElementById('gaKeterangan');
     if (ketLabel && ketInput) {
         if (tipe === 'notulensi') {
-            ketLabel.textContent = 'Notulensi';
-            ketInput.placeholder = 'Tuliskan catatan atau isi notulensi kegiatan...';
+            ketLabel.textContent = 'Notulensi / Ringkasan Rapat';
+            ketInput.placeholder = 'Tuliskan catatan atau ringkasan isi notulensi kegiatan...';
         } else {
             ketLabel.textContent = 'Keterangan';
             ketInput.placeholder = 'Keterangan singkat mengenai arsip...';
@@ -1062,6 +1508,7 @@ function closeGaleriModal() {
 // ===== VIEWER FUNCTIONS =====
 // Semua file dimuat via fetch JSON → base64 → Blob URL agar IDM tidak mencegat
 const THUMB_BASE = '{{ url("/dokumentasi-pimpinan/galeri-arsip/thumb") }}';
+const THUMB_PAPARAN_BASE = '{{ url("/dokumentasi-pimpinan/galeri-arsip/thumb-paparan") }}';
 
 function dataURItoBlob(dataURI) {
     const parts  = dataURI.split(',');
@@ -1084,7 +1531,19 @@ function fetchAsBlob(itemId) {
     });
 }
 
-function openViewer(tipe, itemId, judul, fileName) {
+function fetchPaparanAsBlob(itemId) {
+    return fetch(THUMB_PAPARAN_BASE + '/' + itemId, {
+        credentials: 'same-origin',
+        headers: { 'Accept': 'application/json' }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(json) {
+        if (!json || !json.data) throw new Error('no data');
+        return URL.createObjectURL(dataURItoBlob(json.data));
+    });
+}
+
+function openViewer(tipe, itemId, judul, fileName, paparanUrl, paparanName) {
     if (!itemId) return;
 
     if (tipe === 'foto') {
@@ -1113,6 +1572,29 @@ function openViewer(tipe, itemId, judul, fileName) {
         document.getElementById('viewerDocFrame').src = '';
         document.getElementById('viewerDocDownload').href = '#';
         document.getElementById('viewerDocDownload').onclick = null;
+
+        const paparanBtn = document.getElementById('viewerPaparanDownload');
+        if (paparanBtn) {
+            if (paparanUrl) {
+                paparanBtn.style.display = 'inline-flex';
+                paparanBtn.onclick = function(e) {
+                    e.preventDefault();
+                    fetchPaparanAsBlob(itemId).then(function(blobUrl) {
+                        const a = document.createElement('a');
+                        a.href = blobUrl;
+                        a.download = paparanName || 'paparan-rapat.pptx';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }).catch(function() {
+                        window.open(paparanUrl, '_blank');
+                    });
+                };
+            } else {
+                paparanBtn.style.display = 'none';
+            }
+        }
+
         document.getElementById('viewerDoc').classList.add('active');
         document.body.style.overflow = 'hidden';
         fetchAsBlob(itemId).then(function(blobUrl) {
@@ -1291,6 +1773,15 @@ function loadThumbnails() {
         });
     });
 }
-document.addEventListener('DOMContentLoaded', loadThumbnails);
+document.addEventListener('DOMContentLoaded', function() {
+    loadThumbnails();
+    
+    // Auto open modal jika ada parameter action=upload
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('action') === 'upload') {
+        const tipe = urlParams.get('tab') || 'foto';
+        openGaleriModal(tipe);
+    }
+});
 </script>
 @endpush

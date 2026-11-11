@@ -3,15 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GaleriArsip extends Model
 {
+    use SoftDeletes;
     protected $table = 'galeri_arsip';
 
     protected $fillable = [
         'kode',
         'judul',
+        'instansi',
         'tipe',
         'akses',
         'file_path',
@@ -19,6 +22,9 @@ class GaleriArsip extends Model
         'durasi_detik',
         'jumlah_foto',
         'keterangan',
+        'keywords',
+        'file_paparan_path',
+        'file_paparan_name',
         'tanggal_kegiatan',
         'kegiatan_id',
         'created_by',
@@ -67,6 +73,25 @@ class GaleriArsip extends Model
     public function getAksesLabelAttribute(): string
     {
         return ucfirst($this->akses);
+    }
+
+    public function getKeywordsListAttribute(): array
+    {
+        if (empty($this->keywords)) return [];
+        return array_values(array_filter(array_map('trim', explode(',', $this->keywords))));
+    }
+
+    public function getFilePaparanUrlAttribute(): string
+    {
+        if ($this->file_paparan_path) {
+            return asset('storage/' . $this->file_paparan_path);
+        }
+        return '';
+    }
+
+    public function getHasPaparanAttribute(): bool
+    {
+        return !empty($this->file_paparan_path);
     }
 
     public static function generateKode(): string

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Tambah Analisis Isu & Media — E-PROKOPIM')
+@section('title', 'Tambah Analisis Isu & Media')
 
 @push('styles')
 <style>

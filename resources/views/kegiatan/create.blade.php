@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Tambah Kegiatan — SIKOPIM')
+@section('title', 'Tambah Kegiatan')
 @section('topbar-title', 'Kegiatan')
 
 @section('content')

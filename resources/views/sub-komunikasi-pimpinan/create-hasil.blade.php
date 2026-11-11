@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Upload Hasil Sambutan — E-PROKOPIM')
+@section('title', 'Upload Hasil Sambutan')
 
 @push('styles')
 <style>

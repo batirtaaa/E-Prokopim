@@ -1,5 +1,5 @@
 @extends('layouts.auth')
-@section('title', 'Lupa Password — SIKOPIM')
+@section('title', 'Lupa Password')
 
 @section('content')
 <div class="login-page">
@@ -13,7 +13,7 @@
                     <rect x="18" y="18" width="12" height="12" rx="2" fill="#0d2137"/>
                 </svg>
             </div>
-            <h1>SIKOPIM</h1>
+            <h1>E-PROKOPIM</h1>
             <p>Kota Bandung</p>
         </div>
 

@@ -144,42 +144,6 @@
 }
 @keyframes fadeIn { from { opacity:0; transform: translateY(-4px); } to { opacity:1; transform: translateY(0); } }
 
-/* Checkbox Card for Print */
-.print-status-box {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 14px 16px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-}
-.print-status-box:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-}
-.print-status-box input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    accent-color: #16a34a;
-    cursor: pointer;
-}
-.print-status-info {
-    display: flex;
-    flex-direction: column;
-}
-.print-status-title {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: #1e293b;
-}
-.print-status-desc {
-    font-size: 12px;
-    color: #64748b;
-}
-
 /* Footer Actions */
 .form-footer-card {
     display: flex;
@@ -314,18 +278,6 @@
             @error('file_dokumen')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
-        </div>
-
-        {{-- Row 6: Status Pencetakan --}}
-        <div class="form-group" style="margin-top: 10px;">
-            <label class="form-label">Status Pencetakan</label>
-            <label class="print-status-box" for="is_printed">
-                <input type="checkbox" name="is_printed" id="is_printed" value="1" {{ old('is_printed') ? 'checked' : '' }}>
-                <div class="print-status-info">
-                    <span class="print-status-title">Tandai Sudah Diprint</span>
-                    <span class="print-status-desc">Centang jika fisik surat sudah dicetak / didistribusikan.</span>
-                </div>
-            </label>
         </div>
 
         {{-- Footer --}}

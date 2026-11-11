@@ -57,9 +57,10 @@
 .stat-icon-positif { background: #ecfdf5; color: #059669; }
 .stat-icon-negatif { background: #fef2f2; color: #dc2626; }
 .stat-icon-netral  { background: #f1f5f9; color: #475569; }
-.stat-info { display: flex; flex-direction: column; }
-.stat-value { font-size: 24px; font-weight: 700; color: #0f172a; line-height: 1.2; }
-.stat-label { font-size: 12.5px; color: #64748b; font-weight: 500; margin-top: 2px; }
+.stat-info { display: flex; flex-direction: row; align-items: center; gap: 14px; }
+.stat-value { font-size: 26px; font-weight: 700; color: #0f172a; line-height: 1; flex-shrink: 0; }
+.stat-text  { display: flex; flex-direction: column; }
+.stat-label { font-size: 12.5px; color: #64748b; font-weight: 500; }
 .stat-sub   { font-size: 11px; color: #94a3b8; margin-top: 2px; }
 
 /* ============================================================
@@ -389,8 +390,10 @@
         </div>
         <div class="stat-info">
             <span class="stat-value">{{ $totalCount }}</span>
-            <span class="stat-label">Total Analisis Isu</span>
-            <span class="stat-sub">Tahun {{ $selectedTahun }}</span>
+            <div class="stat-text">
+                <span class="stat-label">Total Analisis Isu</span>
+                <span class="stat-sub">Tahun {{ $selectedTahun }}</span>
+            </div>
         </div>
     </div>
     <div class="stat-card">
@@ -399,8 +402,10 @@
         </div>
         <div class="stat-info">
             <span class="stat-value" style="color:#059669">{{ $positifCount }}</span>
-            <span class="stat-label">Sentimen Positif</span>
-            <span class="stat-sub">{{ $totalCount > 0 ? round(($positifCount / $totalCount) * 100) : 0 }}% dari total isu</span>
+            <div class="stat-text">
+                <span class="stat-label">Sentimen Positif</span>
+                <span class="stat-sub">{{ $totalCount > 0 ? round(($positifCount / $totalCount) * 100) : 0 }}% dari total isu</span>
+            </div>
         </div>
     </div>
     <div class="stat-card">
@@ -409,8 +414,10 @@
         </div>
         <div class="stat-info">
             <span class="stat-value" style="color:#dc2626">{{ $negatifCount }}</span>
-            <span class="stat-label">Sentimen Negatif</span>
-            <span class="stat-sub">Perlu respon & rekomendasi cepat</span>
+            <div class="stat-text">
+                <span class="stat-label">Sentimen Negatif</span>
+                <span class="stat-sub">Perlu respon & rekomendasi cepat</span>
+            </div>
         </div>
     </div>
     <div class="stat-card">
@@ -419,8 +426,10 @@
         </div>
         <div class="stat-info">
             <span class="stat-value" style="color:#475569">{{ $netralCount }}</span>
-            <span class="stat-label">Sentimen Netral</span>
-            <span class="stat-sub">Informasi pemberitaan reguler</span>
+            <div class="stat-text">
+                <span class="stat-label">Sentimen Netral</span>
+                <span class="stat-sub">Informasi pemberitaan reguler</span>
+            </div>
         </div>
     </div>
 </div>

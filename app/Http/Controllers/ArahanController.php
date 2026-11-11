@@ -11,6 +11,12 @@ class ArahanController extends Controller
 {
     public function index(Request $request)
     {
+        // Auto-update status menjadi melewati_deadline jika sudah lewat deadline
+        Arahan::whereNotNull('deadline')
+            ->where('deadline', '<', now()->startOfDay())
+            ->whereNotIn('status', ['selesai', 'melewati_deadline'])
+            ->update(['status' => 'melewati_deadline']);
+
         $query = Arahan::orderBy('tanggal_arahan', 'desc');
         if ($request->filled('search')) $query->where('judul', 'like', '%' . $request->search . '%');
         if ($request->filled('status')) $query->where('status', $request->status);
@@ -33,7 +39,7 @@ class ArahanController extends Controller
             'ditujukan_kepada' => 'nullable|string|max:255',
             'tanggal_arahan' => 'required|date',
             'deadline' => 'nullable|date',
-            'prioritas' => 'required|in:rendah,sedang,tinggi,urgent',
+            'prioritas' => 'required|in:rendah,sedang,tinggi',
             'status' => 'required|in:belum_selesai,sedang_berjalan,selesai,melewati_deadline',
         ]);
         $validated['created_by'] = Auth::id();
@@ -76,7 +82,7 @@ class ArahanController extends Controller
             'pimpinan' => 'required|in:wali_kota,wakil_wali_kota,sekda,asisten',
             'tanggal_arahan' => 'required|date',
             'deadline' => 'nullable|date',
-            'prioritas' => 'required|in:rendah,sedang,tinggi,urgent',
+            'prioritas' => 'required|in:rendah,sedang,tinggi',
             'status' => 'required|in:belum_selesai,sedang_berjalan,selesai,melewati_deadline',
         ]);
         $arahan->update($validated);

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Surat Berhasil Disimpan — E-PROKOPIM')
+@section('title', 'Surat Berhasil Disimpan')
 
 @push('styles')
 <style>
@@ -133,7 +133,7 @@
                 <div>
                     <div class="suc-field-label">Batas Deadline Disposisi</div>
                     <div class="suc-field-value" style="color:#d97706">
-                        {{ $sambutan->deadline_at ? $sambutan->deadline_at->format('d M Y, H:i') : ($sambutan->tenggat_waktu ? $sambutan->tenggat_waktu->format('d M Y') : '—') }}
+                        {{ $sambutan->deadline_at ? $sambutan->deadline_at->translatedFormat('d M Y, H:i') : ($sambutan->tenggat_waktu ? $sambutan->tenggat_waktu->translatedFormat('d M Y') : '—') }}
                     </div>
                 </div>
                 <div>
@@ -155,27 +155,70 @@
             Lihat Daftar<br>Surat
         </a>
         @php
-            $docUrl = $sambutan->file_path ? url('storage/' . $sambutan->file_path) : null;
-            $rowAcara = $sambutan->tanggal_acara ? $sambutan->tanggal_acara->translatedFormat('d F Y') : '-';
-            $rowWaktu = $sambutan->waktu_acara ? $sambutan->waktu_acara . ' WIB' : '-';
-            $rowDeadline = $sambutan->deadline_at ? $sambutan->deadline_at->format('d F Y, H:i') : ($sambutan->tenggat_waktu ? $sambutan->tenggat_waktu->translatedFormat('d F Y') : '-');
+            // Nama file asli dari inputan
+            $docName   = $sambutan->file_name    ?: basename($sambutan->file_path ?? '');
+            $hasilName = $sambutan->file_hasil_name ?: basename($sambutan->file_hasil_path ?? '');
+
+            // URL akses file
+            $docUrl   = $sambutan->file_path
+                ? url('storage/' . $sambutan->file_path)
+                : null;
+            $hasilUrl = $sambutan->file_hasil_path
+                ? route('sambutan.stream-hasil', $sambutan->id)
+                : null;
+
+            $rowAcara = $sambutan->tanggal_acara
+                ? $sambutan->tanggal_acara->translatedFormat('d F Y')
+                    . ($sambutan->waktu_acara ? ', Pukul ' . $sambutan->waktu_acara . ' WIB' : '')
+                : '-';
+            $rowDeadline = $sambutan->deadline_at
+                ? $sambutan->deadline_at->format('d F Y, H:i') . ' WIB'
+                : ($sambutan->tenggat_waktu ? $sambutan->tenggat_waktu->translatedFormat('d F Y') : '-');
 
             $waLines = [
-                "📄 *DISPOSISI SURAT PERMOHONAN SAMBUTAN*",
-                "Nomor Surat: " . $sambutan->nomor_surat,
-                "Instansi: " . $sambutan->asal_instansi,
-                "Ditujukan Kepada: " . ($sambutan->tujuan ?: '-'),
-                "Tanggal Acara: " . $rowAcara,
-                "Waktu Acara: " . $rowWaktu,
-                "Perihal: " . $sambutan->perihal,
-                "Petugas: " . ($sambutan->petugas ? $sambutan->petugas->nama_lengkap : '-'),
-                "Deadline Pengerjaan: " . $rowDeadline . " (Maks. 2 Jam)",
-                "Status: " . $sambutan->status_label,
+                "📋 *DISPOSISI SURAT PERMOHONAN SAMBUTAN*",
+                "━━━━━━━━━━━━━━━━━━━━━",
+                "📌 *Nomor Surat:* " . ($sambutan->nomor_surat ?: '-'),
+                "🏛️ *Instansi:* " . ($sambutan->asal_instansi ?: '-'),
+                "🎯 *Ditujukan Kepada:* " . ($sambutan->tujuan ?: '-'),
+                "📅 *Tanggal Acara:* " . $rowAcara,
+                "📝 *Perihal:* " . ($sambutan->perihal ?: '-'),
+                "👤 *Petugas:* " . ($sambutan->petugas ? $sambutan->petugas->nama_lengkap : '-'),
+                "⏰ *Deadline:* " . $rowDeadline . " *(Maks. 2 Jam)*",
+                "✅ *Status:* " . $sambutan->status_label,
             ];
 
+            // Lampiran Dokumen Surat Masuk
             if ($docUrl) {
-                $waLines[] = "Dokumen: " . $docUrl;
+                $waLines[] = "━━━━━━━━━━━━━━━━━━━━━";
+                $waLines[] = "📎 *Softfile Dokumen Surat Masuk*";
+                if ($docName) {
+                    $waLines[] = "📄 Nama File: _" . $docName . "_";
+                }
+                if ($sambutan->perihal) {
+                    $waLines[] = "📋 Perihal: _" . $sambutan->perihal . "_";
+                }
+                $waLines[] = "🔗 Link: " . $docUrl;
             }
+
+            // Lampiran Naskah Hasil Sambutan (jika sudah ada)
+            if ($hasilUrl) {
+                $waLines[] = "━━━━━━━━━━━━━━━━━━━━━";
+                $waLines[] = "📝 *Softfile Naskah Hasil Sambutan*";
+                if ($hasilName) {
+                    $waLines[] = "📄 Nama File: _" . $hasilName . "_";
+                }
+                $tglUpload = $sambutan->tgl_upload_hasil
+                    ? $sambutan->tgl_upload_hasil->translatedFormat('d F Y, H:i') . ' WIB'
+                    : null;
+                if ($tglUpload) {
+                    $waLines[] = "🕐 Diunggah: _" . $tglUpload . "_";
+                }
+                $waLines[] = "🔗 Link: " . $hasilUrl;
+            }
+
+            $waLines[] = "━━━━━━━━━━━━━━━━━━━━━";
+            $waLines[] = "_Pesan ini dikirim otomatis dari Sistem E-PROKOPIM Kota Bandung_";
 
             $waText = implode("\n", $waLines);
             $waHref = "https://api.whatsapp.com/send?text=" . urlencode($waText);

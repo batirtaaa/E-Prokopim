@@ -249,24 +249,101 @@
             </div>
         </div>
 
+        @php
+            $streamUrl = route('sambutan.stream-hasil', $sambutan->id);
+            // URL absolut untuk Google Docs Viewer (harus bisa diakses publik)
+            $absoluteStreamUrl = request()->getSchemeAndHttpHost() . '/komunikasi-pimpinan/sambutan/' . $sambutan->id . '/stream-hasil';
+            $googleViewerUrl = 'https://docs.google.com/gview?embedded=true&url=' . urlencode($absoluteStreamUrl);
+            $officeViewerUrl = 'https://view.officeapps.live.com/op/embed.aspx?src=' . urlencode($absoluteStreamUrl);
+        @endphp
+
         @if($ext === 'pdf')
-            {{-- PDF Viewer Inline --}}
-            <iframe src="{{ route('sambutan.stream-hasil', $sambutan->id) }}#toolbar=1" class="ph-viewer-frame"></iframe>
-        @elseif(in_array($ext, ['jpg', 'jpeg', 'png', 'webp']))
+            {{-- PDF Viewer Inline langsung di browser --}}
+            <iframe src="{{ $streamUrl }}#toolbar=1&navpanes=0" class="ph-viewer-frame"
+                    allow="fullscreen"
+                    title="Pratinjau PDF: {{ $fileName }}">
+            </iframe>
+
+        @elseif(in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif']))
             {{-- Image Viewer --}}
             <div style="padding:24px;text-align:center;background:#f8fafc;max-height:800px;overflow:auto;">
-                <img src="{{ route('sambutan.stream-hasil', $sambutan->id) }}" alt="{{ $fileName }}" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                <img src="{{ $streamUrl }}" alt="{{ $fileName }}"
+                     style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
             </div>
+
+        @elseif(in_array($ext, ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']))
+            {{-- Office Viewer via Microsoft Office Online (embed) --}}
+            <div style="position:relative;">
+                <iframe id="officeViewerFrame"
+                        src="{{ $officeViewerUrl }}"
+                        class="ph-viewer-frame"
+                        allow="fullscreen"
+                        title="Pratinjau Dokumen: {{ $fileName }}"
+                        onload="checkViewerLoad(this)"
+                        onerror="showViewerFallback()">
+                </iframe>
+                {{-- Fallback jika Office Online tidak bisa load (localhost/intranet) --}}
+                <div id="viewer-fallback-msg" style="display:none;padding:48px 24px;text-align:center;background:#fafafa;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:48px;height:48px;color:#94a3b8;margin-bottom:14px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+                    </svg>
+                    <h3 style="font-size:16px;font-weight:600;color:#1e293b;margin-bottom:6px;">Pratinjau tidak tersedia di jaringan lokal</h3>
+                    <p style="font-size:13.5px;color:#64748b;max-width:480px;margin:0 auto 20px;">
+                        Viewer online memerlukan URL yang dapat diakses dari internet.
+                        Di jaringan lokal, silakan unduh dokumen untuk membacanya.
+                    </p>
+                    <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
+                        <a href="{{ $streamUrl }}" target="_blank" class="ph-btn-action secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+                            <span>Buka File Langsung</span>
+                        </a>
+                        <a href="{{ route('sambutan.download-hasil', $sambutan->id) }}" class="ph-btn-action primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                            <span>Unduh Dokumen</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <script>
+            function checkViewerLoad(iframe) {
+                // Jika iframe berhasil load tapi kontennya error (Office Online gagal),
+                // coba deteksi dengan timeout
+                setTimeout(function() {
+                    try {
+                        // Cek apakah iframe punya konten (cross-origin akan throw)
+                        var doc = iframe.contentDocument || iframe.contentWindow.document;
+                        if (!doc || !doc.body || doc.body.innerHTML.trim() === '') {
+                            showViewerFallback();
+                        }
+                    } catch(e) {
+                        // Cross-origin = Office Online berhasil load (expected behavior)
+                    }
+                }, 5000);
+            }
+            function showViewerFallback() {
+                document.getElementById('officeViewerFrame').style.display = 'none';
+                document.getElementById('viewer-fallback-msg').style.display = 'block';
+            }
+            // Jika running di localhost, langsung tampilkan fallback
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    showViewerFallback();
+                });
+            }
+            </script>
+
         @else
-            {{-- Fallback untuk format DOC / DOCX --}}
+            {{-- Fallback untuk format lain --}}
             <div class="ph-viewer-fallback">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
-                <h3>Dokumen Naskah Sambutan ({{ strtoupper($ext) }})</h3>
-                <p>Dokumen format <strong>{{ strtoupper($ext) }}</strong> dapat langsung dibuka di browser atau diunduh ke komputer Anda melalui dua pilihan di bawah ini:</p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:48px;height:48px;color:#94a3b8;display:block;margin:0 auto 14px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+                </svg>
+                <h3>Dokumen ({{ strtoupper($ext) }})</h3>
+                <p>Format <strong>{{ strtoupper($ext) }}</strong> tidak dapat dipratinjau langsung. Gunakan pilihan berikut:</p>
                 <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
-                    <a href="{{ route('sambutan.stream-hasil', $sambutan->id) }}" target="_blank" class="ph-btn-action secondary">
+                    <a href="{{ $streamUrl }}" target="_blank" class="ph-btn-action secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
-                        <span>Buka di Browser</span>
+                        <span>Buka File</span>
                     </a>
                     <a href="{{ route('sambutan.download-hasil', $sambutan->id) }}" class="ph-btn-action primary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>

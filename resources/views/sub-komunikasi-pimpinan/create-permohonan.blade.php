@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Upload Surat Permohonan — E-PROKOPIM')
+@section('title', 'Upload Surat Permohonan')
 
 @push('styles')
 <style>
@@ -217,6 +217,9 @@
                 <div class="upload-hint">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
                     Format: PDF, JPG, PNG. Maks: 10MB
+                </div>
+                <div class="upload-hint" style="color:#0369a1;background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;padding:4px 8px;margin-top:6px;font-size:11px;">
+                    ℹ️ Standar ISO disarankan: <strong>Tanggal_Bulan_Tahun_Nama Kegiatan</strong>
                 </div>
             </label>
             <div id="file-error-msg" style="display:none;color:#dc2626;font-size:12.5px;margin-top:8px;font-weight:600">

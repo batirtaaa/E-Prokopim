@@ -35,7 +35,11 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'database' => env('DB_DATABASE')
+                ? ((str_contains(env('DB_DATABASE'), '/') || str_contains(env('DB_DATABASE'), '\\') || str_ends_with(env('DB_DATABASE'), '.sqlite'))
+                    ? env('DB_DATABASE')
+                    : ((isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) ? '/tmp/database.sqlite' : database_path(env('DB_DATABASE') . '.sqlite')))
+                : ((isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) ? '/tmp/database.sqlite' : database_path('database.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
             'busy_timeout' => null,

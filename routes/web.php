@@ -24,8 +24,10 @@ use App\Http\Controllers\SubProtokolController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\KeuanganController;
+use App\Http\Controllers\SuratKeluarController;
 use App\Http\Controllers\AsistenAiController;
 use App\Http\Controllers\NotifikasiController;
+use App\Http\Controllers\TrashController;
 
 // Auth Routes
 Route::middleware('guest')->group(function () {
@@ -54,6 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/kegiatan-pimpinan/{kegiatan}/edit', [KegiatanPimpinanController::class, 'edit'])->name('kegiatan-pimpinan.edit');
     Route::put('/kegiatan-pimpinan/{kegiatan}', [KegiatanPimpinanController::class, 'update'])->name('kegiatan-pimpinan.update');
     Route::delete('/kegiatan-pimpinan/{kegiatan}', [KegiatanPimpinanController::class, 'destroy'])->name('kegiatan-pimpinan.destroy');
+    Route::post('/kegiatan-pimpinan/bulk-destroy', [KegiatanPimpinanController::class, 'bulkDestroy'])->name('kegiatan-pimpinan.bulk-destroy');
 
     // Komunikasi Pimpinan — Sambutan
     Route::get('/komunikasi-pimpinan/sambutan', [SambutanController::class, 'index'])->name('sambutan.index');
@@ -97,6 +100,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dokumentasi-pimpinan/galeri-arsip/export-notulensi', [GaleriArsipController::class, 'exportNotulensi'])->name('galeri-arsip.export-notulensi');
     Route::get('/dokumentasi-pimpinan/galeri-arsip', [GaleriArsipController::class, 'index'])->name('galeri-arsip.index');
     Route::get('/dokumentasi-pimpinan/galeri-arsip/thumb/{id}', [GaleriArsipController::class, 'thumb'])->name('galeri-arsip.thumb');
+    Route::get('/dokumentasi-pimpinan/galeri-arsip/thumb-paparan/{id}', [GaleriArsipController::class, 'thumbPaparan'])->name('galeri-arsip.thumb-paparan');
     Route::post('/dokumentasi-pimpinan/galeri-arsip', [GaleriArsipController::class, 'store'])->name('galeri-arsip.store');
     Route::put('/dokumentasi-pimpinan/galeri-arsip/{galeriArsip}', [GaleriArsipController::class, 'update'])->name('galeri-arsip.update');
     Route::delete('/dokumentasi-pimpinan/galeri-arsip/{galeriArsip}', [GaleriArsipController::class, 'destroy'])->name('galeri-arsip.destroy');
@@ -126,6 +130,7 @@ Route::middleware('auth')->group(function () {
 
     // Notulensi
     Route::resource('/notulensi', NotulensiController::class)->except(['create']);
+    Route::get('/notulensi/{notulensi}/download/{type}', [NotulensiController::class, 'download'])->name('notulensi.download');
 
     // Arahan Pimpinan
     Route::get('/arahan', [ArahanController::class, 'index'])->name('arahan.index');
@@ -138,14 +143,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/arsip', [ArsipController::class, 'index'])->name('arsip.index');
     Route::get('/arsip/create', [ArsipController::class, 'create'])->name('arsip.create');
     Route::post('/arsip', [ArsipController::class, 'store'])->name('arsip.store');
+    Route::get('/arsip/{arsip}/edit', [ArsipController::class, 'edit'])->name('arsip.edit');
+    Route::put('/arsip/{arsip}', [ArsipController::class, 'update'])->name('arsip.update');
     Route::delete('/arsip/{arsip}', [ArsipController::class, 'destroy'])->name('arsip.destroy');
 
     // Asset Management (Administrasi)
     Route::get('/administrasi/asset', [AssetController::class, 'index'])->name('asset.index');
     Route::get('/administrasi/asset/create-inventaris', [AssetController::class, 'createInventaris'])->name('asset.create-inventaris');
     Route::post('/administrasi/asset/store-inventaris', [AssetController::class, 'storeInventaris'])->name('asset.store-inventaris');
+    Route::get('/administrasi/asset/{asset}/edit-inventaris', [AssetController::class, 'editInventaris'])->name('asset.edit-inventaris');
+    Route::put('/administrasi/asset/{asset}/inventaris', [AssetController::class, 'updateInventaris'])->name('asset.update-inventaris');
     Route::get('/administrasi/asset/create-kendaraan', [AssetController::class, 'createKendaraan'])->name('asset.create-kendaraan');
     Route::post('/administrasi/asset/store-kendaraan', [AssetController::class, 'storeKendaraan'])->name('asset.store-kendaraan');
+    Route::get('/administrasi/asset/{kendaraan}/edit-kendaraan', [AssetController::class, 'editKendaraan'])->name('asset.edit-kendaraan');
+    Route::put('/administrasi/asset/{kendaraan}/kendaraan', [AssetController::class, 'updateKendaraan'])->name('asset.update-kendaraan');
     Route::delete('/administrasi/asset/{asset}/inventaris', [AssetController::class, 'destroyInventaris'])->name('asset.destroy-inventaris');
     Route::delete('/administrasi/asset/{kendaraan}/kendaraan', [AssetController::class, 'destroyKendaraan'])->name('asset.destroy-kendaraan');
     Route::get('/administrasi/asset/export', [AssetController::class, 'export'])->name('asset.export');
@@ -161,7 +172,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/administrasi/pegawai/export', [PegawaiController::class, 'export'])->name('pegawai.export');
     Route::get('/pegawai', fn() => redirect()->route('pegawai.index'));
 
-    // Keuangan / Surat Masuk Management (Administrasi)
+    // Surat Masuk Management (Administrasi)
     Route::get('/administrasi/keuangan', [KeuanganController::class, 'index'])->name('keuangan.index');
     Route::get('/administrasi/keuangan/create', [KeuanganController::class, 'create'])->name('keuangan.create');
     Route::post('/administrasi/keuangan', [KeuanganController::class, 'store'])->name('keuangan.store');
@@ -172,6 +183,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/administrasi/keuangan/bulk-destroy', [KeuanganController::class, 'bulkDestroy'])->name('keuangan.bulk-destroy');
     Route::get('/administrasi/keuangan/export', [KeuanganController::class, 'export'])->name('keuangan.export');
     Route::get('/keuangan', fn() => redirect()->route('keuangan.index'));
+
+    // Surat Keluar Management (Administrasi)
+    Route::get('/administrasi/surat-keluar', [SuratKeluarController::class, 'index'])->name('surat-keluar.index');
+    Route::get('/administrasi/surat-keluar/create', [SuratKeluarController::class, 'create'])->name('surat-keluar.create');
+    Route::post('/administrasi/surat-keluar', [SuratKeluarController::class, 'store'])->name('surat-keluar.store');
+    Route::get('/administrasi/surat-keluar/{suratKeluar}/edit', [SuratKeluarController::class, 'edit'])->name('surat-keluar.edit');
+    Route::put('/administrasi/surat-keluar/{suratKeluar}', [SuratKeluarController::class, 'update'])->name('surat-keluar.update');
+    Route::delete('/administrasi/surat-keluar/{suratKeluar}', [SuratKeluarController::class, 'destroy'])->name('surat-keluar.destroy');
+    Route::post('/administrasi/surat-keluar/bulk-destroy', [SuratKeluarController::class, 'bulkDestroy'])->name('surat-keluar.bulk-destroy');
+    Route::get('/administrasi/surat-keluar/export', [SuratKeluarController::class, 'export'])->name('surat-keluar.export');
 
     // Asisten AI Chatbot
     Route::get('/asisten-ai', [AsistenAiController::class, 'index'])->name('asisten-ai.index');
@@ -198,6 +219,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
     Route::put('/pengaturan/instansi', [PengaturanController::class, 'updateInstansi'])->name('pengaturan.instansi.update');
     Route::post('/pengaturan/users', [PengaturanController::class, 'storeUser'])->name('pengaturan.users.store');
+    Route::put('/pengaturan/users/{user}', [PengaturanController::class, 'updateUser'])->name('pengaturan.users.update');
     Route::delete('/pengaturan/users/{user}', [PengaturanController::class, 'destroyUser'])->name('pengaturan.users.destroy');
     Route::patch('/pengaturan/users/{user}/toggle-status', [PengaturanController::class, 'toggleUserStatus'])->name('pengaturan.users.toggle-status');
 
@@ -213,4 +235,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifikasi/{notifikasi}/read', [NotifikasiController::class, 'markRead'])->name('notifikasi.read');
     Route::post('/notifikasi/read-all', [NotifikasiController::class, 'markAllRead'])->name('notifikasi.read-all');
     Route::post('/notifikasi/preferences', [NotifikasiController::class, 'savePreferences'])->name('notifikasi.preferences');
+
+    // Trash / Recycle Bin
+    Route::get('/trash', [TrashController::class, 'index'])->name('trash.index');
+    Route::post('/trash/restore/{type}/{id}', [TrashController::class, 'restore'])->name('trash.restore');
+    Route::post('/trash/bulk-restore', [TrashController::class, 'bulkRestore'])->name('trash.bulk-restore');
+    Route::delete('/trash/force-delete/{type}/{id}', [TrashController::class, 'forceDelete'])->name('trash.force-delete');
+    Route::post('/trash/bulk-force-delete', [TrashController::class, 'bulkForceDelete'])->name('trash.bulk-force-delete');
+    Route::post('/trash/empty', [TrashController::class, 'emptyTrash'])->name('trash.empty');
 });

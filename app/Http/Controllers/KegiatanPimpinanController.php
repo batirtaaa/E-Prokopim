@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kegiatan;
+use App\Models\GaleriArsip;
+use App\Services\FileNamingService;
 use App\Exports\KegiatanPimpinanRekapExport;
 use App\Http\Controllers\NotifikasiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class KegiatanPimpinanController extends Controller
@@ -25,7 +28,11 @@ class KegiatanPimpinanController extends Controller
             });
         }
 
-        $kegiatan = $query->paginate(10)->withQueryString();
+        $kegiatan = $query->withCount([
+            'galeriArsip as foto_count'      => fn($q) => $q->where('tipe', 'foto'),
+            'galeriArsip as video_count'     => fn($q) => $q->where('tipe', 'video'),
+            'galeriArsip as notulensi_count' => fn($q) => $q->where('tipe', 'notulensi'),
+        ])->paginate(10)->withQueryString();
 
         $dbYears = Kegiatan::whereNotNull('tanggal_mulai')
             ->selectRaw('YEAR(tanggal_mulai) as tahun')
@@ -65,6 +72,9 @@ class KegiatanPimpinanController extends Controller
             'pimpinan'       => 'nullable|array',
             'keterangan'     => 'nullable|string',
             'nomor_agenda'   => 'nullable|string|max:100',
+            'dok_foto.*'       => 'nullable|file|mimes:jpg,jpeg,png,webp|max:51200',
+            'dok_video.*'      => 'nullable|file|mimes:mp4,mov,avi|max:512000',
+            'dok_notulensi.*'  => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:51200',
         ]);
 
         $lokasiMap = [
@@ -120,7 +130,71 @@ class KegiatanPimpinanController extends Controller
             );
         }
 
+        // Simpan dokumentasi (foto/video/notulensi) ke galeri_arsip
+        $this->saveDokumentasi($request, $kegiatan);
+
         return redirect()->route('kegiatan-pimpinan.success', $kegiatan);
+    }
+
+    /**
+     * Simpan file dokumentasi dari form kegiatan ke tabel galeri_arsip
+     */
+    private function saveDokumentasi(Request $request, Kegiatan $kegiatan): void
+    {
+        $tanggal = $kegiatan->tanggal_mulai ? $kegiatan->tanggal_mulai->format('Y-m-d') : now()->format('Y-m-d');
+
+        $tipeMap = [
+            'foto'      => ['field' => 'dok_foto',      'judul_field' => 'dok_foto_judul',      'jumlah_field' => 'dok_foto_jumlah',   'durasi_field' => null],
+            'video'     => ['field' => 'dok_video',     'judul_field' => 'dok_video_judul',     'jumlah_field' => null,                'durasi_field' => 'dok_video_durasi'],
+            'notulensi' => ['field' => 'dok_notulensi', 'judul_field' => 'dok_notulensi_judul', 'jumlah_field' => null,                'durasi_field' => null],
+        ];
+
+        foreach ($tipeMap as $tipe => $cfg) {
+            if (!$request->hasFile($cfg['field'])) continue;
+
+            $files  = $request->file($cfg['field']);
+            $judul  = trim($request->input($cfg['judul_field'], ''));
+            $jumlah = $cfg['jumlah_field'] ? (int) $request->input($cfg['jumlah_field'], 1) : 1;
+            $durasi = $cfg['durasi_field'] ? (int) $request->input($cfg['durasi_field'], 0) : null;
+
+            // Konversi durasi menit -> detik
+            $durasiDetik = ($durasi && $durasi > 0) ? $durasi * 60 : null;
+
+            $fileIdx = 1;
+            foreach ($files as $file) {
+                if (!$file->isValid()) continue;
+
+                $suffix = ($tipe === 'foto') ? (count($files) > 1 ? "Foto_{$fileIdx}" : 'Foto') : ($tipe === 'video' ? 'Video' : 'Notulensi');
+                $isoName = FileNamingService::formatIsoFileName(
+                    $tanggal,
+                    $kegiatan->judul,
+                    $file->getClientOriginalExtension(),
+                    $suffix
+                );
+                $fileName = FileNamingService::ensureUniqueName('galeri-arsip', $isoName);
+                $filePath = $file->storeAs('galeri-arsip', $fileName, 'public');
+                $fileIdx++;
+
+                $judulFinal = $judul ?: ($tipe === 'foto' ? 'Foto ' : ($tipe === 'video' ? 'Video ' : 'Notulensi ')) . $kegiatan->judul;
+
+                GaleriArsip::create([
+                    'kode'             => GaleriArsip::generateKode(),
+                    'judul'            => $judulFinal,
+                    'instansi'         => $kegiatan->leading_sektor,
+                    'tipe'             => $tipe,
+                    'akses'            => 'internal',
+                    'file_path'        => $filePath,
+                    'file_name'        => $fileName,
+                    'jumlah_foto'      => ($tipe === 'foto') ? max(1, $jumlah) : 1,
+                    'durasi_detik'     => $durasiDetik,
+                    'keterangan'       => null,
+                    'keywords'         => null,
+                    'tanggal_kegiatan' => $tanggal,
+                    'kegiatan_id'      => $kegiatan->id,
+                    'created_by'       => Auth::id(),
+                ]);
+            }
+        }
     }
 
     public function success(Kegiatan $kegiatan)
@@ -133,6 +207,7 @@ class KegiatanPimpinanController extends Controller
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit kegiatan.');
         }
+        $kegiatan->load('galeriArsip');
         return view('kegiatan-pimpinan.create', compact('kegiatan'));
     }
 
@@ -151,6 +226,9 @@ class KegiatanPimpinanController extends Controller
             'lokasi'                => 'required|string',
             'pimpinan'              => 'nullable|array',
             'keterangan'            => 'nullable|string',
+            'dok_foto.*'            => 'nullable|file|mimes:jpg,jpeg,png,webp|max:51200',
+            'dok_video.*'           => 'nullable|file|mimes:mp4,mov,avi|max:512000',
+            'dok_notulensi.*'       => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:51200',
         ]);
 
         $lokasiMap = [
@@ -185,6 +263,9 @@ class KegiatanPimpinanController extends Controller
             'pimpinan'        => $request->input('pimpinan', []),
         ]);
 
+        // Tambahkan dokumentasi baru jika ada file yang diunggah
+        $this->saveDokumentasi($request, $kegiatan);
+
         return redirect()->route('kegiatan-pimpinan.index')->with('success', 'Kegiatan berhasil diperbarui.');
     }
 
@@ -196,6 +277,24 @@ class KegiatanPimpinanController extends Controller
         $kegiatan->delete();
         return redirect()->route('kegiatan-pimpinan.index')
             ->with('success', 'Kegiatan berhasil dihapus.');
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menghapus kegiatan.');
+        }
+
+        $ids = $request->input('selected_ids', []);
+        if (!empty($ids)) {
+            $count = count($ids);
+            Kegiatan::whereIn('id', $ids)->delete();
+            return redirect()->route('kegiatan-pimpinan.index')
+                ->with('success', "{$count} kegiatan berhasil dihapus secara bersamaan.");
+        }
+
+        return redirect()->route('kegiatan-pimpinan.index')
+            ->with('warning', 'Tidak ada kegiatan yang dipilih.');
     }
 
     /**

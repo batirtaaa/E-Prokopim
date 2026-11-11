@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Edit Arahan — SIKOPIM')
+@section('title', 'Edit Arahan')
 @section('topbar-title', 'Arahan Pimpinan')
 @section('content')
 <div class="page-header"><h1 class="page-title">Edit Arahan Pimpinan</h1></div>
@@ -16,7 +16,7 @@
             <div class="form-row cols-3">
                 <div class="form-group"><label class="form-label">Tanggal *</label><input type="date" name="tanggal_arahan" class="form-control" value="{{ $arahan->tanggal_arahan->format('Y-m-d') }}" required></div>
                 <div class="form-group"><label class="form-label">Deadline</label><input type="date" name="deadline" class="form-control" value="{{ $arahan->deadline?->format('Y-m-d') }}"></div>
-                <div class="form-group"><label class="form-label">Prioritas</label><select name="prioritas" class="form-control">@foreach(['rendah'=>'Rendah','sedang'=>'Sedang','tinggi'=>'Tinggi','urgent'=>'Urgent'] as $v=>$l)<option value="{{ $v }}" {{ $arahan->prioritas===$v ? 'selected' : '' }}>{{ $l }}</option>@endforeach</select></div>
+                <div class="form-group"><label class="form-label">Prioritas</label><select name="prioritas" class="form-control">@foreach(['rendah'=>'Rendah','sedang'=>'Sedang','tinggi'=>'Tinggi'] as $v=>$l)<option value="{{ $v }}" {{ $arahan->prioritas===$v ? 'selected' : '' }}>{{ $l }}</option>@endforeach</select></div>
             </div>
             <div class="form-group"><label class="form-label">Status</label><select name="status" class="form-control">@foreach(['belum_selesai'=>'Belum Selesai','sedang_berjalan'=>'Sedang Berjalan','selesai'=>'Selesai','melewati_deadline'=>'Melewati Deadline'] as $v=>$l)<option value="{{ $v }}" {{ $arahan->status===$v ? 'selected' : '' }}>{{ $l }}</option>@endforeach</select></div>
             <div class="form-actions"><a href="{{ route('arahan.index') }}" class="btn btn-outline">Batal</a><button type="submit" class="btn btn-primary">Simpan Perubahan</button></div>

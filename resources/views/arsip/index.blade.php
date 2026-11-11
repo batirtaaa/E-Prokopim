@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Arsip Surat — E-PROKOPIM')
+@section('title', 'Arsip Surat')
 
 @push('styles')
 <style>
@@ -686,6 +686,17 @@
     {{-- Filter Card --}}
     <div class="ar-filter-card">
         <form method="GET" action="{{ route('arsip.index') }}" class="ar-filter-form">
+            {{-- Kata Kunci / Pencarian --}}
+            <div class="ar-filter-group" style="flex:1; min-width:200px;">
+                <label class="ar-filter-label">Pencarian</label>
+                <div style="position:relative; display:flex; align-items:center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="position:absolute; left:10px; width:15px; height:15px; color:#94a3b8; pointer-events:none;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+                    </svg>
+                    <input type="text" name="search" class="ar-date-control" style="width:100%; padding-left:32px;" placeholder="Cari nama dokumen, perihal, nomor..." value="{{ request('search') }}">
+                </div>
+            </div>
+
             {{-- Jenis Surat --}}
             <div class="ar-filter-group">
                 <label class="ar-filter-label">Jenis Surat</label>
@@ -725,6 +736,12 @@
                 </svg>
                 <span>Terapkan Filter</span>
             </button>
+
+            @if(request('search') || request('jenis_surat') || request('start_date') || request('end_date'))
+            <a href="{{ route('arsip.index') }}" class="ar-btn-cancel" style="display:inline-flex;align-items:center;gap:4px;text-decoration:none;padding:8px 14px;" title="Reset filter">
+                <span>Reset</span>
+            </a>
+            @endif
         </form>
     </div>
 
@@ -741,6 +758,9 @@
                         <th>Tipe File</th>
                         <th>Tanggal Unggah</th>
                         <th>Diunggah Oleh</th>
+                        @if(auth()->user()->isAdmin())
+                        <th style="text-align: right; width: 85px;">Aksi</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -770,7 +790,7 @@
                         ];
                         $catLabel = $catLabels[$catKey] ?? ucwords(str_replace('_', ' ', $catKey));
                     @endphp
-                    <tr class="ar-clickable-row" onclick="previewArsip('{{ $fileUrl }}', '{{ addslashes($item->judul) }}', '{{ addslashes($item->nomor_arsip ?? '—') }}', '{{ strtoupper($ext) }}', '{{ addslashes($item->file_name ?? $item->judul) }}', '{{ $formattedDate }}', '{{ addslashes($uploaderName) }}', '{{ addslashes($catLabel) }}')">
+                    <tr class="ar-clickable-row" onclick="previewArsip('{{ $fileUrl }}', '{{ addslashes($item->judul) }}', '{{ addslashes($item->nomor_arsip ?? '—') }}', '{{ strtoupper($ext) }}', '{{ addslashes($item->file_name ?? $item->judul) }}', '{{ $formattedDate }}', '{{ addslashes($uploaderName) }}', '{{ addslashes($catLabel) }}', '{{ route('arsip.edit', $item) }}')">
                         {{-- No --}}
                         <td class="ar-cell-no">
                             {{ $arsip->firstItem() ? $arsip->firstItem() + $index : $index + 1 }}
@@ -833,12 +853,30 @@
                                 {{ $uploaderName }}
                             </span>
                         </td>
+
+                        {{-- Aksi --}}
+                        @if(auth()->user()->isAdmin())
+                        <td onclick="event.stopPropagation()" style="text-align: right; white-space: nowrap;">
+                            <div style="display: inline-flex; align-items: center; gap: 6px; justify-content: flex-end;">
+                                <a href="{{ route('arsip.edit', $item) }}" title="Edit Arsip" style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:6px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; text-decoration:none; transition:all 0.15s;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
+                                </a>
+                                <form method="POST" action="{{ route('arsip.destroy', $item) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus arsip ini?')" style="margin:0; display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" title="Hapus Arsip" style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:6px; border:1px solid #fecaca; background:#fef2f2; color:#ef4444; cursor:pointer; transition:all 0.15s;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                        @endif
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" style="text-align:center; padding: 48px 20px; color: #94a3b8;">
+                        <td colspan="{{ auth()->user()->isAdmin() ? 8 : 7 }}" style="text-align:center; padding: 48px 20px; color: #94a3b8;">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" style="width:40px; height:40px; margin:0 auto 8px; display:block; opacity:0.4;">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                             </svg>
                             <p style="font-weight: 500; margin: 0 0 8px 0;">Belum ada arsip surat</p>
                             <a href="{{ route('arsip.create') }}" style="color:#2563eb; background:none; border:none; text-decoration:none; cursor:pointer; font-size:12.5px; font-weight:600;">+ Unggah Dokumen Sekarang</a>
@@ -944,6 +982,14 @@
                     </svg>
                     <span>Buka Penuh</span>
                 </a>
+                @if(auth()->user()->isAdmin())
+                <a href="#" id="arBtnEdit" class="ar-btn-viewer-action secondary" title="Edit Arsip">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="14" height="14">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                    </svg>
+                    <span>Edit</span>
+                </a>
+                @endif
                 <button type="button" class="ar-viewer-close-btn" onclick="closeArsipViewer()">&times;</button>
             </div>
         </div>
@@ -969,7 +1015,7 @@
 // ==========================
 // PREVIEW SOFTFILE VIEWER
 // ==========================
-function previewArsip(fileUrl, judul, nomor, fileExt, fileName, tanggal, uploader, kategori) {
+function previewArsip(fileUrl, judul, nomor, fileExt, fileName, tanggal, uploader, kategori, editUrl) {
     if (!fileUrl) return;
 
     const overlay = document.getElementById('arDocViewer');
@@ -986,6 +1032,11 @@ function previewArsip(fileUrl, judul, nomor, fileExt, fileName, tanggal, uploade
     document.getElementById('arBtnDownload').href = fileUrl;
     document.getElementById('arBtnNewTab').href = fileUrl;
     document.getElementById('arFallbackDownload').href = fileUrl;
+
+    const editBtn = document.getElementById('arBtnEdit');
+    if (editBtn && editUrl) {
+        editBtn.href = editUrl;
+    }
 
     const ext = (fileExt || '').toLowerCase();
 

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Arahan Pimpinan — SIKOPIM')
+@section('title', 'Arahan Pimpinan')
 @section('topbar-title', 'Arahan Pimpinan')
 @section('content')
 <div class="page-header flex justify-between items-center">
@@ -21,7 +21,7 @@
             </select>
             <select name="prioritas" class="form-control">
                 <option value="">Semua Prioritas</option>
-                @foreach(['rendah'=>'Rendah','sedang'=>'Sedang','tinggi'=>'Tinggi','urgent'=>'Urgent'] as $v=>$l)
+                @foreach(['rendah'=>'Rendah','sedang'=>'Sedang','tinggi'=>'Tinggi'] as $v=>$l)
                     <option value="{{ $v }}" {{ request('prioritas')===$v ? 'selected' : '' }}>{{ $l }}</option>
                 @endforeach
             </select>
@@ -40,17 +40,22 @@
                         @if($a->ditujukan_kepada)<div class="text-sm text-muted">Kepada: {{ $a->ditujukan_kepada }}</div>@endif
                     </td>
                     <td><span class="badge badge-blue">{{ $a->pimpinan_label }}</span></td>
-                    <td>
+                    <td data-arahan-row data-deadline="{{ $a->deadline ? $a->deadline->format('Y-m-d') : '' }}" data-status="{{ $a->effective_status }}">
                         @if($a->deadline)
-                            <div class="{{ $a->status === 'melewati_deadline' ? 'text-muted' : '' }}" style="{{ $a->status === 'melewati_deadline' ? 'color:var(--danger)' : '' }}">
-                                {{ $a->deadline->format('d M Y') }}
+                            <div class="{{ $a->effective_status === 'melewati_deadline' ? '' : '' }}"
+                                 style="{{ $a->effective_status === 'melewati_deadline' ? 'color:var(--danger);font-weight:600;' : '' }}">
+                                {{ $a->deadline->translatedFormat('d M Y') }}
                             </div>
                         @else<span class="text-muted">—</span>@endif
                     </td>
                     <td><span class="badge badge-{{ $a->prioritas_color }}">{{ ucfirst($a->prioritas) }}</span></td>
                     <td>
-                        @php $statusMap = ['belum_selesai'=>'Belum Selesai','sedang_berjalan'=>'Berjalan','selesai'=>'Selesai','melewati_deadline'=>'Deadline']; @endphp
-                        <span class="badge badge-{{ $a->status_color }}">{{ $statusMap[$a->status] ?? $a->status }}</span>
+                        @php
+                            $effStatus = $a->effective_status;
+                            $statusMap = ['belum_selesai'=>'Belum Selesai','sedang_berjalan'=>'Berjalan','selesai'=>'Selesai','melewati_deadline'=>'Melewati Deadline'];
+                        @endphp
+                        <span class="badge badge-{{ $a->status_color }} status-badge"
+                              data-status="{{ $effStatus }}">{{ $statusMap[$effStatus] ?? $effStatus }}</span>
                     </td>
                     <td>
                         @if(auth()->user()->isAdmin())
@@ -88,7 +93,7 @@
                 <div class="form-row cols-3">
                     <div class="form-group"><label class="form-label">Tanggal Arahan *</label><input type="date" name="tanggal_arahan" class="form-control" value="{{ date('Y-m-d') }}" required></div>
                     <div class="form-group"><label class="form-label">Deadline</label><input type="date" name="deadline" class="form-control"></div>
-                    <div class="form-group"><label class="form-label">Prioritas</label><select name="prioritas" class="form-control"><option value="rendah">Rendah</option><option value="sedang" selected>Sedang</option><option value="tinggi">Tinggi</option><option value="urgent">Urgent</option></select></div>
+                    <div class="form-group"><label class="form-label">Prioritas</label><select name="prioritas" class="form-control"><option value="rendah">Rendah</option><option value="sedang" selected>Sedang</option><option value="tinggi">Tinggi</option></select></div>
                 </div>
                 <div class="form-group"><label class="form-label">Status</label><select name="status" class="form-control"><option value="belum_selesai">Belum Selesai</option><option value="sedang_berjalan">Sedang Berjalan</option><option value="selesai">Selesai</option></select></div>
             </div>
@@ -97,3 +102,52 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+/**
+ * Real-time deadline checker: setiap menit, periksa apakah deadline arahan sudah lewat.
+ * Jika iya dan status bukan 'selesai', update tampilan badge secara langsung tanpa reload.
+ */
+function checkArahanDeadlines() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    document.querySelectorAll('[data-arahan-row]').forEach(function(cell) {
+        const deadlineStr = cell.dataset.deadline;
+        const currentStatus = cell.dataset.status;
+
+        if (!deadlineStr || currentStatus === 'selesai') return;
+
+        const deadline = new Date(deadlineStr);
+        deadline.setHours(0, 0, 0, 0);
+
+        if (deadline < today) {
+            // Update tampilan tanggal deadline menjadi merah
+            const dateDiv = cell.querySelector('div');
+            if (dateDiv) {
+                dateDiv.style.color = 'var(--danger)';
+                dateDiv.style.fontWeight = '600';
+            }
+
+            // Update badge status
+            const row = cell.closest('tr');
+            if (row) {
+                const badge = row.querySelector('.status-badge');
+                if (badge && badge.dataset.status !== 'melewati_deadline') {
+                    badge.textContent = 'Melewati Deadline';
+                    badge.className = 'badge badge-red status-badge';
+                    badge.dataset.status = 'melewati_deadline';
+                    cell.dataset.status = 'melewati_deadline';
+                }
+            }
+        }
+    });
+}
+
+// Jalankan saat halaman dimuat
+checkArahanDeadlines();
+// Periksa setiap 60 detik (real-time)
+setInterval(checkArahanDeadlines, 60000);
+</script>
+@endpush

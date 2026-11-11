@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Profil Administrator — SIKOPIM')
+@section('title', 'Profil Administrator')
 @section('topbar-title', 'Profil Admin')
 
 @section('content')

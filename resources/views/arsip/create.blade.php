@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Unggah Arsip Surat Baru — E-PROKOPIM')
+@section('title', 'Unggah Arsip Surat Baru')
 
 @push('styles')
 <style>
@@ -502,7 +502,7 @@
                         <p class="ar-drop-title">Tarik &amp; Lepas file di sini</p>
                         <p class="ar-drop-or">atau</p>
                         <button type="button" class="ar-drop-btn">Pilih File</button>
-                        <p class="ar-drop-hint">Format yang didukung: PDF, JPG, PNG, DOCX.<br>Maksimal 10MB.</p>
+                        <p class="ar-drop-hint">Format yang didukung: PDF, JPG, PNG, DOCX.<br>Maksimal 10MB.<br><span style="color:#0284c7;font-weight:600;display:inline-block;margin-top:4px;">Disarankan standar ISO: Tanggal_Bulan_Tahun_Nama Kegiatan</span></p>
                     </div>
 
                     {{-- Selected File Box --}}

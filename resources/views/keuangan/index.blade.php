@@ -112,9 +112,9 @@
     flex-shrink: 0;
 }
 .stat-icon-wrap svg { width: 24px; height: 24px; }
-.stat-icon-total   { background: #eff6ff; color: #2563eb; }
-.stat-icon-printed { background: #ecfdf5; color: #059669; }
-.stat-icon-unprinted { background: #fff1f2; color: #e11d48; }
+.stat-icon-masuk   { background: #eff6ff; color: #2563eb; }
+.stat-icon-keluar  { background: #ecfeff; color: #0891b2; }
+.stat-icon-total   { background: #f0fdf4; color: #16a34a; }
 
 .stat-info { display: flex; flex-direction: column; }
 .stat-value { font-size: 24px; font-weight: 700; color: #0f172a; line-height: 1.2; }
@@ -513,12 +513,12 @@
 <div class="page-header-row">
     <div class="page-header-left">
         <h1>Buku Surat Masuk</h1>
-        <p>Pencatatan, pengelolaan berkas disposisi, dan pemantauan status cetak surat masuk Bagian Protokol dan Komunikasi Pimpinan.</p>
+        <p>Pencatatan, pengelolaan berkas disposisi, dan pemantauan surat masuk Bagian Protokol dan Komunikasi Pimpinan.</p>
     </div>
     <div class="header-actions">
-        <a href="javascript:void(0)" onclick="openExportModal()" class="btn-secondary-action" title="Unduh Rekap Spreadsheet Excel (.xls)">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-            Download Rekap Excel
+        <a href="{{ route('surat-keluar.index') }}" class="btn-secondary-action" title="Lihat Surat Keluar">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+            Surat Keluar
         </a>
         <a href="{{ route('keuangan.create') }}" class="btn-primary-action">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
@@ -597,33 +597,33 @@
 {{-- KPI Stats --}}
 <div class="stats-grid">
     <div class="stat-card">
-        <div class="stat-icon-wrap stat-icon-total">
+        <div class="stat-icon-wrap stat-icon-masuk">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
         </div>
         <div class="stat-info">
-            <span class="stat-value" id="statTotalSurat">{{ $totalSurat }}</span>
-            <span class="stat-label">Total Surat Masuk</span>
+            <span class="stat-value">{{ $totalSuratMasuk }}</span>
+            <span class="stat-label">Surat Masuk</span>
             <span class="stat-sub">Tahun {{ $selectedTahun }}</span>
         </div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon-wrap stat-icon-printed">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24-1.04-.47-2.11-.67-3.21m0 0A18.03 18.03 0 0112 10.5c2.11 0 4.14.36 6.01 1.019m-12.02 0l-1.02-5.1A2.25 2.25 0 017.18 3.75h9.64a2.25 2.25 0 012.21 2.669l-1.02 5.1m-12.02 0a24.49 24.49 0 000 7.421m12.02-7.421a24.49 24.49 0 010 7.421m-12.02 0h12.02M9 17.25v2.25A1.5 1.5 0 0010.5 21h3a1.5 1.5 0 001.5-1.5v-2.25"/></svg>
+        <div class="stat-icon-wrap stat-icon-keluar">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
         </div>
         <div class="stat-info">
-            <span class="stat-value" id="statTotalPrinted" style="color:#059669">{{ $totalPrinted }}</span>
-            <span class="stat-label">Sudah Diprint</span>
-            <span class="stat-sub" id="statPercentagePrinted">{{ $totalSurat > 0 ? round(($totalPrinted / $totalSurat) * 100) : 0 }}% selesai dicetak</span>
+            <span class="stat-value" style="color:#0891b2">{{ $totalSuratKeluar }}</span>
+            <span class="stat-label">Surat Keluar</span>
+            <span class="stat-sub">Tahun {{ $selectedTahun }}</span>
         </div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon-wrap stat-icon-unprinted">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="stat-icon-wrap stat-icon-total">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"/></svg>
         </div>
         <div class="stat-info">
-            <span class="stat-value" id="statTotalUnprinted" style="color:#e11d48">{{ $totalUnprinted }}</span>
-            <span class="stat-label">Belum Diprint</span>
-            <span class="stat-sub">Perlu dicetak / ditindaklanjuti</span>
+            <span class="stat-value" style="color:#16a34a">{{ $totalSemua }}</span>
+            <span class="stat-label">Total Semua Surat</span>
+            <span class="stat-sub">Masuk + Keluar {{ $selectedTahun }}</span>
         </div>
     </div>
 </div>
@@ -648,12 +648,6 @@
             @foreach($bulanList as $k => $b)
                 <option value="{{ $k }}" {{ request('bulan') == $k ? 'selected' : '' }}>{{ $b }}</option>
             @endforeach
-        </select>
-
-        <select name="status_print" class="filter-select" onchange="this.form.submit()">
-            <option value="">Status Pencetakan (Semua)</option>
-            <option value="1" {{ request('status_print') === '1' ? 'selected' : '' }}>✓ Sudah Diprint</option>
-            <option value="0" {{ request('status_print') === '0' ? 'selected' : '' }}>— Belum Diprint</option>
         </select>
 
         <select name="tahun" class="filter-select" onchange="this.form.submit()">

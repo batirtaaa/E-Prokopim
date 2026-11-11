@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dokumentasi;
 use App\Models\Kegiatan;
+use App\Services\FileNamingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -37,14 +38,21 @@ class DokumentasiController extends Controller
         ]);
 
         $file = $request->file('file');
-        $path = $file->store('dokumentasi', 'public');
+        $isoName = FileNamingService::formatIsoFileName(
+            $validated['tanggal_dokumentasi'],
+            $validated['judul'],
+            $file->getClientOriginalExtension(),
+            $validated['tipe'] === 'foto' ? 'Foto' : ($validated['tipe'] === 'video' ? 'Video' : 'Dokumen')
+        );
+        $safeName = FileNamingService::ensureUniqueName('dokumentasi', $isoName);
+        $path = $file->storeAs('dokumentasi', $safeName, 'public');
 
         Dokumentasi::create([
             'judul' => $validated['judul'],
             'kegiatan_id' => $validated['kegiatan_id'] ?? null,
             'tipe' => $validated['tipe'],
             'file_path' => $path,
-            'file_name' => $file->getClientOriginalName(),
+            'file_name' => $safeName,
             'file_size' => $file->getSize(),
             'tanggal_dokumentasi' => $validated['tanggal_dokumentasi'],
             'fotografer' => $validated['fotografer'] ?? null,
@@ -61,8 +69,7 @@ class DokumentasiController extends Controller
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menghapus dokumentasi.');
         }
 
-        Storage::disk('public')->delete($dokumentasi->file_path);
         $dokumentasi->delete();
-        return redirect()->route('dokumentasi.index')->with('success', 'Dokumentasi berhasil dihapus.');
+        return redirect()->route('dokumentasi.index')->with('success', 'Dokumentasi berhasil dipindahkan ke Sampah (Trash).');
     }
 }

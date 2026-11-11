@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Sub Protokol — SIKOPIM')
+@section('title', 'Sub Protokol')
 @section('topbar-title', 'Sub Protokol')
 @section('content')
     <div>

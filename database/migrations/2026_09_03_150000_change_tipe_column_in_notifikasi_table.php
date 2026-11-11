@@ -15,15 +15,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Ubah ke string terlebih dahulu agar nilai lama tidak crash saat alter
-        DB::statement("ALTER TABLE `notifikasi` MODIFY COLUMN `tipe` VARCHAR(50) NOT NULL DEFAULT 'info'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE `notifikasi` MODIFY COLUMN `tipe` VARCHAR(50) NOT NULL DEFAULT 'info'");
+        } else {
+            Schema::table('notifikasi', function (Blueprint $table) {
+                $table->string('tipe', 50)->default('info')->change();
+            });
+        }
     }
 
     public function down(): void
     {
-        // Kembalikan ke enum; pastikan data lama tidak melebihi enum list
-        DB::statement("UPDATE `notifikasi` SET `tipe` = 'info' WHERE `tipe` NOT IN ('info','warning','success','error')");
-        DB::statement("ALTER TABLE `notifikasi` MODIFY COLUMN `tipe` ENUM('info','warning','success','error') NOT NULL DEFAULT 'info'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("UPDATE `notifikasi` SET `tipe` = 'info' WHERE `tipe` NOT IN ('info','warning','success','error')");
+            DB::statement("ALTER TABLE `notifikasi` MODIFY COLUMN `tipe` ENUM('info','warning','success','error') NOT NULL DEFAULT 'info'");
+        }
     }
 };
 

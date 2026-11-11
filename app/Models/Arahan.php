@@ -37,14 +37,25 @@ class Arahan extends Model
             'rendah' => 'green',
             'sedang' => 'blue',
             'tinggi' => 'orange',
-            'urgent' => 'red',
             default => 'gray',
         };
     }
 
+    /**
+     * Mengembalikan status efektif: jika deadline sudah lewat dan belum selesai,
+     * otomatis dianggap melewati_deadline meski belum tersimpan di DB.
+     */
+    public function getEffectiveStatusAttribute(): string
+    {
+        if ($this->status !== 'selesai' && $this->deadline && $this->deadline->lt(now()->startOfDay())) {
+            return 'melewati_deadline';
+        }
+        return $this->status;
+    }
+
     public function getStatusColorAttribute(): string
     {
-        return match($this->status) {
+        return match($this->effective_status) {
             'belum_selesai' => 'blue',
             'sedang_berjalan' => 'yellow',
             'selesai' => 'green',

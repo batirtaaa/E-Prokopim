@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sambutan;
 use App\Models\Personel;
 use App\Exports\SambutanRekapExport;
+use App\Services\FileNamingService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,12 +44,53 @@ class SambutanController extends Controller
             $query->where('status', $request->status);
         }
 
-        if ($request->filled('filter_tahun')) {
-            $query->whereYear('tanggal_terima', (int) $request->filter_tahun);
+        // Filter rentang tanggal
+        if ($request->filled('tgl_mulai')) {
+            $tglMulai = $request->tgl_mulai;
+            $query->where(function ($q) use ($tglMulai) {
+                $q->where(function ($sub) use ($tglMulai) {
+                    $sub->whereNotNull('tanggal_acara')
+                        ->whereDate('tanggal_acara', '>=', $tglMulai);
+                })->orWhere(function ($sub) use ($tglMulai) {
+                    $sub->whereNull('tanggal_acara')
+                        ->whereDate('tanggal_terima', '>=', $tglMulai);
+                });
+            });
         }
 
-        if ($request->filled('filter_bulan')) {
-            $query->whereMonth('tanggal_terima', (int) $request->filter_bulan);
+        if ($request->filled('tgl_selesai')) {
+            $tglSelesai = $request->tgl_selesai;
+            $query->where(function ($q) use ($tglSelesai) {
+                $q->where(function ($sub) use ($tglSelesai) {
+                    $sub->whereNotNull('tanggal_acara')
+                        ->whereDate('tanggal_acara', '<=', $tglSelesai);
+                })->orWhere(function ($sub) use ($tglSelesai) {
+                    $sub->whereNull('tanggal_acara')
+                        ->whereDate('tanggal_terima', '<=', $tglSelesai);
+                });
+            });
+        }
+
+        if ($request->filled('filter_tahun') && !$request->filled('tgl_mulai') && !$request->filled('tgl_selesai')) {
+            $thn = (int) $request->filter_tahun;
+            $query->where(function ($q) use ($thn) {
+                $q->where(function ($sub) use ($thn) {
+                    $sub->whereNotNull('tanggal_acara')->whereYear('tanggal_acara', $thn);
+                })->orWhere(function ($sub) use ($thn) {
+                    $sub->whereNull('tanggal_acara')->whereYear('tanggal_terima', $thn);
+                });
+            });
+        }
+
+        if ($request->filled('filter_bulan') && !$request->filled('tgl_mulai') && !$request->filled('tgl_selesai')) {
+            $bln = (int) $request->filter_bulan;
+            $query->where(function ($q) use ($bln) {
+                $q->where(function ($sub) use ($bln) {
+                    $sub->whereNotNull('tanggal_acara')->whereMonth('tanggal_acara', $bln);
+                })->orWhere(function ($sub) use ($bln) {
+                    $sub->whereNull('tanggal_acara')->whereMonth('tanggal_terima', $bln);
+                });
+            });
         }
 
         $sambutan = $query->paginate(10)->withQueryString();
@@ -109,8 +151,14 @@ class SambutanController extends Controller
         }
 
         $file = $request->file('dokumen_hasil');
-        $fileName = $file->getClientOriginalName();
-        $filePath = $file->store('sambutan/hasil', 'public');
+        $isoName = FileNamingService::formatIsoFileName(
+            $sambutan->tanggal_acara ?: ($sambutan->tanggal_surat ?: now()),
+            $sambutan->perihal,
+            $file->getClientOriginalExtension(),
+            'Naskah_Sambutan'
+        );
+        $fileName = FileNamingService::ensureUniqueName('sambutan/hasil', $isoName);
+        $filePath = $file->storeAs('sambutan/hasil', $fileName, 'public');
 
         $status = $request->input('status', 'selesai');
 
@@ -150,8 +198,14 @@ class SambutanController extends Controller
         }
 
         $file = $request->file('dokumen_hasil');
-        $fileName = $file->getClientOriginalName();
-        $filePath = $file->store('sambutan/hasil', 'public');
+        $isoName = FileNamingService::formatIsoFileName(
+            $sambutan->tanggal_acara ?: ($sambutan->tanggal_surat ?: now()),
+            $sambutan->perihal,
+            $file->getClientOriginalExtension(),
+            'Naskah_Sambutan'
+        );
+        $fileName = FileNamingService::ensureUniqueName('sambutan/hasil', $isoName);
+        $filePath = $file->storeAs('sambutan/hasil', $fileName, 'public');
 
         $status = $request->input('status', 'selesai');
 
@@ -237,8 +291,14 @@ class SambutanController extends Controller
         }
 
         $file     = $request->file('dokumen');
-        $fileName = $file->getClientOriginalName();
-        $filePath = $file->store('sambutan', 'public');
+        $isoName  = FileNamingService::formatIsoFileName(
+            $request->tanggal_acara ?: ($request->tanggal_surat ?: now()),
+            $request->perihal,
+            $file->getClientOriginalExtension(),
+            'Permohonan'
+        );
+        $fileName = FileNamingService::ensureUniqueName('sambutan', $isoName);
+        $filePath = $file->storeAs('sambutan', $fileName, 'public');
 
         $sambutan = Sambutan::create([
             'nomor_surat'        => $request->nomor_surat,
@@ -349,8 +409,15 @@ class SambutanController extends Controller
                 Storage::disk('public')->delete($sambutan->file_path);
             }
             $file = $request->file('dokumen');
-            $data['file_name'] = $file->getClientOriginalName();
-            $data['file_path'] = $file->store('sambutan', 'public');
+            $isoName = FileNamingService::formatIsoFileName(
+                $request->tanggal_acara ?: ($sambutan->tanggal_acara ?: now()),
+                $request->perihal ?: $sambutan->perihal,
+                $file->getClientOriginalExtension(),
+                'Permohonan'
+            );
+            $fileName = FileNamingService::ensureUniqueName('sambutan', $isoName);
+            $data['file_name'] = $fileName;
+            $data['file_path'] = $file->storeAs('sambutan', $fileName, 'public');
         }
 
         if ($request->hasFile('dokumen_hasil')) {
@@ -358,8 +425,15 @@ class SambutanController extends Controller
                 Storage::disk('public')->delete($sambutan->file_hasil_path);
             }
             $fileHasil = $request->file('dokumen_hasil');
-            $data['file_hasil_name'] = $fileHasil->getClientOriginalName();
-            $data['file_hasil_path'] = $fileHasil->store('sambutan/hasil', 'public');
+            $isoHasil = FileNamingService::formatIsoFileName(
+                $request->tanggal_acara ?: ($sambutan->tanggal_acara ?: now()),
+                $request->perihal ?: $sambutan->perihal,
+                $fileHasil->getClientOriginalExtension(),
+                'Naskah_Sambutan'
+            );
+            $fileNameHasil = FileNamingService::ensureUniqueName('sambutan/hasil', $isoHasil);
+            $data['file_hasil_name'] = $fileNameHasil;
+            $data['file_hasil_path'] = $fileHasil->storeAs('sambutan/hasil', $fileNameHasil, 'public');
             $data['tgl_upload_hasil'] = now();
             if (!$request->filled('status') || $request->status === 'draft') {
                 $data['status'] = 'selesai';
@@ -378,14 +452,8 @@ class SambutanController extends Controller
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menghapus sambutan.');
         }
 
-        if ($sambutan->file_path) {
-            Storage::disk('public')->delete($sambutan->file_path);
-        }
-        if ($sambutan->file_hasil_path) {
-            Storage::disk('public')->delete($sambutan->file_hasil_path);
-        }
         $sambutan->delete();
-        return redirect()->route('sambutan.index')->with('success', 'Surat berhasil dihapus.');
+        return redirect()->route('sambutan.index')->with('success', 'Surat berhasil dipindahkan ke Sampah (Trash).');
     }
 
     public function bulkDestroy(Request $request)
@@ -401,17 +469,11 @@ class SambutanController extends Controller
 
         $items = Sambutan::whereIn('id', $request->selected_ids)->get();
         foreach ($items as $item) {
-            if ($item->file_path) {
-                Storage::disk('public')->delete($item->file_path);
-            }
-            if ($item->file_hasil_path) {
-                Storage::disk('public')->delete($item->file_hasil_path);
-            }
             $item->delete();
         }
 
         return redirect()->route('sambutan.index', ['tab' => $request->get('tab', 'permohonan')])
-            ->with('success', count($items) . ' surat berhasil dihapus.');
+            ->with('success', count($items) . ' surat berhasil dipindahkan ke Sampah (Trash).');
     }
 
     /**
@@ -423,11 +485,30 @@ class SambutanController extends Controller
     public function exportRekap(Request $request)
     {
         $tahun = (int) $request->get('tahun', now()->year);
+        if ($request->filled('tgl_mulai')) {
+            try {
+                $parsedYear = (int) \Carbon\Carbon::parse($request->tgl_mulai)->year;
+                if ($parsedYear >= 2000 && $parsedYear <= 2100) {
+                    $tahun = $parsedYear;
+                }
+            } catch (\Exception $e) {}
+        }
+
         if ($tahun < 2000 || $tahun > 2100) {
             $tahun = (int) now()->year;
         }
 
         $bulan = $request->filled('bulan') ? (int) $request->bulan : null;
+        if (!$bulan && $request->filled('tgl_mulai') && $request->filled('tgl_selesai')) {
+            try {
+                $start = \Carbon\Carbon::parse($request->tgl_mulai);
+                $end = \Carbon\Carbon::parse($request->tgl_selesai);
+                if ($start->year === $end->year && $start->month === $end->month) {
+                    $bulan = (int) $start->month;
+                }
+            } catch (\Exception $e) {}
+        }
+
         if ($bulan !== null && ($bulan < 1 || $bulan > 12)) {
             $bulan = null;
         }

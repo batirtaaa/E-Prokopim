@@ -1,5 +1,5 @@
 @extends('layouts.auth')
-@section('title', 'Daftar Akun Baru — SIKOPIM')
+@section('title', 'Daftar Akun Baru')
 
 @section('content')
 <div class="login-page">
@@ -15,7 +15,7 @@
                 </svg>
             </div>
             <h1 style="font-size: 22px;">Registrasi Akun</h1>
-            <p>SIKOPIM Kota Bandung</p>
+            <p>E-PROKOPIM Kota Bandung</p>
         </div>
 
         {{-- Errors --}}

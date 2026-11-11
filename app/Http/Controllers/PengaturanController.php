@@ -70,6 +70,35 @@ class PengaturanController extends Controller
             ->with('success', 'Pengguna berhasil ditambahkan.');
     }
 
+    public function updateUser(Request $request, User $user)
+    {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit pengguna.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'nip' => 'nullable|string|max:30|unique:users,nip,' . $user->id,
+            'username' => 'required|string|unique:users,username,' . $user->id,
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'jabatan' => 'nullable|string|max:255',
+            'role' => 'required|in:super_admin,admin,operator,personel',
+            'password' => 'nullable|min:8|confirmed',
+        ]);
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        return redirect()->route('pengaturan.index', ['tab' => 'manajemen-pengguna'])
+            ->with('success', 'Data pengguna berhasil diperbarui.');
+    }
+
     public function destroyUser(User $user)
     {
         if (!Auth::user()->isAdmin()) {

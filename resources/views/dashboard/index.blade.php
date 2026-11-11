@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Dashboard — E-PROKOPIM')
+@section('title', 'Dashboard')
 
 @push('styles')
 <style>
@@ -269,9 +269,15 @@
     max-width: 42px;
     background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
     border-radius: 4px 4px 0 0;
-    min-height: 6px;
+    min-height: 0;
     transition: height 0.3s ease, opacity 0.18s;
     cursor: pointer;
+}
+.chart-bar.empty {
+    height: 0 !important;
+    min-height: 0 !important;
+    opacity: 0;
+    pointer-events: none;
 }
 .chart-bar:hover { opacity: 0.85; filter: brightness(1.1); }
 .chart-bar-label {
@@ -659,6 +665,300 @@
 }
 .pegawai-modal-item label { font-size: 11px; color: #64748b; display: block; margin-bottom: 2px; }
 .pegawai-modal-item span { font-size: 13px; font-weight: 600; color: #0f172a; }
+
+/* ── Sambutan Charts Grid ── */
+.sambutan-charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+@media (max-width: 768px) {
+    .sambutan-charts-grid { grid-template-columns: 1fr; }
+}
+
+/* Chart wrapper */
+.sambutan-chart-wrap {
+    display: flex;
+    gap: 8px;
+    height: 200px;
+    padding: 8px 0 0;
+}
+
+/* Y-axis */
+.sambutan-y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 28px;
+    padding-bottom: 22px;
+    flex-shrink: 0;
+}
+.sambutan-y-axis span {
+    font-size: 10px;
+    color: #94a3b8;
+    line-height: 1;
+}
+
+/* Bar area */
+.sambutan-bars-area {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.sambutan-grid-lines {
+    position: absolute;
+    inset: 0 0 22px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+}
+.sambutan-grid-line {
+    border-top: 1px dashed #e2e8f0;
+    width: 100%;
+}
+
+/* Bars container */
+.sambutan-bars {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    padding-bottom: 22px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Each bar column */
+.sambutan-bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    gap: 3px;
+}
+.sambutan-bar-value {
+    font-size: 10px;
+    font-weight: 700;
+    color: #475569;
+    min-height: 14px;
+    line-height: 1;
+}
+.sambutan-bar-value--zero { color: transparent; }
+.sambutan-bar-outer {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+}
+.sambutan-bar {
+    width: 100%;
+    border-radius: 5px 5px 2px 2px;
+    transition: height 0.6s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+    cursor: default;
+    position: relative;
+}
+.sambutan-bar:hover { filter: brightness(1.12); }
+
+/* Bar colours */
+.sambutan-bar--tahun {
+    background: linear-gradient(180deg, #818cf8 0%, #6366f1 100%);
+    box-shadow: 0 2px 8px rgba(99,102,241,0.25);
+}
+.sambutan-bar--bulan {
+    background: linear-gradient(180deg, #38bdf8 0%, #0ea5e9 100%);
+    box-shadow: 0 2px 8px rgba(14,165,233,0.2);
+}
+.sambutan-bar--current {
+    background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
+    box-shadow: 0 2px 10px rgba(16,185,129,0.35);
+}
+
+.sambutan-bar-label {
+    font-size: 10px;
+    color: #64748b;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    line-height: 1.2;
+}
+.sambutan-bar-label--current {
+    color: #10b981;
+    font-weight: 700;
+}
+
+/* Badges */
+.sambutan-total-badge {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6366f1;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 20px;
+    padding: 3px 10px;
+}
+.sambutan-year-badge {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0ea5e9;
+    background: #e0f2fe;
+    border: 1px solid #bae6fd;
+    border-radius: 20px;
+    padding: 3px 10px;
+}
+
+/* Empty state */
+.sambutan-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+    gap: 10px;
+}
+.sambutan-empty p { font-size: 13px; margin: 0; }
+
+.sambutan-single-card {
+    margin-bottom: 20px;
+}
+.sambutan-filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.sambutan-filters .filter-select {
+    padding: 6px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 12.5px;
+    color: #1e293b;
+    background-color: #f8fafc;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.sambutan-filters .filter-select:hover {
+    background-color: #ffffff;
+    border-color: #94a3b8;
+}
+.sambutan-filters .filter-select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+    background-color: #ffffff;
+}
+.sambutan-bar--dimmed {
+    opacity: 0.25 !important;
+}
+.sambutan-bar--highlighted {
+    background: linear-gradient(180deg, #6366f1 0%, #4338ca 100%) !important;
+    box-shadow: 0 3px 12px rgba(99, 102, 241, 0.45) !important;
+}
+
+/* ── Dokumentasi (Foto/Video/Notulensi) Chart ── */
+.dok-single-card {
+    margin-bottom: 20px;
+}
+.dok-legend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11.5px;
+    color: #475569;
+    font-weight: 600;
+}
+.dok-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.15s;
+}
+.dok-legend-item:hover {
+    opacity: 0.8;
+}
+.dok-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.dok-dot.foto      { background: #3b82f6; box-shadow: 0 0 4px rgba(59,130,246,0.4); }
+.dok-dot.video     { background: #8b5cf6; box-shadow: 0 0 4px rgba(139,92,246,0.4); }
+.dok-dot.notulensi { background: #f59e0b; box-shadow: 0 0 4px rgba(245,158,11,0.4); }
+
+.dok-bar-stacked {
+    width: 100%;
+    border-radius: 5px 5px 2px 2px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column-reverse;
+    transition: height 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.dok-bar-stacked:hover {
+    filter: brightness(1.1);
+}
+.dok-segment {
+    width: 100%;
+    transition: height 0.3s ease;
+}
+.dok-segment--foto {
+    background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+}
+.dok-segment--video {
+    background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
+}
+.dok-segment--notulensi {
+    background: linear-gradient(180deg, #fcd34d 0%, #d97706 100%);
+}
+
+.dok-bar--single-foto {
+    background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+    box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+}
+.dok-bar--single-video {
+    background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
+    box-shadow: 0 2px 8px rgba(124,58,237,0.25);
+}
+.dok-bar--single-notulensi {
+    background: linear-gradient(180deg, #fcd34d 0%, #d97706 100%);
+    box-shadow: 0 2px 8px rgba(217,119,6,0.25);
+}
+
+.dok-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.15s ease;
+    z-index: 20;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+.dok-bar-col:hover .dok-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px);
+}
 </style>
 @endpush
 
@@ -778,15 +1078,19 @@
             @endphp
             <div class="chart-bars" id="chart-bars-container">
                 @foreach($statistikBulanan as $stat)
-                    @php $pct = round(($stat['count'] / $maxCount) * 100); @endphp
+                    @php 
+                        $val = $stat['count'];
+                        $pct = $val > 0 ? max(round(($val / $maxCount) * 100), 6) : 0; 
+                    @endphp
                     <div class="chart-bar-wrap" 
+                         data-bulan-nama="{{ $stat['bulan_nama'] ?? $stat['label'] }}"
                          data-semua="{{ $stat['count'] }}" 
                          data-rapat="{{ $stat['rapat'] }}" 
                          data-kunjungan="{{ $stat['kunjungan'] }}" 
                          data-acara="{{ $stat['acara'] }}" 
                          data-audiensi="{{ $stat['audiensi'] }}">
-                        <div class="chart-bar-tooltip">{{ $stat['label'] }}: {{ $stat['count'] }} kegiatan</div>
-                        <div class="chart-bar" style="height: {{ max($pct, 6) }}%"></div>
+                        <div class="chart-bar-tooltip">{{ $stat['bulan_nama'] ?? $stat['label'] }}: {{ $stat['count'] }} kegiatan</div>
+                        <div class="chart-bar {{ $val === 0 ? 'empty' : '' }}" style="height: {{ $pct }}%"></div>
                         <div class="chart-bar-label">{{ $stat['label'] }}</div>
                     </div>
                 @endforeach
@@ -835,7 +1139,116 @@
     </div>
 </div>
 
-{{-- 5. Data Pegawai --}}
+{{-- 5. Grafik Sambutan (1 grafik + filter) --}}
+<div class="dash-card sambutan-single-card">
+    <div class="dash-card-header" style="flex-wrap:wrap;gap:10px;">
+        <span class="dash-card-title">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16" style="vertical-align:middle;margin-right:6px;color:#6366f1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
+            </svg>
+            Statistik Sambutan
+        </span>
+        <div class="sambutan-filters">
+            <select class="filter-select" id="sambutan-filter-tahun" onchange="handleSambutanYearChange(this)">
+            </select>
+            <select class="filter-select" id="sambutan-filter-bulan" onchange="renderSambutanChart()">
+                <option value="0">Semua Bulan</option>
+                <option value="1">Januari</option>
+                <option value="2">Februari</option>
+                <option value="3">Maret</option>
+                <option value="4">April</option>
+                <option value="5">Mei</option>
+                <option value="6">Juni</option>
+                <option value="7">Juli</option>
+                <option value="8">Agustus</option>
+                <option value="9">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+            </select>
+            <span class="sambutan-total-badge" id="sambutan-total-label">Total: 0</span>
+        </div>
+    </div>
+    <div class="dash-card-body">
+        <div class="sambutan-chart-wrap" id="sambutan-chart-wrap">
+            <div class="sambutan-y-axis" id="sambutan-y-axis"></div>
+            <div class="sambutan-bars-area">
+                <div class="sambutan-grid-lines" id="sambutan-grid-lines">
+                    <div class="sambutan-grid-line"></div>
+                    <div class="sambutan-grid-line"></div>
+                    <div class="sambutan-grid-line"></div>
+                    <div class="sambutan-grid-line"></div>
+                </div>
+                <div class="sambutan-bars" id="sambutan-bars-container"></div>
+            </div>
+        </div>
+    </div>
+{{-- 5b. Grafik Dokumentasi (Foto, Video & Notulensi) --}}
+<div class="dash-card dok-single-card">
+    <div class="dash-card-header" style="flex-wrap:wrap;gap:12px;">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+            <span class="dash-card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16" style="vertical-align:middle;margin-right:6px;color:#0ea5e9">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
+                Statistik Foto, Video & Notulensi
+            </span>
+            <div class="dok-legend">
+                <span class="dok-legend-item" onclick="setDokTipeFilter('foto')" title="Filter Foto">
+                    <span class="dok-dot foto"></span> Foto
+                </span>
+                <span class="dok-legend-item" onclick="setDokTipeFilter('video')" title="Filter Video">
+                    <span class="dok-dot video"></span> Video
+                </span>
+                <span class="dok-legend-item" onclick="setDokTipeFilter('notulensi')" title="Filter Notulensi">
+                    <span class="dok-dot notulensi"></span> Notulensi
+                </span>
+            </div>
+        </div>
+        <div class="sambutan-filters">
+            <select class="filter-select" id="dok-filter-tipe" onchange="renderDokumentasiChart()">
+                <option value="semua">Semua Tipe</option>
+                <option value="foto">Foto</option>
+                <option value="video">Video</option>
+                <option value="notulensi">Notulensi</option>
+            </select>
+            <select class="filter-select" id="dok-filter-tahun" onchange="handleDokYearChange(this)">
+            </select>
+            <select class="filter-select" id="dok-filter-bulan" onchange="renderDokumentasiChart()">
+                <option value="0">Semua Bulan</option>
+                <option value="1">Januari</option>
+                <option value="2">Februari</option>
+                <option value="3">Maret</option>
+                <option value="4">April</option>
+                <option value="5">Mei</option>
+                <option value="6">Juni</option>
+                <option value="7">Juli</option>
+                <option value="8">Agustus</option>
+                <option value="9">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+            </select>
+            <span class="sambutan-total-badge" id="dok-total-label" style="background:#f0fdf4;color:#16a34a;border-color:#bbf7d0;">Total: 0</span>
+        </div>
+    </div>
+    <div class="dash-card-body">
+        <div class="sambutan-chart-wrap" id="dok-chart-wrap">
+            <div class="sambutan-y-axis" id="dok-y-axis"></div>
+            <div class="sambutan-bars-area">
+                <div class="sambutan-grid-lines" id="dok-grid-lines">
+                    <div class="sambutan-grid-line"></div>
+                    <div class="sambutan-grid-line"></div>
+                    <div class="sambutan-grid-line"></div>
+                    <div class="sambutan-grid-line"></div>
+                </div>
+                <div class="sambutan-bars" id="dok-bars-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- 6. Data Pegawai --}}
 <div class="dash-table-card">
     <div class="dash-table-header">
         <span class="dash-table-header-title">Data Pegawai</span>
@@ -1056,10 +1469,16 @@ function filterChart(category) {
         const val = parseInt(wrap.getAttribute('data-' + category) || wrap.getAttribute('data-semua') || 0);
         const bar = wrap.querySelector('.chart-bar');
         const tooltip = wrap.querySelector('.chart-bar-tooltip');
-        const label = wrap.querySelector('.chart-bar-label').textContent;
+        const label = wrap.getAttribute('data-bulan-nama') || wrap.querySelector('.chart-bar-label').textContent;
 
-        const pct = Math.round((val / maxVal) * 100);
-        bar.style.height = Math.max(pct, 6) + '%';
+        if (val > 0) {
+            const pct = Math.max(Math.round((val / maxVal) * 100), 6);
+            bar.style.height = pct + '%';
+            bar.classList.remove('empty');
+        } else {
+            bar.style.height = '0%';
+            bar.classList.add('empty');
+        }
         tooltip.textContent = label + ': ' + val + ' kegiatan';
     });
 }
@@ -1107,6 +1526,403 @@ function closePegawaiModal(e) {
     if (e.target.id === 'pegawai-modal') {
         document.getElementById('pegawai-modal').classList.remove('open');
     }
+}
+
+// ── Sambutan Chart Interactive Filter ──
+const sambutanData = {!! $sambutanChartJson !!};
+
+function initSambutanFilters() {
+    const yearSelect = document.getElementById('sambutan-filter-tahun');
+    if (!yearSelect) return;
+
+    yearSelect.innerHTML = '';
+
+    const years = sambutanData.years || [];
+    const currentYear = sambutanData.currentYear || new Date().getFullYear();
+
+    years.forEach(yr => {
+        const opt = document.createElement('option');
+        opt.value = yr;
+        opt.textContent = 'Tahun ' + yr;
+        if (yr === currentYear) {
+            opt.selected = true;
+        }
+        yearSelect.appendChild(opt);
+    });
+
+    const customOpt = document.createElement('option');
+    customOpt.value = 'custom_prompt';
+    customOpt.textContent = '+ Pilih Tahun Lain...';
+    yearSelect.appendChild(customOpt);
+
+    renderSambutanChart();
+}
+
+function handleSambutanYearChange(select) {
+    if (select.value === 'custom_prompt') {
+        const enteredYear = prompt('Masukkan tahun yang ingin ditampilkan (contoh: 2022):');
+        const parsed = parseInt(enteredYear);
+        if (parsed && parsed >= 1990 && parsed <= 2100) {
+            let existing = Array.from(select.options).find(o => o.value == parsed);
+            if (!existing) {
+                existing = document.createElement('option');
+                existing.value = parsed;
+                existing.textContent = 'Tahun ' + parsed;
+                select.insertBefore(existing, select.lastElementChild);
+            }
+            select.value = parsed;
+        } else {
+            select.value = sambutanData.currentYear || new Date().getFullYear();
+            if (enteredYear !== null && enteredYear.trim() !== '') {
+                alert('Tahun tidak valid. Silakan masukkan angka tahun antara 1990 - 2100.');
+            }
+        }
+    }
+    renderSambutanChart();
+}
+
+function renderSambutanChart() {
+    const yearSelect = document.getElementById('sambutan-filter-tahun');
+    const monthSelect = document.getElementById('sambutan-filter-bulan');
+    const totalBadge = document.getElementById('sambutan-total-label');
+    const yAxisContainer = document.getElementById('sambutan-y-axis');
+    const barsContainer = document.getElementById('sambutan-bars-container');
+
+    if (!yearSelect || !monthSelect || !barsContainer) return;
+
+    const currentYear = sambutanData.currentYear || new Date().getFullYear();
+    const selectedYear = yearSelect.value === 'custom_prompt' ? currentYear : (parseInt(yearSelect.value) || currentYear);
+    const selectedMonth = parseInt(monthSelect.value) || 0;
+
+    const matrix = sambutanData.matrix || {};
+    const bulanLabels = sambutanData.bulanLabels || ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+
+    let chartItems = [];
+    let totalCount = 0;
+
+    const yr = selectedYear;
+    const yrMatrix = matrix[yr] || {};
+
+    if (selectedMonth === 0) {
+        for (let m = 1; m <= 12; m++) {
+            const val = yrMatrix[m] || 0;
+            totalCount += val;
+            const isNow = (yr === currentYear && (new Date().getMonth() + 1) === m);
+            chartItems.push({
+                label: bulanLabels[m - 1],
+                value: val,
+                isCurrent: isNow,
+                isHighlighted: true
+            });
+        }
+        totalBadge.textContent = 'Total Tahun ' + yr + ': ' + totalCount + ' Sambutan';
+    } else {
+        const namaBulan = bulanLabels[selectedMonth - 1] || ('Bulan ' + selectedMonth);
+        const valBulan = yrMatrix[selectedMonth] || 0;
+        totalCount = valBulan;
+
+        for (let m = 1; m <= 12; m++) {
+            const val = yrMatrix[m] || 0;
+            const isSelected = (m === selectedMonth);
+            const isNow = (yr === currentYear && (new Date().getMonth() + 1) === m);
+            chartItems.push({
+                label: bulanLabels[m - 1],
+                value: val,
+                isCurrent: isNow,
+                isHighlighted: isSelected,
+                dimmed: !isSelected
+            });
+        }
+        totalBadge.textContent = namaBulan + ' ' + yr + ': ' + valBulan + ' Sambutan';
+    }
+
+    const maxVal = Math.max(...chartItems.map(i => i.value), 1);
+
+    if (yAxisContainer) {
+        yAxisContainer.innerHTML = `
+            <span>${maxVal}</span>
+            <span>${Math.round(maxVal * 0.66)}</span>
+            <span>${Math.round(maxVal * 0.33)}</span>
+            <span>0</span>
+        `;
+    }
+
+    barsContainer.innerHTML = '';
+
+    chartItems.forEach(item => {
+        const pct = maxVal > 0 ? Math.round((item.value / maxVal) * 100) : 0;
+        const barHeight = item.value > 0 ? Math.max(pct, 8) : 3;
+
+        let barClass = 'sambutan-bar sambutan-bar--bulan';
+
+        if (item.isCurrent) {
+            barClass += ' sambutan-bar--current';
+        }
+        if (item.dimmed) {
+            barClass += ' sambutan-bar--dimmed';
+        }
+        if (item.isHighlighted && selectedMonth > 0) {
+            barClass += ' sambutan-bar--highlighted';
+        }
+
+        const col = document.createElement('div');
+        col.className = 'sambutan-bar-col';
+        col.innerHTML = `
+            <div class="sambutan-bar-value ${item.value === 0 ? 'sambutan-bar-value--zero' : ''}">${item.value}</div>
+            <div class="sambutan-bar-outer">
+                <div class="${barClass}" style="height: ${barHeight}%;" title="${item.label}: ${item.value} sambutan"></div>
+            </div>
+            <div class="sambutan-bar-label ${item.isCurrent ? 'sambutan-bar-label--current' : ''}">${item.label}</div>
+        `;
+        barsContainer.appendChild(col);
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        initSambutanFilters();
+        initDokumentasiFilters();
+    });
+} else {
+    initSambutanFilters();
+    initDokumentasiFilters();
+}
+
+// ── Dokumentasi (Foto, Video, Notulensi) Chart Interactive Filter ──
+const dokumentasiData = {!! $dokumentasiChartJson !!};
+
+function initDokumentasiFilters() {
+    const yearSelect = document.getElementById('dok-filter-tahun');
+    if (!yearSelect) return;
+
+    yearSelect.innerHTML = '';
+
+    const years = dokumentasiData.years || [];
+    const currentYear = dokumentasiData.currentYear || new Date().getFullYear();
+
+    years.forEach(yr => {
+        const opt = document.createElement('option');
+        opt.value = yr;
+        opt.textContent = 'Tahun ' + yr;
+        if (yr === currentYear) {
+            opt.selected = true;
+        }
+        yearSelect.appendChild(opt);
+    });
+
+    const customOpt = document.createElement('option');
+    customOpt.value = 'custom_prompt';
+    customOpt.textContent = '+ Pilih Tahun Lain...';
+    yearSelect.appendChild(customOpt);
+
+    renderDokumentasiChart();
+}
+
+function handleDokYearChange(select) {
+    if (select.value === 'custom_prompt') {
+        const enteredYear = prompt('Masukkan tahun yang ingin ditampilkan (contoh: 2022):');
+        const parsed = parseInt(enteredYear);
+        if (parsed && parsed >= 1990 && parsed <= 2100) {
+            let existing = Array.from(select.options).find(o => o.value == parsed);
+            if (!existing) {
+                existing = document.createElement('option');
+                existing.value = parsed;
+                existing.textContent = 'Tahun ' + parsed;
+                select.insertBefore(existing, select.lastElementChild);
+            }
+            select.value = parsed;
+        } else {
+            select.value = dokumentasiData.currentYear || new Date().getFullYear();
+            if (enteredYear !== null && enteredYear.trim() !== '') {
+                alert('Tahun tidak valid. Silakan masukkan angka tahun antara 1990 - 2100.');
+            }
+        }
+    }
+    renderDokumentasiChart();
+}
+
+function setDokTipeFilter(tipe) {
+    const tipeSelect = document.getElementById('dok-filter-tipe');
+    if (tipeSelect) {
+        tipeSelect.value = tipe;
+        renderDokumentasiChart();
+    }
+}
+
+function renderDokumentasiChart() {
+    const tipeSelect = document.getElementById('dok-filter-tipe');
+    const yearSelect = document.getElementById('dok-filter-tahun');
+    const monthSelect = document.getElementById('dok-filter-bulan');
+    const totalBadge = document.getElementById('dok-total-label');
+    const yAxisContainer = document.getElementById('dok-y-axis');
+    const barsContainer = document.getElementById('dok-bars-container');
+
+    if (!yearSelect || !monthSelect || !barsContainer) return;
+
+    const selectedTipe = tipeSelect ? tipeSelect.value : 'semua';
+    const currentYear = dokumentasiData.currentYear || new Date().getFullYear();
+    const selectedYear = (yearSelect.value === 'custom_prompt') ? currentYear : (parseInt(yearSelect.value) || currentYear);
+    const selectedMonth = parseInt(monthSelect.value) || 0;
+
+    const matrix = dokumentasiData.matrix || {};
+    const bulanLabels = dokumentasiData.bulanLabels || ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+
+    let chartItems = [];
+    let grandFoto = 0, grandVideo = 0, grandNotulensi = 0, grandTotal = 0;
+
+    // Tampilkan per tahun terpilih
+    const yr = selectedYear;
+    const yrMatrix = matrix[yr] || {};
+
+    if (selectedMonth === 0) {
+        // 12 Bulan dalam tahun terpilih
+        for (let m = 1; m <= 12; m++) {
+            const cell = yrMatrix[m] || { foto: 0, video: 0, notulensi: 0, total: 0 };
+            const f = cell.foto || 0;
+            const v = cell.video || 0;
+            const n = cell.notulensi || 0;
+            const t = cell.total || 0;
+
+            grandFoto += f; grandVideo += v; grandNotulensi += n; grandTotal += t;
+
+            let val = t;
+            if (selectedTipe === 'foto') val = f;
+            else if (selectedTipe === 'video') val = v;
+            else if (selectedTipe === 'notulensi') val = n;
+
+            const isNow = (yr === currentYear && (new Date().getMonth() + 1) === m);
+            chartItems.push({
+                label: bulanLabels[m - 1],
+                value: val,
+                foto: f, video: v, notulensi: n, total: t,
+                isCurrent: isNow,
+                isHighlighted: true
+            });
+        }
+    } else {
+        // 12 Bulan, dengan highlight bulan tertentu
+        const namaBulan = bulanLabels[selectedMonth - 1] || ('Bulan ' + selectedMonth);
+        for (let m = 1; m <= 12; m++) {
+            const cell = yrMatrix[m] || { foto: 0, video: 0, notulensi: 0, total: 0 };
+            const f = cell.foto || 0;
+            const v = cell.video || 0;
+            const n = cell.notulensi || 0;
+            const t = cell.total || 0;
+
+            if (m === selectedMonth) {
+                grandFoto = f; grandVideo = v; grandNotulensi = n; grandTotal = t;
+            }
+
+            let val = t;
+            if (selectedTipe === 'foto') val = f;
+            else if (selectedTipe === 'video') val = v;
+            else if (selectedTipe === 'notulensi') val = n;
+
+            const isSelected = (m === selectedMonth);
+            const isNow = (yr === currentYear && (new Date().getMonth() + 1) === m);
+            chartItems.push({
+                label: bulanLabels[m - 1],
+                value: val,
+                foto: f, video: v, notulensi: n, total: t,
+                isCurrent: isNow,
+                isHighlighted: isSelected,
+                dimmed: !isSelected
+            });
+        }
+    }
+
+    // Set Total Badge
+    let activeTotal = grandTotal;
+    if (selectedTipe === 'foto') activeTotal = grandFoto;
+    else if (selectedTipe === 'video') activeTotal = grandVideo;
+    else if (selectedTipe === 'notulensi') activeTotal = grandNotulensi;
+
+    let badgeText = '';
+    const prefix = selectedMonth > 0
+        ? (bulanLabels[selectedMonth - 1] + ' ' + selectedYear)
+        : ('Tahun ' + selectedYear);
+
+    if (selectedTipe === 'semua') {
+        badgeText = `${prefix}: ${grandTotal} Arsip (${grandFoto} Foto, ${grandVideo} Video, ${grandNotulensi} Notulensi)`;
+    } else {
+        const tipeLabel = selectedTipe.charAt(0).toUpperCase() + selectedTipe.slice(1);
+        badgeText = `${prefix}: ${activeTotal} ${tipeLabel}`;
+    }
+    if (totalBadge) totalBadge.textContent = badgeText;
+
+    // Y-Axis scale
+    const maxVal = Math.max(...chartItems.map(i => i.value), 1);
+    if (yAxisContainer) {
+        yAxisContainer.innerHTML = `
+            <span>${maxVal}</span>
+            <span>${Math.round(maxVal * 0.66)}</span>
+            <span>${Math.round(maxVal * 0.33)}</span>
+            <span>0</span>
+        `;
+    }
+
+    barsContainer.innerHTML = '';
+
+    if (chartItems.length === 0) {
+        barsContainer.innerHTML = '<div style="flex:1;text-align:center;padding:40px 10px;color:#94a3b8;font-size:13px;">Tidak ada data foto/video/notulensi untuk periode ini</div>';
+        return;
+    }
+
+    chartItems.forEach(item => {
+        const pct = maxVal > 0 ? Math.round((item.value / maxVal) * 100) : 0;
+        const barHeight = item.value > 0 ? Math.max(pct, 8) : 3;
+
+        const col = document.createElement('div');
+        col.className = 'sambutan-bar-col dok-bar-col';
+        if (item.dimmed) {
+            col.style.opacity = '0.25';
+        }
+
+        let tooltipText = '';
+        if (selectedTipe === 'semua') {
+            tooltipText = `${item.label}: ${item.total} Arsip (${item.foto} Foto, ${item.video} Video, ${item.notulensi} Notulensi)`;
+        } else {
+            const tipeLabel = selectedTipe.charAt(0).toUpperCase() + selectedTipe.slice(1);
+            tooltipText = `${item.label}: ${item.value} ${tipeLabel}`;
+        }
+
+        let barInnerHtml = '';
+        if (selectedTipe === 'semua') {
+            // Stacked bar
+            if (item.value === 0) {
+                barInnerHtml = `<div class="dok-bar-stacked" style="height: ${barHeight}%; background: #e2e8f0;"></div>`;
+            } else {
+                const totalVal = item.total || 1;
+                const pctFoto = Math.round((item.foto / totalVal) * 100);
+                const pctVideo = Math.round((item.video / totalVal) * 100);
+                const pctNotulensi = 100 - pctFoto - pctVideo;
+
+                barInnerHtml = `
+                    <div class="dok-bar-stacked" style="height: ${barHeight}%;">
+                        ${item.foto > 0 ? `<div class="dok-segment dok-segment--foto" style="height:${pctFoto}%"></div>` : ''}
+                        ${item.video > 0 ? `<div class="dok-segment dok-segment--video" style="height:${pctVideo}%"></div>` : ''}
+                        ${item.notulensi > 0 ? `<div class="dok-segment dok-segment--notulensi" style="height:${pctNotulensi}%"></div>` : ''}
+                    </div>
+                `;
+            }
+        } else {
+            // Single category bar
+            let singleClass = `dok-bar--single-${selectedTipe}`;
+            barInnerHtml = `
+                <div class="sambutan-bar ${singleClass}" style="height: ${barHeight}%;"></div>
+            `;
+        }
+
+        col.innerHTML = `
+            <div class="dok-tooltip">${tooltipText}</div>
+            <div class="sambutan-bar-value ${item.value === 0 ? 'sambutan-bar-value--zero' : ''}">${item.value}</div>
+            <div class="sambutan-bar-outer" style="position:relative;">
+                ${barInnerHtml}
+            </div>
+            <div class="sambutan-bar-label ${item.isCurrent ? 'sambutan-bar-label--current' : ''}">${item.label}</div>
+        `;
+        barsContainer.appendChild(col);
+    });
 }
 </script>
 @endpush

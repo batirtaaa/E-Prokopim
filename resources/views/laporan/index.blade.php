@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Laporan — SIKOPIM')
+@section('title', 'Laporan')
 @section('topbar-title', 'Laporan')
 @section('content')
 <div class="page-header flex justify-between items-center">
@@ -38,7 +38,7 @@
                     <td><span class="badge badge-blue">{{ ucfirst($l->tipe) }}</span></td>
                     <td>
                         @if($l->periode_mulai && $l->periode_selesai)
-                            {{ $l->periode_mulai->format('d M Y') }} – {{ $l->periode_selesai->format('d M Y') }}
+                            {{ $l->periode_mulai->translatedFormat('d M Y') }} – {{ $l->periode_selesai->translatedFormat('d M Y') }}
                         @else<span class="text-muted">—</span>@endif
                     </td>
                     <td><span class="badge {{ $l->status === 'final' ? 'badge-green' : 'badge-yellow' }}">{{ ucfirst($l->status) }}</span></td>

@@ -1,5 +1,5 @@
 @extends('layouts.auth')
-@section('title', 'Masuk — SIKOPIM')
+@section('title', 'Masuk')
 
 @section('content')
 <div class="login-page">
@@ -14,7 +14,7 @@
                     <rect x="18" y="18" width="12" height="12" rx="2" fill="#0d2137"/>
                 </svg>
             </div>
-            <h1>SIKOPIM</h1>
+            <h1>E-PROKOPIM</h1>
             <p>Kota Bandung</p>
         </div>
 
@@ -40,7 +40,7 @@
                         name="username"
                         class="form-control with-icon"
                         placeholder="Masukkan NIP atau Username"
-                        value="{{ old('username') }}"
+                        value="{{ old('username', $rememberedUsername ?? '') }}"
                         autocomplete="username"
                         autofocus>
                 </div>
@@ -65,7 +65,7 @@
 
             <div class="login-form-extra">
                 <label class="checkbox-label">
-                    <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                    <input type="checkbox" name="remember" id="remember" {{ old('remember', $rememberChecked ?? false) ? 'checked' : '' }}>
                     Ingat Saya
                 </label>
                 <a href="{{ route('forgot-password') }}" class="forgot-link">Lupa Password?</a>
@@ -88,3 +88,97 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+(function () {
+    var usernameInput = document.getElementById('username');
+    var passwordInput = document.getElementById('password');
+    var rememberCheck = document.getElementById('remember');
+
+    // Pre-fill password jika remember terceklis
+    @if(!empty($rememberedPassword))
+        if (passwordInput) {
+            passwordInput.value = @json($rememberedPassword);
+        }
+    @endif
+
+    // Saved accounts dropdown
+    var savedAccounts = @json($savedAccounts ?? []);
+    var accountKeys = Object.keys(savedAccounts);
+
+    if (accountKeys.length > 0 && usernameInput) {
+        // Buat elemen dropdown
+        var dropdown = document.createElement('div');
+        dropdown.id = 'remember-accounts-dropdown';
+        dropdown.style.cssText = [
+            'position:absolute',
+            'top:100%',
+            'left:0',
+            'right:0',
+            'background:#fff',
+            'border:1px solid #cbd5e1',
+            'border-radius:8px',
+            'box-shadow:0 4px 20px rgba(0,0,0,0.12)',
+            'z-index:9999',
+            'max-height:220px',
+            'overflow-y:auto',
+            'display:none',
+            'margin-top:4px'
+        ].join(';');
+
+        accountKeys.forEach(function (key) {
+            var acc = savedAccounts[key];
+            var item = document.createElement('div');
+            item.style.cssText = 'padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:13px;border-bottom:1px solid #f1f5f9;transition:background .15s;';
+
+            var iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#64748b"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg>';
+            var displayName = acc.name ? acc.name : acc.username;
+            item.innerHTML = iconSvg + '<div><div style="font-weight:600;color:#0f172a;line-height:1.3;">' + displayName + '</div><div style="color:#64748b;font-size:11px;">' + acc.username + '</div></div>';
+
+            item.addEventListener('mouseenter', function () { this.style.background = '#f8fafc'; });
+            item.addEventListener('mouseleave', function () { this.style.background = ''; });
+
+            // mousedown (bukan click) agar blur tidak menutup dropdown dulu
+            item.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                usernameInput.value = acc.username;
+                if (passwordInput) passwordInput.value = acc.password;
+                if (rememberCheck) rememberCheck.checked = true;
+                dropdown.style.display = 'none';
+                if (passwordInput) passwordInput.focus();
+            });
+
+            dropdown.appendChild(item);
+        });
+
+        // Pasang dropdown ke wrapper username
+        var wrapper = usernameInput.closest('.form-control-wrapper') || usernameInput.parentElement;
+        wrapper.style.position = 'relative';
+        wrapper.appendChild(dropdown);
+
+        // Tampilkan saat fokus (hanya jika username kosong)
+        usernameInput.addEventListener('focus', function () {
+            if (this.value === '') {
+                dropdown.style.display = 'block';
+            }
+        });
+
+        // Sembunyikan saat blur
+        usernameInput.addEventListener('blur', function () {
+            setTimeout(function () { dropdown.style.display = 'none'; }, 180);
+        });
+
+        // Tampilkan/sembunyikan berdasarkan input
+        usernameInput.addEventListener('input', function () {
+            dropdown.style.display = (this.value === '') ? 'block' : 'none';
+        });
+
+        // Tutup dengan Escape
+        usernameInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') dropdown.style.display = 'none';
+        });
+    }
+})();
+</script>
+@endpush

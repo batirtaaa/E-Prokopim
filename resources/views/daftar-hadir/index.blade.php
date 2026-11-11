@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Daftar Hadir — SIKOPIM')
+@section('title', 'Daftar Hadir')
 @section('topbar-title', 'Daftar Hadir')
 @section('content')
 <div class="page-header flex justify-between items-center">

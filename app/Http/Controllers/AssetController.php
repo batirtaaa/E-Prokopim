@@ -136,6 +136,64 @@ class AssetController extends Controller
             ->with('success', 'Aset inventaris barang berhasil ditambahkan ke dalam sistem.');
     }
 
+    public function editInventaris(AsetBarang $asset)
+    {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit aset.');
+        }
+
+        $pegawaiList = Personel::orderBy('nama_lengkap', 'asc')->get();
+        return view('asset.edit-inventaris', compact('asset', 'pegawaiList'));
+    }
+
+    public function updateInventaris(Request $request, AsetBarang $asset)
+    {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit aset.');
+        }
+
+        $request->validate([
+            'nama_barang' => 'required|string|max:255',
+            'kategori' => 'required|string|max:100',
+            'tanggal_perolehan' => 'required|date',
+            'lokasi' => 'required|string|max:255',
+            'penanggung_jawab' => 'nullable|string|max:255',
+            'kondisi' => 'required|string|max:50',
+            'status' => 'required|string|max:50',
+            'foto_barang' => 'nullable|image|max:5120',
+            'dokumen_pendukung' => 'nullable|file|max:10240',
+        ]);
+
+        $data = [
+            'nama_barang' => $request->nama_barang,
+            'kategori' => $request->kategori,
+            'tanggal_perolehan' => $request->tanggal_perolehan,
+            'lokasi' => $request->lokasi,
+            'penanggung_jawab' => $request->penanggung_jawab,
+            'kondisi' => $request->kondisi,
+            'status' => $request->status,
+        ];
+
+        if ($request->hasFile('foto_barang')) {
+            if ($asset->foto_barang) {
+                Storage::disk('public')->delete($asset->foto_barang);
+            }
+            $data['foto_barang'] = $request->file('foto_barang')->store('aset/foto', 'public');
+        }
+
+        if ($request->hasFile('dokumen_pendukung')) {
+            if ($asset->dokumen_pendukung) {
+                Storage::disk('public')->delete($asset->dokumen_pendukung);
+            }
+            $data['dokumen_pendukung'] = $request->file('dokumen_pendukung')->store('aset/dokumen', 'public');
+        }
+
+        $asset->update($data);
+
+        return redirect()->route('asset.index', ['tab' => 'inventaris'])
+            ->with('success', 'Aset inventaris barang berhasil diperbarui.');
+    }
+
     public function createKendaraan()
     {
         if (!Auth::user()->isAdmin()) {
@@ -191,22 +249,74 @@ class AssetController extends Controller
             ->with('success', 'Kendaraan operasional berhasil ditambahkan ke dalam sistem.');
     }
 
+    public function editKendaraan(AsetKendaraan $kendaraan)
+    {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit kendaraan.');
+        }
+
+        $pegawaiList = Personel::orderBy('nama_lengkap', 'asc')->get();
+        return view('asset.edit-kendaraan', compact('kendaraan', 'pegawaiList'));
+    }
+
+    public function updateKendaraan(Request $request, AsetKendaraan $kendaraan)
+    {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit kendaraan.');
+        }
+
+        $request->validate([
+            'plat_nomor' => 'required|string|max:50|unique:aset_kendaraan,plat_nomor,' . $kendaraan->id,
+            'nama_kendaraan' => 'required|string|max:255',
+            'jenis' => 'required|string|max:100',
+            'pemegang_pengguna' => 'nullable|string|max:255',
+            'tahun' => 'required|string|max:10',
+            'status' => 'required|string|max:50',
+            'foto' => 'nullable|image|max:5120',
+            'dokumen' => 'nullable|file|max:10240',
+            'catatan' => 'nullable|string',
+        ]);
+
+        $data = [
+            'plat_nomor' => strtoupper($request->plat_nomor),
+            'nama_kendaraan' => $request->nama_kendaraan,
+            'jenis' => $request->jenis,
+            'pemegang_pengguna' => $request->pemegang_pengguna ?: '-',
+            'tahun' => $request->tahun,
+            'status' => $request->status,
+            'catatan' => $request->catatan,
+        ];
+
+        if ($request->hasFile('foto')) {
+            if ($kendaraan->foto) {
+                Storage::disk('public')->delete($kendaraan->foto);
+            }
+            $data['foto'] = $request->file('foto')->store('kendaraan/foto', 'public');
+        }
+
+        if ($request->hasFile('dokumen')) {
+            if ($kendaraan->dokumen) {
+                Storage::disk('public')->delete($kendaraan->dokumen);
+            }
+            $data['dokumen'] = $request->file('dokumen')->store('kendaraan/dokumen', 'public');
+        }
+
+        $kendaraan->update($data);
+
+        return redirect()->route('asset.index', ['tab' => 'kendaraan'])
+            ->with('success', 'Kendaraan operasional berhasil diperbarui.');
+    }
+
     public function destroyInventaris(AsetBarang $asset)
     {
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menghapus aset.');
         }
 
-        if ($asset->foto_barang) {
-            Storage::disk('public')->delete($asset->foto_barang);
-        }
-        if ($asset->dokumen_pendukung) {
-            Storage::disk('public')->delete($asset->dokumen_pendukung);
-        }
         $asset->delete();
 
         return redirect()->route('asset.index', ['tab' => 'inventaris'])
-            ->with('success', 'Aset inventaris berhasil dihapus.');
+            ->with('success', 'Aset inventaris berhasil dipindahkan ke Sampah (Trash).');
     }
 
     public function destroyKendaraan(AsetKendaraan $kendaraan)
@@ -215,73 +325,16 @@ class AssetController extends Controller
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menghapus kendaraan.');
         }
 
-        if ($kendaraan->foto) {
-            Storage::disk('public')->delete($kendaraan->foto);
-        }
-        if ($kendaraan->dokumen) {
-            Storage::disk('public')->delete($kendaraan->dokumen);
-        }
         $kendaraan->delete();
 
         return redirect()->route('asset.index', ['tab' => 'kendaraan'])
-            ->with('success', 'Kendaraan operasional berhasil dihapus.');
+            ->with('success', 'Kendaraan operasional berhasil dipindahkan ke Sampah (Trash).');
     }
 
     public function export(Request $request)
     {
-        $type = $request->query('type', 'inventaris');
-
-        if ($type === 'kendaraan') {
-            $data = AsetKendaraan::all();
-            $filename = 'daftar_kendaraan_operasional_' . date('Ymd_His') . '.csv';
-
-            $headers = [
-                'Content-Type' => 'text/csv; charset=utf-8',
-                'Content-Disposition' => "attachment; filename=\"$filename\"",
-            ];
-
-            return response()->stream(function () use ($data) {
-                $file = fopen('php://output', 'w');
-                fputcsv($file, ['No', 'Plat Nomor', 'Nama Kendaraan', 'Jenis', 'Pemegang / Pengguna', 'Tahun', 'Status']);
-                foreach ($data as $index => $row) {
-                    fputcsv($file, [
-                        $index + 1,
-                        $row->plat_nomor,
-                        $row->nama_kendaraan,
-                        $row->jenis,
-                        $row->pemegang_pengguna,
-                        $row->tahun,
-                        $row->status_label,
-                    ]);
-                }
-                fclose($file);
-            }, 200, $headers);
-        } else {
-            $data = AsetBarang::all();
-            $filename = 'daftar_inventaris_barang_' . date('Ymd_His') . '.csv';
-
-            $headers = [
-                'Content-Type' => 'text/csv; charset=utf-8',
-                'Content-Disposition' => "attachment; filename=\"$filename\"",
-            ];
-
-            return response()->stream(function () use ($data) {
-                $file = fopen('php://output', 'w');
-                fputcsv($file, ['Kode Aset', 'Nama Barang', 'Kategori', 'Lokasi', 'Penanggung Jawab', 'Kondisi', 'Status', 'Tanggal Perolehan']);
-                foreach ($data as $row) {
-                    fputcsv($file, [
-                        $row->kode_aset,
-                        $row->nama_barang,
-                        $row->kategori,
-                        $row->lokasi,
-                        $row->penanggung_jawab,
-                        ucfirst($row->kondisi),
-                        $row->status_label,
-                        $row->tanggal_perolehan ? $row->tanggal_perolehan->format('Y-m-d') : '-',
-                    ]);
-                }
-                fclose($file);
-            }, 200, $headers);
-        }
+        $type = $request->query('type', 'all');
+        $export = new \App\Exports\AssetExport($type);
+        return $export->download();
     }
 }
