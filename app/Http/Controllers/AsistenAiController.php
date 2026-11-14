@@ -38,7 +38,7 @@ class AsistenAiController extends Controller
         }
 
         $currentApiKey = config('services.gemini.api_key') ?: env('GEMINI_API_KEY') ?: session('gemini_api_key');
-        $currentModel = config('services.gemini.model') ?: env('GEMINI_MODEL', 'gemini-1.5-flash');
+        $currentModel = config('services.gemini.model') ?: env('GEMINI_MODEL', 'gemini-3.5-flash-lite');
 
         return view('asisten-ai.index', compact('messages', 'currentApiKey', 'currentModel'));
     }
@@ -131,7 +131,7 @@ class AsistenAiController extends Controller
         ]);
 
         $apiKey = trim($request->gemini_api_key ?? '');
-        $model = trim($request->gemini_model ?? '') ?: 'gemini-1.5-flash';
+        $model = trim($request->gemini_model ?? '') ?: 'gemini-3.5-flash-lite';
 
         // 1. Simpan permanen ke file .env
         $this->updateEnvFile('GEMINI_API_KEY', $apiKey);

@@ -16,7 +16,7 @@ class PengaturanController extends Controller
         $instansi = Instansi::first();
         $users = User::withCount('loginHistories')->orderBy('name')->paginate(10);
         $geminiApiKey = config('services.gemini.api_key') ?: env('GEMINI_API_KEY') ?: session('gemini_api_key');
-        $geminiModel = config('services.gemini.model') ?: env('GEMINI_MODEL', 'gemini-1.5-flash');
+        $geminiModel = config('services.gemini.model') ?: env('GEMINI_MODEL', 'gemini-3.5-flash-lite');
 
         return view('pengaturan.index', compact('instansi', 'users', 'geminiApiKey', 'geminiModel'));
     }

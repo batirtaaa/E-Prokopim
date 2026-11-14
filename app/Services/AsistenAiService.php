@@ -154,15 +154,15 @@ class AsistenAiService
 
     protected function callGeminiApi(string $prompt, string $apiKey, ?array $fileData = null): ?array
     {
+        $selectedModel = config('services.gemini.model', 'gemini-3.5-flash-lite');
         $modelsToTry = array_unique(array_filter([
-            config('services.gemini.model', 'gemini-3.6-flash'),
-            'gemini-3.6-flash',
+            $selectedModel,
+            'gemini-3.5-flash-lite',
+            'gemini-flash-lite-latest',
+            'gemini-4-hydrogen',
+            'gemini-3.8-flash',
+            'gemini-3.1-flash-lite',
             'gemini-3.1-flash-lite-preview',
-            'gemini-flash-latest',
-            'gemini-3.7-flash',
-            'gemini-3.5-flash',
-            'gemini-2.5-pro',
-            'gemini-3-flash-preview',
         ]));
 
         $systemInstruction = $this->buildSystemInstruction();
@@ -215,7 +215,7 @@ class AsistenAiService
             try {
                 $response = Http::withoutVerifying()
                     ->withHeaders(['Content-Type' => 'application/json'])
-                    ->timeout(18)
+                    ->timeout(20)
                     ->post($url, $payload);
 
                 if ($response->successful()) {

@@ -271,10 +271,11 @@
                         <div class="form-group" style="margin-bottom:20px;">
                             <label class="form-label-normal" style="font-weight:600;">Model Gemini Utama</label>
                             <select name="gemini_model" class="form-control">
-                                <option value="gemini-1.5-flash" {{ ($geminiModel ?? '') == 'gemini-1.5-flash' ? 'selected' : '' }}>Gemini 1.5 Flash (Sangat Cepat &amp; Direkomendasikan)</option>
-                                <option value="gemini-2.0-flash" {{ ($geminiModel ?? '') == 'gemini-2.0-flash' ? 'selected' : '' }}>Gemini 2.0 Flash (Generasi Terbaru)</option>
-                                <option value="gemini-1.5-pro" {{ ($geminiModel ?? '') == 'gemini-1.5-pro' ? 'selected' : '' }}>Gemini 1.5 Pro (Penalaran Kompleks)</option>
-                                <option value="gemini-3.1-flash-lite-preview" {{ ($geminiModel ?? '') == 'gemini-3.1-flash-lite-preview' ? 'selected' : '' }}>Gemini 3.1 Flash Lite (Preview)</option>
+                                <option value="gemini-3.5-flash-lite" {{ ($geminiModel ?? '') == 'gemini-3.5-flash-lite' ? 'selected' : '' }}>Gemini 3.5 Flash-Lite (Jawaban Instan &amp; Sangat Cepat)</option>
+                                <option value="gemini-4-hydrogen" {{ ($geminiModel ?? '') == 'gemini-4-hydrogen' ? 'selected' : '' }}>Gemini 4 Hydrogen (Bantuan Sehari-hari &amp; Penalaran Tinggi)</option>
+                                <option value="gemini-flash-lite-latest" {{ ($geminiModel ?? '') == 'gemini-flash-lite-latest' ? 'selected' : '' }}>Gemini Flash-Lite Latest (Generasi Terbaru Selalu Terupdate)</option>
+                                <option value="gemini-3.8-flash" {{ ($geminiModel ?? '') == 'gemini-3.8-flash' ? 'selected' : '' }}>Gemini 3.8 Flash (Multimodal Cerdas)</option>
+                                <option value="gemini-3.1-flash-lite" {{ ($geminiModel ?? '') == 'gemini-3.1-flash-lite' ? 'selected' : '' }}>Gemini 3.1 Flash Lite (Stabil &amp; Efisien)</option>
                             </select>
                         </div>
 

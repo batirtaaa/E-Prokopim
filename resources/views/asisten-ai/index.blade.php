@@ -771,10 +771,11 @@
                 <div style="margin-bottom:12px;">
                     <label style="font-size:12px; font-weight:600; color:#334155; margin-bottom:4px; display:block;">Model Gemini</label>
                     <select name="gemini_model" class="ai-modal-input" style="background:#fff;">
-                        <option value="gemini-1.5-flash" {{ ($currentModel ?? '') == 'gemini-1.5-flash' ? 'selected' : '' }}>Gemini 1.5 Flash (Sangat Cepat &amp; Rekomendasi)</option>
-                        <option value="gemini-2.0-flash" {{ ($currentModel ?? '') == 'gemini-2.0-flash' ? 'selected' : '' }}>Gemini 2.0 Flash (Generasi Terbaru)</option>
-                        <option value="gemini-1.5-pro" {{ ($currentModel ?? '') == 'gemini-1.5-pro' ? 'selected' : '' }}>Gemini 1.5 Pro (Penalaran Kompleks)</option>
-                        <option value="gemini-3.1-flash-lite-preview" {{ ($currentModel ?? '') == 'gemini-3.1-flash-lite-preview' ? 'selected' : '' }}>Gemini 3.1 Flash Lite (Preview)</option>
+                        <option value="gemini-3.5-flash-lite" {{ ($currentModel ?? '') == 'gemini-3.5-flash-lite' ? 'selected' : '' }}>Gemini 3.5 Flash-Lite (Jawaban Instan &amp; Sangat Cepat)</option>
+                        <option value="gemini-4-hydrogen" {{ ($currentModel ?? '') == 'gemini-4-hydrogen' ? 'selected' : '' }}>Gemini 4 Hydrogen (Bantuan Sehari-hari &amp; Penalaran Tinggi)</option>
+                        <option value="gemini-flash-lite-latest" {{ ($currentModel ?? '') == 'gemini-flash-lite-latest' ? 'selected' : '' }}>Gemini Flash-Lite Latest (Generasi Terbaru Selalu Terupdate)</option>
+                        <option value="gemini-3.8-flash" {{ ($currentModel ?? '') == 'gemini-3.8-flash' ? 'selected' : '' }}>Gemini 3.8 Flash (Multimodal Cerdas)</option>
+                        <option value="gemini-3.1-flash-lite" {{ ($currentModel ?? '') == 'gemini-3.1-flash-lite' ? 'selected' : '' }}>Gemini 3.1 Flash Lite (Stabil &amp; Efisien)</option>
                     </select>
                 </div>
 
