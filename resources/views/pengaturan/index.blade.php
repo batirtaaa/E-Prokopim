@@ -126,7 +126,7 @@
                                     </div>
                                 </td>
                                 <td class="text-muted">{{ $user->nip ?? '—' }}</td>
-                                <td><span class="badge badge-blue">{{ $user->getRoleLabel() }}</span></td>
+                                <td><span class="badge {{ $user->role === 'super_admin' ? 'badge-purple' : 'badge-blue' }}">{{ $user->getRoleLabel() }}</span></td>
                                 <td>
                                     <span class="badge {{ $user->is_active ? 'badge-green' : 'badge-gray' }}">
                                         {{ $user->is_active ? 'Aktif' : 'Nonaktif' }}
@@ -394,8 +394,7 @@
                     <div class="form-group">
                         <label class="form-label">Role *</label>
                         <select name="role" class="form-control" required>
-                            <option value="operator">Operator</option>
-                            <option value="admin">Admin</option>
+                            <option value="user">User (Staf Operasional)</option>
                             <option value="super_admin">Super Admin</option>
                         </select>
                     </div>
@@ -464,8 +463,7 @@
                     <div class="form-group">
                         <label class="form-label">Role *</label>
                         <select name="role" id="edit_user_role" class="form-control" required>
-                            <option value="operator">Operator</option>
-                            <option value="admin">Admin</option>
+                            <option value="user">User (Staf Operasional)</option>
                             <option value="super_admin">Super Admin</option>
                         </select>
                     </div>
@@ -586,7 +584,7 @@ function openEditUserModal(user) {
     document.getElementById('edit_user_username').value = user.username || '';
     document.getElementById('edit_user_email').value = user.email || '';
     document.getElementById('edit_user_phone').value = user.phone || '';
-    document.getElementById('edit_user_role').value = user.role || 'operator';
+    document.getElementById('edit_user_role').value = (user.role === 'super_admin') ? 'super_admin' : 'user';
     document.getElementById('edit_user_jabatan').value = user.jabatan || '';
 
     modal.classList.add('active');

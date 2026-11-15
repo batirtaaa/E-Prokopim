@@ -59,7 +59,7 @@ class PengaturanController extends Controller
             'email' => 'required|email|unique:users',
             'phone' => 'nullable|string|max:20',
             'jabatan' => 'nullable|string|max:255',
-            'role' => 'required|in:super_admin,admin,operator,personel',
+            'role' => 'required|in:super_admin,user,admin,operator,personel',
             'password' => 'required|min:8|confirmed',
         ]);
 
@@ -83,7 +83,7 @@ class PengaturanController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'nullable|string|max:20',
             'jabatan' => 'nullable|string|max:255',
-            'role' => 'required|in:super_admin,admin,operator,personel',
+            'role' => 'required|in:super_admin,user,admin,operator,personel',
             'password' => 'nullable|min:8|confirmed',
         ]);
 

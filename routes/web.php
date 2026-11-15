@@ -216,13 +216,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
     Route::delete('/laporan/{laporan}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
 
-    // Pengaturan
-    Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
-    Route::put('/pengaturan/instansi', [PengaturanController::class, 'updateInstansi'])->name('pengaturan.instansi.update');
-    Route::post('/pengaturan/users', [PengaturanController::class, 'storeUser'])->name('pengaturan.users.store');
-    Route::put('/pengaturan/users/{user}', [PengaturanController::class, 'updateUser'])->name('pengaturan.users.update');
-    Route::delete('/pengaturan/users/{user}', [PengaturanController::class, 'destroyUser'])->name('pengaturan.users.destroy');
-    Route::patch('/pengaturan/users/{user}/toggle-status', [PengaturanController::class, 'toggleUserStatus'])->name('pengaturan.users.toggle-status');
+    // Pengaturan (Khusus Super Admin)
+    Route::middleware('super_admin')->group(function () {
+        Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
+        Route::put('/pengaturan/instansi', [PengaturanController::class, 'updateInstansi'])->name('pengaturan.instansi.update');
+        Route::post('/pengaturan/users', [PengaturanController::class, 'storeUser'])->name('pengaturan.users.store');
+        Route::put('/pengaturan/users/{user}', [PengaturanController::class, 'updateUser'])->name('pengaturan.users.update');
+        Route::delete('/pengaturan/users/{user}', [PengaturanController::class, 'destroyUser'])->name('pengaturan.users.destroy');
+        Route::patch('/pengaturan/users/{user}/toggle-status', [PengaturanController::class, 'toggleUserStatus'])->name('pengaturan.users.toggle-status');
+    });
 
     // Profil Admin
     Route::get('/profil-admin', [ProfilAdminController::class, 'index'])->name('profil-admin.index');

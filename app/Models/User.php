@@ -50,17 +50,23 @@ class User extends Authenticatable
     {
         return match($this->role) {
             'super_admin' => 'Super Admin',
-            'admin' => 'Admin',
-            'operator' => 'User',
-            'user' => 'User',
-            'personel' => 'Personel',
             default => 'User',
         };
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
     }
 
     public function isAdmin(): bool
     {
         return in_array($this->role, ['super_admin', 'admin']);
+    }
+
+    public function isUser(): bool
+    {
+        return $this->role !== 'super_admin';
     }
 
     public function getPhotoUrlAttribute(): string
