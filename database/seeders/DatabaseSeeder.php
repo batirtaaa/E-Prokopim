@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         // 3 User Akun (Role: user, Password: user123)
         $op1 = User::create([
             'name' => 'Barka Tirta',
-            'nip' => '19950101202001 1 001',
+            'nip' => null,
             'username' => 'batirtaaa',
             'email' => 'batirtaaa@bandung.go.id',
             'phone' => '081234567801',
@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
 
         $op2 = User::create([
             'name' => 'Nanda Tutep',
-            'nip' => '19960202202002 2 002',
+            'nip' => null,
             'username' => 'nandakeju',
             'email' => 'nandakeju@bandung.go.id',
             'phone' => '081234567802',
@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
 
         $op3 = User::create([
             'name' => 'Narisa Izzut',
-            'nip' => '19970303202003 2 003',
+            'nip' => null,
             'username' => 'narsky',
             'email' => 'narsky@bandung.go.id',
             'phone' => '081234567803',
