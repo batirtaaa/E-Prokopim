@@ -298,6 +298,46 @@
     white-space: nowrap;
 }
 
+html.dark-mode .ar-date-text,
+html.dark-mode .ar-uploader-text {
+    color: #cbd5e1 !important;
+}
+html.dark-mode .ar-pagination-footer {
+    border-top-color: #1e3352 !important;
+    color: #94a3b8 !important;
+}
+html.dark-mode .ar-page-btn {
+    background-color: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .ar-page-btn:hover {
+    background-color: #1e3352 !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+html.dark-mode .ar-page-btn.active {
+    background-color: #2563eb !important;
+    border-color: #2563eb !important;
+    color: #ffffff !important;
+}
+html.dark-mode .ar-page-btn.disabled {
+    background-color: #0f1c30 !important;
+    border-color: #1e3352 !important;
+    color: #64748b !important;
+    opacity: 0.45 !important;
+}
+html.dark-mode a[title="Edit Arsip"] {
+    background-color: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode a[title="Edit Arsip"]:hover {
+    background-color: #1e3352 !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
 /* Pagination Footer */
 .ar-pagination-footer {
     display: flex;

@@ -658,6 +658,17 @@ html.dark-mode .sb-page-btn:hover {
     border-color: #3b82f6 !important;
     color: #ffffff !important;
 }
+html.dark-mode .sb-page-btn.active {
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+    color: #ffffff !important;
+}
+html.dark-mode .sb-page-btn.disabled {
+    background: #0f1c30 !important;
+    border-color: #1e3352 !important;
+    color: #64748b !important;
+    opacity: 0.45 !important;
+}
 html.dark-mode .modal-card {
     background: #131f33 !important;
     border: 1px solid #1e3352 !important;

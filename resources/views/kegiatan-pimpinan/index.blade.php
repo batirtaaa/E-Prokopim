@@ -365,6 +365,28 @@
 .kg-page-btn:hover { border-color: #2563eb; color: #2563eb; }
 .kg-page-btn.active { background: #1e3a5f; border-color: #1e3a5f; color: white; font-weight: 600; }
 .kg-page-btn.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+html.dark-mode .kg-page-btn {
+    background: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .kg-page-btn:hover {
+    background: #1e3352 !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+html.dark-mode .kg-page-btn.active {
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+    color: #ffffff !important;
+}
+html.dark-mode .kg-page-btn.disabled {
+    background: #0f1c30 !important;
+    border-color: #1e3352 !important;
+    color: #64748b !important;
+    opacity: 0.45 !important;
+}
 </style>
 @endpush
 

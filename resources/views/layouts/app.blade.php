@@ -1468,19 +1468,82 @@
             color: #64748b !important;
         }
 
-        /* 7. Pagination Wrappers & Item Info */
+        /* 7. Universal Pagination System */
         html.dark-mode .pagination-wrapper,
         html.dark-mode [class*="-pagination-wrap"],
         html.dark-mode [class*="-pagination-row"],
+        html.dark-mode [class*="-pagination-footer"],
+        html.dark-mode [class*="-pagination"],
         html.dark-mode .pagination {
             color: #94a3b8 !important;
             border-color: #1e3352 !important;
         }
         html.dark-mode .pagination a,
-        html.dark-mode .pagination span {
+        html.dark-mode .pagination span,
+        html.dark-mode .pagination-wrapper a,
+        html.dark-mode .pagination-wrapper span,
+        html.dark-mode [class*="-page-btn"],
+        html.dark-mode [class*="-p-btn"],
+        html.dark-mode .page-link,
+        html.dark-mode .ar-page-btn,
+        html.dark-mode .ast-p-btn,
+        html.dark-mode .pgw-p-btn,
+        html.dark-mode .kg-page-btn,
+        html.dark-mode .ms-page-btn,
+        html.dark-mode .pn-page-btn,
+        html.dark-mode .sb-page-btn {
             background-color: #17263d !important;
             border-color: #1e3352 !important;
             color: #cbd5e1 !important;
+        }
+        html.dark-mode .pagination a:hover,
+        html.dark-mode .pagination-wrapper a:hover,
+        html.dark-mode [class*="-page-btn"]:hover:not(.active):not(.disabled),
+        html.dark-mode [class*="-p-btn"]:hover:not(.active):not(.disabled),
+        html.dark-mode .page-link:hover,
+        html.dark-mode .ar-page-btn:hover:not(.active):not(.disabled),
+        html.dark-mode .ast-p-btn:hover:not(.active):not(.disabled),
+        html.dark-mode .pgw-p-btn:hover:not(.active):not(.disabled),
+        html.dark-mode .kg-page-btn:hover:not(.active):not(.disabled),
+        html.dark-mode .ms-page-btn:hover:not(.active):not(.disabled),
+        html.dark-mode .pn-page-btn:hover:not(.active):not(.disabled),
+        html.dark-mode .sb-page-btn:hover:not(.active):not(.disabled) {
+            background-color: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .pagination .active a,
+        html.dark-mode .pagination .active span,
+        html.dark-mode .pagination-wrapper .active,
+        html.dark-mode [class*="-page-btn"].active,
+        html.dark-mode [class*="-p-btn"].active,
+        html.dark-mode .ar-page-btn.active,
+        html.dark-mode .ast-p-btn.active,
+        html.dark-mode .pgw-p-btn.active,
+        html.dark-mode .kg-page-btn.active,
+        html.dark-mode .ms-page-btn.active,
+        html.dark-mode .pn-page-btn.active,
+        html.dark-mode .sb-page-btn.active {
+            background-color: #2563eb !important;
+            border-color: #2563eb !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        html.dark-mode .pagination .disabled a,
+        html.dark-mode .pagination .disabled span,
+        html.dark-mode [class*="-page-btn"].disabled,
+        html.dark-mode [class*="-p-btn"].disabled,
+        html.dark-mode .ar-page-btn.disabled,
+        html.dark-mode .ast-p-btn.disabled,
+        html.dark-mode .pgw-p-btn.disabled,
+        html.dark-mode .kg-page-btn.disabled,
+        html.dark-mode .ms-page-btn.disabled,
+        html.dark-mode .pn-page-btn.disabled,
+        html.dark-mode .sb-page-btn.disabled {
+            background-color: #0f1c30 !important;
+            border-color: #1e3352 !important;
+            color: #64748b !important;
+            opacity: 0.45 !important;
         }
 
         /* 8. Empty States across all modules */
@@ -2788,6 +2851,117 @@
         html.dark-mode .ar-doc-nomor {
             color: #cbd5e1 !important;
         }
+        html.dark-mode .ar-date-text,
+        html.dark-mode .ar-uploader-text,
+        html.dark-mode [class*="-uploader-text"],
+        html.dark-mode [class*="-uploader"] {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ar-pagination-footer,
+        html.dark-mode [class*="-pagination-footer"] {
+            border-top-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ar-page-btn,
+        html.dark-mode .ast-p-btn,
+        html.dark-mode .pgw-p-btn,
+        html.dark-mode [class*="-p-btn"],
+        html.dark-mode [class*="-page-btn"] {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ar-page-btn:hover,
+        html.dark-mode .ast-p-btn:hover,
+        html.dark-mode .pgw-p-btn:hover,
+        html.dark-mode [class*="-p-btn"]:hover:not(.active):not(.disabled),
+        html.dark-mode [class*="-page-btn"]:hover:not(.active):not(.disabled) {
+            background-color: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .ar-page-btn.active,
+        html.dark-mode .ast-p-btn.active,
+        html.dark-mode .pgw-p-btn.active,
+        html.dark-mode [class*="-p-btn"].active,
+        html.dark-mode [class*="-page-btn"].active {
+            background-color: #2563eb !important;
+            border-color: #2563eb !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        html.dark-mode .ar-page-btn.disabled,
+        html.dark-mode .ast-p-btn.disabled,
+        html.dark-mode .pgw-p-btn.disabled,
+        html.dark-mode [class*="-p-btn"].disabled,
+        html.dark-mode [class*="-page-btn"].disabled {
+            background-color: #0f1c30 !important;
+            border-color: #1e3352 !important;
+            color: #64748b !important;
+            opacity: 0.45 !important;
+        }
+        html.dark-mode a[title="Edit Arsip"],
+        html.dark-mode td a[style*="background:#ffffff"],
+        html.dark-mode td a[style*="background: #ffffff"],
+        html.dark-mode td a[style*="background:white"],
+        html.dark-mode td a[style*="background: white"] {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode a[title="Edit Arsip"]:hover,
+        html.dark-mode td a[style*="background:#ffffff"]:hover,
+        html.dark-mode td a[style*="background: #ffffff"]:hover,
+        html.dark-mode td a[style*="background:white"]:hover,
+        html.dark-mode td a[style*="background: white"]:hover {
+            background-color: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .ar-modal-card,
+        html.dark-mode .ar-doc-viewer-container {
+            background-color: #131f33 !important;
+            border: 1px solid #1e3352 !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+        }
+        html.dark-mode .ar-modal-header,
+        html.dark-mode .ar-viewer-header {
+            background-color: #131f33 !important;
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .ar-modal-title,
+        html.dark-mode .ar-viewer-title,
+        html.dark-mode #arViewTitle {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ar-modal-sub,
+        html.dark-mode .ar-viewer-meta {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ar-modal-footer {
+            background-color: #0f1c30 !important;
+            border-top-color: #1e3352 !important;
+        }
+        html.dark-mode .ar-btn-cancel {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ar-btn-cancel:hover {
+            background-color: #1e3352 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .ar-form-lbl {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ar-form-input,
+        html.dark-mode .ar-form-select,
+        html.dark-mode .ar-form-textarea {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+            color-scheme: dark !important;
+        }
 
         /* ── Surat Keluar & Surat Masuk (Keuangan) Dark Mode ── */
         html.dark-mode .page-header-left h1 {
@@ -2813,11 +2987,18 @@
             color-scheme: dark !important;
         }
         html.dark-mode .td-nomor,
-        html.dark-mode .td-perihal {
+        html.dark-mode .td-perihal,
+        html.dark-mode .td-pengirim,
+        html.dark-mode .sb-perihal-main,
+        html.dark-mode .suc-title,
+        html.dark-mode .suc-field-value {
             color: #f8fafc !important;
         }
         html.dark-mode .td-tujuan,
-        html.dark-mode .td-date {
+        html.dark-mode .td-date,
+        html.dark-mode .td-disposisi,
+        html.dark-mode .td-keterangan,
+        html.dark-mode .sb-nomor {
             color: #cbd5e1 !important;
         }
 

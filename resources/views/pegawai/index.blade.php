@@ -472,6 +472,38 @@ html.dark-mode .pgw-btn-filter:hover svg {
     cursor: not-allowed;
     pointer-events: none;
 }
+
+html.dark-mode .pgw-name-text {
+    color: #f8fafc !important;
+}
+html.dark-mode .pgw-email-text {
+    color: #94a3b8 !important;
+}
+html.dark-mode .pgw-pagination-footer {
+    border-top-color: #1e3352 !important;
+    color: #94a3b8 !important;
+}
+html.dark-mode .pgw-p-btn {
+    background-color: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .pgw-p-btn:hover {
+    background-color: #1e3352 !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+html.dark-mode .pgw-p-btn.active {
+    background-color: #2563eb !important;
+    border-color: #2563eb !important;
+    color: #ffffff !important;
+}
+html.dark-mode .pgw-p-btn.disabled {
+    background-color: #0f1c30 !important;
+    border-color: #1e3352 !important;
+    color: #64748b !important;
+    opacity: 0.45 !important;
+}
 </style>
 @endpush
 
