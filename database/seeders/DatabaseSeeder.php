@@ -15,85 +15,59 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Admin User
+        // Admin User (Super Admin)
         $admin = User::create([
-            'name' => 'Budi Santoso, S.STP., M.Si.',
-            'nip' => '19850720200501 1 003',
+            'name' => 'B.N.N',
+            'nip' => '24434',
             'username' => 'admin',
-            'email' => 'admin.prokopim@bandung.go.id',
-            'phone' => '0812-3456-7890',
+            'email' => 'admin.e-prokopim@bandung.go.id',
+            'phone' => '081010101010',
             'jabatan' => 'Administrator Prokopim',
             'role' => 'super_admin',
             'password' => Hash::make('admin123'),
             'is_active' => true,
         ]);
 
-        // Operator Users
+        // 3 User Akun (Role: user, Password: user123)
         $op1 = User::create([
-            'name' => 'Siti Nurhayati',
-            'nip' => '19900101201001 2 001',
-            'username' => 'siti.n',
-            'email' => 'siti.n@bandung.go.id',
-            'phone' => '0813-1111-2222',
-            'jabatan' => 'Protokol / MC',
-            'role' => 'operator',
-            'password' => Hash::make('password123'),
+            'name' => 'Barka Tirta',
+            'nip' => '19950101202001 1 001',
+            'username' => 'batirtaaa',
+            'email' => 'batirtaaa@bandung.go.id',
+            'phone' => '081234567801',
+            'jabatan' => 'Staf Protokol & MC',
+            'role' => 'user',
+            'password' => Hash::make('user123'),
+            'is_active' => true,
         ]);
 
         $op2 = User::create([
-            'name' => 'Budi Kurniawan',
-            'nip' => '19880615201501 1 002',
-            'username' => 'budi.k',
-            'email' => 'budi.k@bandung.go.id',
-            'phone' => '0814-2222-3333',
-            'jabatan' => 'Fotografer',
-            'role' => 'operator',
-            'password' => Hash::make('password123'),
+            'name' => 'Nanda Tutep',
+            'nip' => '19960202202002 2 002',
+            'username' => 'nandakeju',
+            'email' => 'nandakeju@bandung.go.id',
+            'phone' => '081234567802',
+            'jabatan' => 'Staf Dokumentasi & Fotografer',
+            'role' => 'user',
+            'password' => Hash::make('user123'),
+            'is_active' => true,
         ]);
 
         $op3 = User::create([
-            'name' => 'Fajar Nugraha',
-            'nip' => '19921020201601 1 003',
-            'username' => 'fajar.n',
-            'email' => 'fajar.n@bandung.go.id',
-            'phone' => '0815-3333-4444',
-            'jabatan' => 'Videografer',
-            'role' => 'operator',
-            'password' => Hash::make('password123'),
+            'name' => 'Narisa Izzut',
+            'nip' => '19970303202003 2 003',
+            'username' => 'narsky',
+            'email' => 'narsky@bandung.go.id',
+            'phone' => '081234567803',
+            'jabatan' => 'Staf Komunikasi Pimpinan & Notulis',
+            'role' => 'user',
+            'password' => Hash::make('user123'),
+            'is_active' => true,
         ]);
 
-        $op4 = User::create([
-            'name' => 'Dina Wulandari',
-            'nip' => '19951215202001 2 004',
-            'username' => 'dina.w',
-            'email' => 'dina.w@bandung.go.id',
-            'phone' => '0816-4444-5555',
-            'jabatan' => 'Notulis',
-            'role' => 'operator',
-            'password' => Hash::make('password123'),
-        ]);
-
-        $op5 = User::create([
-            'name' => 'Rizky Ramadhan',
-            'nip' => '19940315202001 1 005',
-            'username' => 'rizky.r',
-            'email' => 'rizky.r@bandung.go.id',
-            'phone' => '0817-5555-6666',
-            'jabatan' => 'Fotografer',
-            'role' => 'operator',
-            'password' => Hash::make('password123'),
-        ]);
-
-        $op6 = User::create([
-            'name' => 'Andi Pratama',
-            'nip' => '19910822201801 1 006',
-            'username' => 'andi.p',
-            'email' => 'andi.p@bandung.go.id',
-            'phone' => '0818-6666-7777',
-            'jabatan' => 'Protokol',
-            'role' => 'operator',
-            'password' => Hash::make('password123'),
-        ]);
+        $op4 = $op1;
+        $op5 = $op2;
+        $op6 = $op3;
 
         // Instansi
         Instansi::create([
