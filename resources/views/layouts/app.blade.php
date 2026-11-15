@@ -1349,6 +1349,267 @@
             border-color: #1e3352 !important;
         }
 
+        /* ── Media Sosial (ms-) Dark Mode ── */
+        html.dark-mode .ms-toolbar-wrap {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ms-tabs { gap: 8px; }
+        html.dark-mode .ms-tab {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ms-tab:hover { color: #f8fafc !important; }
+        html.dark-mode .ms-tab.active {
+            color: #38bdf8 !important;
+            border-bottom-color: #38bdf8 !important;
+        }
+        html.dark-mode .ms-search-input {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ms-btn-filter {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ms-btn-filter:hover {
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .ms-card,
+        html.dark-mode .folder-card,
+        html.dark-mode .file-card,
+        html.dark-mode .file-body {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .folder-card:hover,
+        html.dark-mode .file-card:hover {
+            border-color: #3b82f6 !important;
+        }
+        html.dark-mode .folder-name,
+        html.dark-mode .file-title {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .folder-count,
+        html.dark-mode .file-desc {
+            color: #94a3b8 !important;
+            background: #0f1c30 !important;
+        }
+        html.dark-mode .folder-cal-year,
+        html.dark-mode .ms-card-title {
+            color: #f8fafc !important;
+            background: #131f33 !important;
+        }
+        html.dark-mode .ms-card-desc,
+        html.dark-mode .ms-date {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ms-card-footer {
+            border-top-color: #1e3352 !important;
+        }
+        html.dark-mode .dropdown-menu-card {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6) !important;
+        }
+        html.dark-mode .dropdown-menu-item {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .dropdown-menu-item:hover {
+            background: #17263d !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .dropdown-menu-item.danger { color: #f87171 !important; }
+        html.dark-mode .dropdown-menu-item.danger:hover { background: #2d1515 !important; }
+        html.dark-mode .ms-page-btn,
+        html.dark-mode .ms-pagination-wrap .ms-page-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ms-page-btn:hover { border-color: #3b82f6 !important; color: #ffffff !important; }
+        html.dark-mode .ms-page-btn.active { background: #2563eb !important; border-color: #2563eb !important; color: #fff !important; }
+        html.dark-mode .ms-card-add,
+        html.dark-mode .folder-card-add {
+            background: #0f1c30 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ms-add-title { color: #f8fafc !important; }
+        html.dark-mode .ms-add-sub { color: #94a3b8 !important; }
+        html.dark-mode .ms-add-icon-wrap { background: #17263d !important; color: #60a5fa !important; }
+        /* Folder search bar (folder.blade.php) */
+        html.dark-mode .folder-search-bar {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .folder-search-input {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .folder-filter-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .folder-filter-btn:hover { border-color: #3b82f6 !important; color: #fff !important; }
+        html.dark-mode .kat-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .kat-btn:hover { border-color: #3b82f6 !important; }
+        html.dark-mode .folder-header-cal-year { background: #131f33 !important; color: #f8fafc !important; }
+        html.dark-mode .folder-header-info h1 { color: #f8fafc !important; }
+        html.dark-mode .folder-header-info p { color: #94a3b8 !important; }
+        html.dark-mode .btn-back {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .btn-back:hover { border-color: #3b82f6 !important; color: #fff !important; }
+        html.dark-mode .folder-breadcrumb { color: #64748b !important; }
+        html.dark-mode .folder-breadcrumb a { color: #60a5fa !important; }
+        html.dark-mode .folder-breadcrumb .current { color: #f8fafc !important; }
+        html.dark-mode .file-thumb { background: #0f1c30 !important; border-color: #1e3352 !important; }
+        html.dark-mode .file-thumb-empty { background: linear-gradient(135deg, #17263d 0%, #0f1c30 100%) !important; }
+        html.dark-mode .file-date-badge {
+            background: rgba(19,31,51,0.92) !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .file-footer { border-top-color: #1e3352 !important; }
+
+        /* ── Analisis (an-) Dark Mode ── */
+        html.dark-mode .an-toolbar-card {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .an-filter-card {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .an-search-input {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .an-select {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .an-table-card {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .an-table thead th {
+            background: #0f1c30 !important;
+            color: #94a3b8 !important;
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .an-table tbody td {
+            border-bottom-color: #1a2a44 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .an-table tbody tr:hover { background: #17263d !important; }
+        html.dark-mode .an-judul-link { color: #f8fafc !important; }
+        html.dark-mode .an-judul-link:hover { color: #60a5fa !important; }
+        html.dark-mode .an-source-tag { background: #0f1c30 !important; color: #94a3b8 !important; }
+        html.dark-mode .an-date-badge { color: #94a3b8 !important; }
+        html.dark-mode .an-preview-text { color: #94a3b8 !important; }
+        html.dark-mode .an-icon-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .an-icon-btn:hover { background: #1e3352 !important; color: #f8fafc !important; }
+        html.dark-mode .an-icon-btn.delete:hover { background: #2d1515 !important; border-color: #7f1d1d !important; color: #f87171 !important; }
+        html.dark-mode .an-year-select {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .an-breadcrumb a { color: #60a5fa !important; }
+        html.dark-mode .an-breadcrumb span { color: #64748b !important; }
+        html.dark-mode .folder-count-badge.folder-count-zero { background: #0f1c30 !important; color: #64748b !important; }
+        html.dark-mode .folder-count-badge.folder-count-has { background: #172e54 !important; color: #93c5fd !important; border-color: #1e3a5f !important; }
+        html.dark-mode .folder-name { color: #f8fafc !important; }
+        html.dark-mode .output-info-grid {
+            background: #0f1c30 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .info-field-label { color: #94a3b8 !important; }
+        html.dark-mode .info-field-val { color: #f8fafc !important; }
+        html.dark-mode .output-section-card {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .output-section-header.analisis-hdr { background: #0f1c30 !important; color: #f8fafc !important; }
+        html.dark-mode .output-section-body { color: #cbd5e1 !important; }
+        html.dark-mode .modal-container,
+        html.dark-mode .modal-backdrop { background: rgba(11,19,32,0.8) !important; }
+        html.dark-mode .modal-container {
+            background: #131f33 !important;
+            border: 1px solid #1e3352 !important;
+        }
+        html.dark-mode .modal-header {
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .modal-footer {
+            background: #0f1c30 !important;
+            border-top-color: #1e3352 !important;
+        }
+        html.dark-mode .empty-state { background: #0f1c30 !important; border-color: #1e3352 !important; }
+        html.dark-mode .empty-state-icon { background: #17263d !important; }
+        html.dark-mode .empty-state-title { color: #f8fafc !important; }
+        html.dark-mode .empty-state-text { color: #94a3b8 !important; }
+
+        /* ── Galeri Arsip (ga-) Dark Mode Additional ── */
+        html.dark-mode .ga-toolbar-wrap {
+            border-bottom-color: #1e3352 !important;
+            background: transparent !important;
+        }
+        html.dark-mode .ga-btn-action {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ga-btn-action:hover { background: #1e3352 !important; color: #fff !important; border-color: #3b82f6 !important; }
+
+        /* ── Surat Keluar / Arsip Surat stat cards ── */
+        html.dark-mode .stat-value { color: #f8fafc !important; }
+        html.dark-mode .stat-label { color: #94a3b8 !important; }
+        html.dark-mode .stat-sub { color: #64748b !important; }
+        html.dark-mode .stat-icon-wrap { opacity: 0.9; }
+        html.dark-mode .filter-card,
+        html.dark-mode .table-card {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .search-input {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .btn-filter-submit {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .btn-filter-submit:hover { background: #1e3352 !important; color: #fff !important; }
+
+        /* ── Asset Dark Mode (ast-) ── */
+        html.dark-mode .ast-tabs-bar {
+            background: #131f33 !important;
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .ast-tab-link { color: #94a3b8 !important; }
+        html.dark-mode .ast-tab-link:hover { color: #f8fafc !important; }
+        html.dark-mode .ast-tab-link.active { color: #38bdf8 !important; border-bottom-color: #38bdf8 !important; }
+        html.dark-mode .ast-toolbar { border-bottom-color: #1e3352 !important; }
+
         /* ── Universal Light Background Segments Nullification ── */
         html.dark-mode [style*="background:#fafafa"],
         html.dark-mode [style*="background: #fafafa"],
