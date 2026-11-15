@@ -1566,10 +1566,18 @@
         html.dark-mode .empty-state-title { color: #f8fafc !important; }
         html.dark-mode .empty-state-text { color: #94a3b8 !important; }
 
-        /* ── Galeri Arsip (ga-) Dark Mode Additional ── */
+        /* ── Galeri Arsip (ga-) Full Dark Mode ── */
         html.dark-mode .ga-toolbar-wrap {
             border-bottom-color: #1e3352 !important;
             background: transparent !important;
+        }
+        html.dark-mode .ga-tabs { border-color: #1e3352 !important; }
+        html.dark-mode .ga-tab { color: #94a3b8 !important; }
+        html.dark-mode .ga-tab:hover { color: #f8fafc !important; }
+        html.dark-mode .ga-tab.active {
+            color: #38bdf8 !important;
+            border-bottom-color: #38bdf8 !important;
+            font-weight: 600 !important;
         }
         html.dark-mode .ga-btn-action {
             background: #17263d !important;
@@ -1577,6 +1585,301 @@
             color: #94a3b8 !important;
         }
         html.dark-mode .ga-btn-action:hover { background: #1e3352 !important; color: #fff !important; border-color: #3b82f6 !important; }
+        html.dark-mode .ga-btn-select {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ga-btn-select:hover { border-color: #ef4444 !important; color: #f87171 !important; background: #2d1515 !important; }
+        html.dark-mode .ga-btn-select.active { background: #2d1515 !important; border-color: #ef4444 !important; color: #f87171 !important; }
+        
+        /* Galeri Arsip Toolbar Filters */
+        html.dark-mode .ga-search-inp {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ga-search-inp:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.2) !important;
+        }
+        html.dark-mode .ga-search-icon,
+        html.dark-mode .ga-search-clear {
+            color: #64748b !important;
+        }
+        html.dark-mode .ga-search-clear:hover { color: #f87171 !important; }
+
+        html.dark-mode .ga-date-filter-wrap,
+        html.dark-mode .ga-toolbar-right div[style*="background:white"],
+        html.dark-mode .ga-toolbar-right div[style*="background: white"],
+        html.dark-mode .ga-toolbar-right div[style*="background:#fff"] {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ga-date-filter-wrap span,
+        html.dark-mode .ga-date-lbl,
+        html.dark-mode .ga-toolbar-right div[style*="background:white"] span,
+        html.dark-mode .ga-toolbar-right div[style*="background: white"] span {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ga-date-filter-wrap input[type="date"],
+        html.dark-mode .ga-toolbar-right input[type="date"] {
+            color: #f8fafc !important;
+            color-scheme: dark !important;
+            background: transparent !important;
+        }
+        html.dark-mode select.ga-filter-select,
+        html.dark-mode .ga-toolbar-right select {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+            color-scheme: dark !important;
+        }
+        html.dark-mode .ga-btn-reset,
+        html.dark-mode .ga-toolbar-right a[title*="Reset"] {
+            background: #2d1515 !important;
+            border-color: #7f1d1d !important;
+            color: #f87171 !important;
+        }
+
+        /* Galeri Arsip Download Excel Button */
+        html.dark-mode .ga-btn-export,
+        html.dark-mode a.ga-btn-export,
+        html.dark-mode a[onclick*="openExportModal"] {
+            background: #132f22 !important;
+            border-color: #16a34a !important;
+            color: #4ade80 !important;
+        }
+        html.dark-mode .ga-btn-export:hover,
+        html.dark-mode a.ga-btn-export:hover,
+        html.dark-mode a[onclick*="openExportModal"]:hover {
+            background: #166534 !important;
+            color: #fff !important;
+        }
+
+        /* Galeri Arsip Active Filter Banner */
+        html.dark-mode .ga-active-filter-banner,
+        html.dark-mode [style*="background:#f0f9ff"][style*="border:1px solid #bae6fd"] {
+            background: #0c233c !important;
+            border-color: #1e3a5f !important;
+            color: #38bdf8 !important;
+        }
+        html.dark-mode .ga-active-filter-banner span[style*="background:#dbeafe"],
+        html.dark-mode .ga-active-filter-banner span[style*="background:#e0e7ff"] {
+            background: #172e54 !important;
+            border-color: #1e3a5f !important;
+            color: #93c5fd !important;
+        }
+
+        /* Galeri Arsip Cards */
+        html.dark-mode .ga-card {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ga-card:hover {
+            border-color: #2563eb !important;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4) !important;
+        }
+        html.dark-mode .ga-card-body {
+            background: #131f33 !important;
+        }
+        html.dark-mode .ga-title { color: #f8fafc !important; }
+        html.dark-mode .ga-date { color: #64748b !important; }
+        html.dark-mode .ga-kode {
+            background: #172e54 !important;
+            color: #60a5fa !important;
+        }
+        html.dark-mode .ga-kode:hover { background: #1e3a5f !important; }
+        html.dark-mode .ga-card-tag.ga-instansi-tag,
+        html.dark-mode .ga-card [style*="color:#1e40af"] {
+            background: #172e54 !important;
+            border-color: #1e3a5f !important;
+            color: #93c5fd !important;
+        }
+        html.dark-mode .ga-card-tag.ga-kegiatan-tag,
+        html.dark-mode .ga-card [style*="color:#047857"] {
+            background: #064e3b !important;
+            border-color: #047857 !important;
+            color: #6ee7b7 !important;
+        }
+        html.dark-mode .ga-file-badge.notulensi {
+            background: #064e3b !important;
+            border-color: #047857 !important;
+            color: #6ee7b7 !important;
+        }
+        html.dark-mode .ga-file-badge.notulensi:hover { background: #047857 !important; color: #fff !important; }
+        html.dark-mode .ga-file-badge.paparan {
+            background: #172e54 !important;
+            border-color: #1e3a5f !important;
+            color: #60a5fa !important;
+        }
+        html.dark-mode .ga-file-badge.paparan:hover { background: #1e3a5f !important; color: #fff !important; }
+        html.dark-mode .ga-kw-badge {
+            background: #0f1c30 !important;
+            border-color: #1e3352 !important;
+            color: #60a5fa !important;
+        }
+        html.dark-mode .ga-kw-badge.more {
+            background: #0f1c30 !important;
+            border-color: #1e3352 !important;
+            color: #64748b !important;
+        }
+        html.dark-mode .ga-footer { border-top-color: #1e3352 !important; }
+        html.dark-mode .ga-akses { color: #94a3b8 !important; }
+        html.dark-mode .ga-more-btn { color: #64748b !important; }
+        html.dark-mode .ga-more-btn:hover { background: #17263d !important; color: #f8fafc !important; }
+        html.dark-mode .ga-dropdown {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6) !important;
+        }
+        html.dark-mode .ga-dd-item { color: #cbd5e1 !important; }
+        html.dark-mode .ga-dd-item:hover { background: #17263d !important; color: #fff !important; }
+        html.dark-mode .ga-dd-item.danger { color: #f87171 !important; }
+        html.dark-mode .ga-dd-item.danger:hover { background: #2d1515 !important; }
+        html.dark-mode .ga-load-more-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ga-load-more-btn:hover { border-color: #3b82f6 !important; color: #fff !important; background: #1e3352 !important; }
+        html.dark-mode .ga-thumb-bg { background-color: #0f1c30 !important; }
+
+        /* Galeri Arsip & Kegiatan Pimpinan Modals */
+        html.dark-mode #exportNotulensiModal > div,
+        html.dark-mode #exportModal > div,
+        html.dark-mode .ga-export-card,
+        html.dark-mode .export-modal-card {
+            background: #131f33 !important;
+            border: 1px solid #1e3352 !important;
+        }
+        html.dark-mode #exportNotulensiModal label,
+        html.dark-mode #exportModal label {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode #exportNotulensiModal p,
+        html.dark-mode #exportModal p {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode #exportNotulensiModal select,
+        html.dark-mode #exportModal select,
+        html.dark-mode #exportTahunSelect {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+            color-scheme: dark !important;
+        }
+        html.dark-mode #exportNotulensiModal button[onclick*="closeExportModal"],
+        html.dark-mode #exportModal button[onclick*="none"] {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .modal-content {
+            background: #131f33 !important;
+            border: 1px solid #1e3352 !important;
+        }
+        html.dark-mode .modal-header {
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .modal-header h3 { color: #f8fafc !important; }
+        html.dark-mode .modal-close { color: #94a3b8 !important; }
+        html.dark-mode .modal-close:hover { color: #f8fafc !important; }
+        html.dark-mode .modal-footer {
+            background: #0f1c30 !important;
+            border-top-color: #1e3352 !important;
+        }
+        html.dark-mode .form-lbl { color: #cbd5e1 !important; }
+        html.dark-mode .form-inp,
+        html.dark-mode .form-sel,
+        html.dark-mode .form-txa {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+            color-scheme: dark !important;
+        }
+        html.dark-mode .viewer-doc-wrap { background: #131f33 !important; }
+        html.dark-mode .viewer-doc-toolbar {
+            background: #0f1c30 !important;
+            border-bottom-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+
+        /* ── Kegiatan Pimpinan (kg-) Dark Mode Rules ── */
+        html.dark-mode .kg-btn-export,
+        html.dark-mode button[onclick*="openExportModal"] {
+            background: #132f22 !important;
+            border-color: #16a34a !important;
+            color: #4ade80 !important;
+        }
+        html.dark-mode .kg-btn-export:hover,
+        html.dark-mode button[onclick*="openExportModal"]:hover {
+            background: #166534 !important;
+            color: #fff !important;
+        }
+        html.dark-mode .kg-id { color: #94a3b8 !important; }
+        html.dark-mode .kg-judul { color: #f8fafc !important; }
+        html.dark-mode .kg-judul-sub { color: #64748b !important; }
+        html.dark-mode .kg-leading-tag {
+            background: #172e54 !important;
+            border-color: #1e3a5f !important;
+            color: #93c5fd !important;
+        }
+        html.dark-mode .kg-tanggal-date { color: #f8fafc !important; }
+        html.dark-mode .kg-tanggal-time { color: #64748b !important; }
+        html.dark-mode .kg-lokasi { color: #94a3b8 !important; }
+        html.dark-mode .kg-dok-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .kg-dok-btn:hover {
+            border-color: #3b82f6 !important;
+            color: #38bdf8 !important;
+            background: #1e3352 !important;
+        }
+        html.dark-mode .kg-dok-btn .kg-dok-badge.empty {
+            background: #1e3352 !important;
+            color: #64748b !important;
+        }
+        html.dark-mode .kg-dok-menu {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6) !important;
+        }
+        html.dark-mode .kg-dok-menu-header {
+            border-bottom-color: #1e3352 !important;
+            color: #64748b !important;
+        }
+        html.dark-mode .kg-dok-menu-item { color: #cbd5e1 !important; }
+        html.dark-mode .kg-dok-menu-item:hover {
+            background: #17263d !important;
+            color: #38bdf8 !important;
+        }
+        html.dark-mode .kg-dok-menu-item .kg-dok-item-count {
+            background: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .kg-dok-menu-item .kg-dok-item-count.has-data {
+            background: #172e54 !important;
+            color: #60a5fa !important;
+        }
+        html.dark-mode .kg-page-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .kg-page-btn:hover { background: #1e3352 !important; color: #fff !important; }
+        html.dark-mode .kg-page-btn.active {
+            background: #3b82f6 !important;
+            border-color: #3b82f6 !important;
+            color: #fff !important;
+        }
+        html.dark-mode .selection-action-bar {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .selection-info { color: #f8fafc !important; }
 
         /* ── Surat Keluar / Arsip Surat stat cards ── */
         html.dark-mode .stat-value { color: #f8fafc !important; }
@@ -1610,6 +1913,13 @@
         html.dark-mode .ast-tab-link.active { color: #38bdf8 !important; border-bottom-color: #38bdf8 !important; }
         html.dark-mode .ast-toolbar { border-bottom-color: #1e3352 !important; }
 
+        /* ── Universal Dark Form & Date Controls ── */
+        html.dark-mode input,
+        html.dark-mode select,
+        html.dark-mode textarea {
+            color-scheme: dark !important;
+        }
+
         /* ── Universal Light Background Segments Nullification ── */
         html.dark-mode [style*="background:#fafafa"],
         html.dark-mode [style*="background: #fafafa"],
@@ -1630,7 +1940,15 @@
         html.dark-mode [style*="background:#f0f7ff"],
         html.dark-mode [style*="background: #f0f7ff"],
         html.dark-mode [style*="background:#f0fdf4"],
-        html.dark-mode [style*="background: #f0fdf4"] {
+        html.dark-mode [style*="background: #f0fdf4"],
+        html.dark-mode [style*="background:#f0f9ff"],
+        html.dark-mode [style*="background: #f0f9ff"],
+        html.dark-mode div[style*="background:white"]:not(.kg-avatar):not(.user-avatar),
+        html.dark-mode div[style*="background: white"]:not(.kg-avatar):not(.user-avatar),
+        html.dark-mode div[style*="background:#fff"]:not(.kg-avatar):not(.user-avatar),
+        html.dark-mode div[style*="background: #fff"]:not(.kg-avatar):not(.user-avatar),
+        html.dark-mode select[style*="background:white"],
+        html.dark-mode select[style*="background: white"] {
             background-color: #17263d !important;
             border-color: #1e3352 !important;
         }

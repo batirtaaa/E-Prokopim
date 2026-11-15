@@ -649,7 +649,7 @@
         <p>Kelola dan telusuri arsip foto, video serta notulensi kegiatan.</p>
     </div>
     <div style="display:flex; align-items:center; gap:10px;">
-        <a href="javascript:void(0)" onclick="openExportModal()" style="display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border:1px solid #16a34a;border-radius:8px;background:white;color:#16a34a;font-size:13.5px;font-weight:600;text-decoration:none;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='white'">
+        <a href="javascript:void(0)" onclick="openExportModal()" class="ga-btn-export" style="display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border:1px solid #16a34a;border-radius:8px;background:white;color:#16a34a;font-size:13.5px;font-weight:600;text-decoration:none;cursor:pointer;transition:all 0.15s;">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:16px;height:16px">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
             </svg>
@@ -665,8 +665,8 @@
 </div>
 
 {{-- Modal Pilih Tahun Export Notulensi --}}
-<div id="exportNotulensiModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(2px); padding:20px;">
-    <div style="background:white; border-radius:16px; width:380px; max-width:92vw; box-shadow:0 20px 60px -10px rgba(0,0,0,0.25); overflow:hidden;">
+<div id="exportNotulensiModal" class="ga-export-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(2px); padding:20px;">
+    <div class="ga-export-card" style="background:white; border-radius:16px; width:380px; max-width:92vw; box-shadow:0 20px 60px -10px rgba(0,0,0,0.25); overflow:hidden;">
         <div style="background:#1e3a5f; padding:18px 24px; display:flex; align-items:center; justify-content:space-between;">
             <div style="display:flex;align-items:center;gap:10px;">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="white" style="width:22px;height:22px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
@@ -728,13 +728,13 @@
             </div>
 
             {{-- Filter Tanggal Spesifik --}}
-            <div style="display:flex;align-items:center;gap:6px;background:white;border:1px solid #e5e7eb;border-radius:8px;padding:2px 10px;height:36px;" title="Filter berdasarkan tanggal kegiatan">
-                <span style="font-size:12px;color:#6b7280;font-weight:600;white-space:nowrap;">📅 Tanggal:</span>
+            <div class="ga-date-filter-wrap" style="display:flex;align-items:center;gap:6px;background:white;border:1px solid #e5e7eb;border-radius:8px;padding:2px 10px;height:36px;" title="Filter berdasarkan tanggal kegiatan">
+                <span class="ga-date-lbl" style="font-size:12px;color:#6b7280;font-weight:600;white-space:nowrap;">📅 Tanggal:</span>
                 <input type="date" name="tanggal" value="{{ request('tanggal') }}" onchange="document.getElementById('gaFilterForm').submit()" style="border:none;outline:none;font-size:12.5px;color:#374151;background:transparent;cursor:pointer;">
             </div>
 
             {{-- Filter Bulan --}}
-            <select name="bulan" id="gaFilterBulan" onchange="document.getElementById('gaFilterForm').submit()" style="padding:6px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:12.5px;color:#374151;background:white;outline:none;cursor:pointer;height:36px;" title="Filter berdasarkan bulan">
+            <select name="bulan" id="gaFilterBulan" class="ga-filter-select" onchange="document.getElementById('gaFilterForm').submit()" style="padding:6px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:12.5px;color:#374151;background:white;outline:none;cursor:pointer;height:36px;" title="Filter berdasarkan bulan">
                 <option value="">Semua Bulan</option>
                 @foreach(['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'] as $idx => $namaBulan)
                 <option value="{{ $idx + 1 }}" {{ request('bulan') == ($idx + 1) ? 'selected' : '' }}>{{ $namaBulan }}</option>
@@ -742,7 +742,7 @@
             </select>
 
             {{-- Filter Tahun --}}
-            <select name="tahun" id="gaFilterTahun" onchange="document.getElementById('gaFilterForm').submit()" style="padding:6px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:12.5px;color:#374151;background:white;outline:none;cursor:pointer;height:36px;" title="Filter berdasarkan tahun">
+            <select name="tahun" id="gaFilterTahun" class="ga-filter-select" onchange="document.getElementById('gaFilterForm').submit()" style="padding:6px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:12.5px;color:#374151;background:white;outline:none;cursor:pointer;height:36px;" title="Filter berdasarkan tahun">
                 <option value="">Semua Tahun</option>
                 @foreach($availableYears as $yr)
                 <option value="{{ $yr }}" {{ request('tahun') == $yr ? 'selected' : '' }}>{{ $yr }}</option>
@@ -751,7 +751,7 @@
 
             {{-- Reset jika ada filter aktif --}}
             @if(request('search') || request('keyword') || request('tanggal') || request('bulan') || request('tahun') || request('kegiatan'))
-            <a href="{{ route('galeri-arsip.index', ['tab' => $tab]) }}" style="padding:6px 12px;border:1px solid #fecaca;background:#fef2f2;border-radius:8px;font-size:12.5px;color:#dc2626;text-decoration:none;display:inline-flex;align-items:center;gap:4px;height:36px;font-weight:600;" title="Reset semua filter">
+            <a href="{{ route('galeri-arsip.index', ['tab' => $tab]) }}" class="ga-btn-reset" style="padding:6px 12px;border:1px solid #fecaca;background:#fef2f2;border-radius:8px;font-size:12.5px;color:#dc2626;text-decoration:none;display:inline-flex;align-items:center;gap:4px;height:36px;font-weight:600;" title="Reset semua filter">
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 Reset
             </a>
@@ -773,7 +773,7 @@
     $namaBulanList = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 @endphp
 @if($hasFilter)
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;background:#f0f9ff;border:1px solid #bae6fd;padding:9px 16px;border-radius:8px;font-size:13px;color:#0369a1;flex-wrap:wrap;">
+<div class="ga-active-filter-banner" style="display:flex;align-items:center;gap:8px;margin-bottom:16px;background:#f0f9ff;border:1px solid #bae6fd;padding:9px 16px;border-radius:8px;font-size:13px;color:#0369a1;flex-wrap:wrap;">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:15px;height:15px;flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"/></svg>
     <span style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
         Filter aktif:
@@ -930,7 +930,7 @@
             @if($itemInstansi)
             <div style="margin-top:5px;display:flex;align-items:center;gap:5px;font-size:11.5px;">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:13px;height:13px;color:#2563eb;flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21"/></svg>
-                <a href="{{ route('galeri-arsip.index', ['tab' => $tab, 'search' => $itemInstansi]) }}" onclick="event.stopPropagation()" style="font-weight:600;color:#1e40af;background:#eff6ff;padding:2px 8px;border-radius:6px;border:1px solid #bfdbfe;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:inline-block;" title="Cari arsip dari: {{ $itemInstansi }}">
+                <a href="{{ route('galeri-arsip.index', ['tab' => $tab, 'search' => $itemInstansi]) }}" onclick="event.stopPropagation()" class="ga-card-tag ga-instansi-tag" style="font-weight:600;color:#1e40af;background:#eff6ff;padding:2px 8px;border-radius:6px;border:1px solid #bfdbfe;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:inline-block;" title="Cari arsip dari: {{ $itemInstansi }}">
                     {{ $itemInstansi }}
                 </a>
             </div>
@@ -940,7 +940,7 @@
             @if($item->kegiatan)
             <div style="margin-top:5px;display:flex;align-items:center;gap:5px;font-size:11.5px;">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="#059669" style="width:13px;height:13px;flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.253 3.75h18M4.5 7.5h15a2.25 2.25 0 012.25 2.25v10.5A2.25 2.25 0 0119.5 22.5H4.5A2.25 2.25 0 012.25 20.25V9.75A2.25 2.25 0 014.5 7.5z"/></svg>
-                <a href="{{ route('galeri-arsip.index', ['tab' => $tab, 'kegiatan' => $item->kegiatan_id]) }}" onclick="event.stopPropagation()" style="font-weight:600;color:#047857;background:#ecfdf5;padding:2px 8px;border-radius:6px;border:1px solid #a7f3d0;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:inline-block;" title="Agenda: {{ $item->kegiatan->judul }}">
+                <a href="{{ route('galeri-arsip.index', ['tab' => $tab, 'kegiatan' => $item->kegiatan_id]) }}" onclick="event.stopPropagation()" class="ga-card-tag ga-kegiatan-tag" style="font-weight:600;color:#047857;background:#ecfdf5;padding:2px 8px;border-radius:6px;border:1px solid #a7f3d0;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:inline-block;" title="Agenda: {{ $item->kegiatan->judul }}">
                     📋 {{ $item->kegiatan->nomor_agenda ? '['.$item->kegiatan->nomor_agenda.'] ' : '' }}{{ Str::limit($item->kegiatan->judul, 28) }}
                 </a>
             </div>

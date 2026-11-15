@@ -377,7 +377,7 @@
         <p>Kelola dan pantau seluruh jadwal kegiatan pimpinan daerah.</p>
     </div>
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <button type="button" onclick="openExportModal()" class="btn btn-outline" style="display:inline-flex;align-items:center;gap:7px;border:1.5px solid #16a34a;color:#16a34a;font-weight:600;padding:9px 16px;border-radius:8px;font-size:13px;background:white;cursor:pointer;transition:all 0.15s;">
+        <button type="button" onclick="openExportModal()" class="btn btn-outline kg-btn-export" style="display:inline-flex;align-items:center;gap:7px;border:1.5px solid #16a34a;color:#16a34a;font-weight:600;padding:9px 16px;border-radius:8px;font-size:13px;background:white;cursor:pointer;transition:all 0.15s;">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:15px;height:15px">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
             </svg>
@@ -697,7 +697,7 @@
 
 {{-- Modal Pilih Tahun Export --}}
 <div id="exportModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center;">
-    <div style="background:white; border-radius:16px; width:380px; max-width:92vw; box-shadow:0 20px 60px -10px rgba(0,0,0,0.25); overflow:hidden;">
+    <div class="export-modal-card" style="background:white; border-radius:16px; width:380px; max-width:92vw; box-shadow:0 20px 60px -10px rgba(0,0,0,0.25); overflow:hidden;">
         <div style="background:#1e3a5f; padding:18px 24px; display:flex; align-items:center; justify-content:space-between;">
             <div style="display:flex;align-items:center;gap:10px;">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" style="width:20px;height:20px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
