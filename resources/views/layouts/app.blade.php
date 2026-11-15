@@ -11,6 +11,9 @@
         if (localStorage.getItem('prokopim_sidebar_collapsed') === 'true') {
             document.documentElement.classList.add('sidebar-collapsed');
         }
+        if (localStorage.getItem('prokopim_theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
     </script>
     <style>
         /* ── Sidebar Navigation Group (Collapsible) ── */
@@ -598,6 +601,342 @@
             width: 14px;
             height: 14px;
         }
+
+        /* ══════════════════════════════════════════════════════════════
+           DARK MODE SYSTEM
+        ══════════════════════════════════════════════════════════════ */
+        html.dark-mode {
+            --bg-main: #0b1320;
+            --bg-card: #131f33;
+            --bg-input: #17263d;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #1e3352;
+            --border-focus: #3b82f6;
+            --primary: #15243b;
+            --primary-light: #182d4d;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.35);
+            --shadow: 0 4px 12px rgba(0,0,0,0.45);
+            --shadow-lg: 0 8px 25px rgba(0,0,0,0.55);
+        }
+
+        /* Base Body */
+        html.dark-mode body {
+            background-color: #0b1320 !important;
+            color: #f1f5f9 !important;
+        }
+
+        /* Theme Toggle Button Icons */
+        .theme-toggle-btn {
+            position: relative;
+            cursor: pointer;
+        }
+        .theme-icon-sun {
+            display: none;
+            color: #f59e0b;
+        }
+        .theme-icon-moon {
+            display: block;
+            color: #475569;
+        }
+        .topbar-icon-btn:hover .theme-icon-moon {
+            color: #1e293b;
+        }
+        html.dark-mode .theme-icon-sun {
+            display: block;
+            color: #fbbf24;
+        }
+        html.dark-mode .theme-icon-moon {
+            display: none;
+        }
+        html.dark-mode .theme-toggle-btn:hover .theme-icon-sun {
+            color: #fde047;
+        }
+
+        /* Topbar in Dark Mode */
+        html.dark-mode .topbar {
+            background: #0f1c30 !important;
+            border-bottom: 1px solid #1e3352 !important;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.4) !important;
+        }
+        html.dark-mode .topbar-title {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .topbar-icon-btn {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .topbar-icon-btn:hover {
+            background: #17263d !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .sidebar-toggle-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .sidebar-toggle-btn:hover {
+            background: #1e3352 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .topbar-profile-name {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .topbar-profile-role {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .topbar-profile-btn:hover {
+            background: #17263d !important;
+        }
+        html.dark-mode .topbar-profile-avatar {
+            border-color: #0f1c30 !important;
+        }
+        html.dark-mode .notif-badge-pill {
+            border-color: #0f1c30 !important;
+        }
+
+        /* Dropdowns in Dark Mode */
+        html.dark-mode .profile-dropdown-menu,
+        html.dark-mode .notif-dropdown {
+            background: #131f33 !important;
+            border: 1px solid #1e3352 !important;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.55) !important;
+        }
+        html.dark-mode .profile-dropdown-item {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .profile-dropdown-item:hover {
+            background: #1a2d47 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .profile-dropdown-divider {
+            background: #1e3352 !important;
+        }
+        html.dark-mode .notif-dropdown-header {
+            background: #0f1c30 !important;
+            border-bottom: 1px solid #1e3352 !important;
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .notif-dropdown-header h4 {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .notif-item {
+            border-bottom: 1px solid #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .notif-item:hover {
+            background: #17263d !important;
+        }
+        html.dark-mode .notif-item.unread {
+            background: #0e223d !important;
+        }
+        html.dark-mode .notif-title {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .notif-pesan {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .notif-time {
+            color: #64748b !important;
+        }
+        html.dark-mode .notif-empty {
+            color: #64748b !important;
+        }
+
+        /* Cards & Containers in Dark Mode */
+        html.dark-mode .card,
+        html.dark-mode .stat-card,
+        html.dark-mode .table-card,
+        html.dark-mode .table-wrapper,
+        html.dark-mode .chart-card,
+        html.dark-mode .page-header {
+            background-color: #131f33;
+            border-color: #1e3352;
+            color: #f1f5f9;
+        }
+        html.dark-mode .card-header,
+        html.dark-mode .card-footer {
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .card-title,
+        html.dark-mode .page-title {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .page-subtitle {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .stat-card-label {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .stat-card-value {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .stat-card-icon.blue { background: #1e3a5f !important; color: #60a5fa !important; }
+        html.dark-mode .stat-card-icon.green { background: #064e3b !important; color: #34d399 !important; }
+        html.dark-mode .stat-card-icon.orange { background: #7c2d12 !important; color: #fb923c !important; }
+        html.dark-mode .stat-card-icon.gray { background: #1e293b !important; color: #94a3b8 !important; }
+
+        /* Tables in Dark Mode */
+        html.dark-mode table {
+            color: #e2e8f0 !important;
+        }
+        html.dark-mode .table th,
+        html.dark-mode table th {
+            background-color: #0f1c30 !important;
+            color: #94a3b8 !important;
+            border-bottom: 1px solid #1e3352 !important;
+        }
+        html.dark-mode .table td,
+        html.dark-mode table td {
+            border-bottom: 1px solid #1a2a44 !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark-mode .table tbody tr:hover,
+        html.dark-mode table tbody tr:hover {
+            background-color: #17263d !important;
+        }
+
+        /* Forms & Inputs in Dark Mode */
+        html.dark-mode .form-control,
+        html.dark-mode .form-select,
+        html.dark-mode input[type="text"],
+        html.dark-mode input[type="search"],
+        html.dark-mode input[type="password"],
+        html.dark-mode input[type="email"],
+        html.dark-mode input[type="date"],
+        html.dark-mode input[type="time"],
+        html.dark-mode input[type="number"],
+        html.dark-mode select,
+        html.dark-mode textarea {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .form-control:focus,
+        html.dark-mode .form-select:focus,
+        html.dark-mode input:focus,
+        html.dark-mode select:focus,
+        html.dark-mode textarea:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important;
+        }
+        html.dark-mode .form-label,
+        html.dark-mode .form-label-normal {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .search-bar input {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .search-bar svg {
+            color: #64748b !important;
+        }
+
+        /* Buttons & Badges in Dark Mode */
+        html.dark-mode .btn-outline {
+            background: #131f33 !important;
+            color: #cbd5e1 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .btn-outline:hover {
+            background: #17263d !important;
+            color: #ffffff !important;
+            border-color: #2b456b !important;
+        }
+        html.dark-mode .badge-gray {
+            background: #1e293b !important;
+            color: #94a3b8 !important;
+        }
+
+        /* Modals in Dark Mode */
+        html.dark-mode .modal,
+        html.dark-mode .modal-content,
+        html.dark-mode .modal-box,
+        html.dark-mode .modal-dialog {
+            background-color: #131f33 !important;
+            border: 1px solid #1e3352 !important;
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .modal-header,
+        html.dark-mode .modal-footer {
+            border-color: #1e3352 !important;
+        }
+
+        /* Pagination in Dark Mode */
+        html.dark-mode .pagination-wrapper {
+            border-top-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .pagination a,
+        html.dark-mode .pagination span {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .pagination a:hover {
+            background: #17263d !important;
+        }
+        html.dark-mode .pagination .active span {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border-color: #2563eb !important;
+        }
+        html.dark-mode .pagination .disabled span {
+            color: #475569 !important;
+            background: #0f1c30 !important;
+        }
+
+        /* Breadcrumbs & Tabs */
+        html.dark-mode .breadcrumb-item,
+        html.dark-mode .breadcrumb-item a {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .breadcrumb-item.active {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .tab-item,
+        html.dark-mode .tab-link {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .tab-item.active,
+        html.dark-mode .tab-link.active {
+            color: #38bdf8 !important;
+            border-color: #38bdf8 !important;
+        }
+
+        /* AI Chat Assistant in Dark Mode */
+        html.dark-mode .ai-chat-card,
+        html.dark-mode .ai-chat-header,
+        html.dark-mode .ai-chat-input-bar,
+        html.dark-mode .ai-sidebar {
+            background-color: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ai-bubble-bot,
+        html.dark-mode .ai-msg-bubble-bot {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #e2e8f0 !important;
+        }
+
+        /* Global fallback for views using inline background styles */
+        html.dark-mode .bg-white {
+            background-color: #131f33 !important;
+        }
+        html.dark-mode .border {
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .text-dark,
+        html.dark-mode .text-gray-900,
+        html.dark-mode .text-slate-900 {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .text-muted,
+        html.dark-mode .text-gray-500,
+        html.dark-mode .text-slate-500 {
+            color: #94a3b8 !important;
+        }
     </style>
     @stack('styles')
 </head>
@@ -767,6 +1106,16 @@
 
             {{-- Right: Notification, Help, Apps Grid, Profile --}}
             <div class="topbar-right">
+                {{-- Theme Mode Toggle (Dark / Light) --}}
+                <button type="button" class="topbar-icon-btn theme-toggle-btn" id="theme-toggle-btn" title="Beralih ke Mode Gelap" onclick="toggleThemeMode()" aria-label="Toggle Dark/Light Mode">
+                    <svg class="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                    </svg>
+                    <svg class="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                    </svg>
+                </button>
+
                 {{-- 1. Notification Bell --}}
                 <div class="notif-wrapper" id="notif-wrapper">
                     <button class="topbar-icon-btn notif-btn" id="notif-btn" title="Notifikasi" onclick="toggleNotifDropdown(event)">
@@ -1020,6 +1369,25 @@ function updateBadge() {
 // Initial load + polling every 30 seconds
 updateBadge();
 setInterval(updateBadge, 30000);
+
+// ── Theme Mode (Dark / Light) ──────────────────────────────────
+function toggleThemeMode() {
+    const isDark = document.documentElement.classList.toggle('dark-mode');
+    localStorage.setItem('prokopim_theme', isDark ? 'dark' : 'light');
+    syncThemeToggleState(isDark);
+}
+
+function syncThemeToggleState(isDark) {
+    const btn = document.getElementById('theme-toggle-btn');
+    if (btn) {
+        btn.setAttribute('title', isDark ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Gelap');
+        btn.setAttribute('aria-label', isDark ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Gelap');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    syncThemeToggleState(document.documentElement.classList.contains('dark-mode'));
+});
 </script>
 @stack('scripts')
 </body>

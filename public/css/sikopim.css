@@ -50,6 +50,22 @@
   --transition: 0.2s ease;
 }
 
+html.dark-mode {
+  --bg-main: #0b1320;
+  --bg-card: #131f33;
+  --bg-input: #17263d;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: #1e3352;
+  --border-focus: #3b82f6;
+  --primary: #15243b;
+  --primary-light: #182d4d;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.35);
+  --shadow: 0 4px 12px rgba(0,0,0,0.45);
+  --shadow-lg: 0 8px 25px rgba(0,0,0,0.55);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
