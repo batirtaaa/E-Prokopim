@@ -570,6 +570,117 @@
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
 }
+
+/* ── Dark Mode Overrides for Sambutan ── */
+html.dark-mode .sb-toolbar-wrap {
+    background: #131f33 !important;
+    border-color: #1e3352 !important;
+}
+html.dark-mode .sb-tabs {
+    border-bottom-color: #1e3352 !important;
+}
+html.dark-mode .sb-tab {
+    color: #94a3b8 !important;
+}
+html.dark-mode .sb-tab:hover {
+    color: #f8fafc !important;
+}
+html.dark-mode .sb-tab.active {
+    color: #38bdf8 !important;
+    border-bottom-color: #38bdf8 !important;
+}
+html.dark-mode .sb-search-input {
+    background: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #f8fafc !important;
+}
+html.dark-mode .sb-date-range-box {
+    background: #17263d !important;
+    border-color: #1e3352 !important;
+}
+html.dark-mode .sb-date-label {
+    color: #94a3b8 !important;
+}
+html.dark-mode .sb-date-input {
+    color: #f8fafc !important;
+    color-scheme: dark !important;
+}
+html.dark-mode .sb-date-sep {
+    color: #64748b !important;
+}
+html.dark-mode .btn-export-outline {
+    background: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #f8fafc !important;
+}
+html.dark-mode .btn-export-outline:hover {
+    background: #1e3352 !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+html.dark-mode .sb-table-wrap {
+    background: #131f33 !important;
+    border-color: #1e3352 !important;
+}
+html.dark-mode .sb-table thead th {
+    background: #0f1c30 !important;
+    color: #94a3b8 !important;
+    border-bottom-color: #1e3352 !important;
+}
+html.dark-mode .sb-table tbody td {
+    border-bottom-color: #1a2a44 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .sb-table tbody tr:hover {
+    background: #17263d !important;
+}
+html.dark-mode .sb-nomor {
+    color: #94a3b8 !important;
+}
+html.dark-mode .sb-perihal-main {
+    color: #f8fafc !important;
+}
+html.dark-mode .sb-perihal-sub {
+    color: #94a3b8 !important;
+}
+html.dark-mode .sb-pagination {
+    background: #0f1c30 !important;
+    border-top-color: #1e3352 !important;
+    color: #94a3b8 !important;
+}
+html.dark-mode .sb-page-btn {
+    background: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .sb-page-btn:hover {
+    background: #1e3352 !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+html.dark-mode .modal-card {
+    background: #131f33 !important;
+    border: 1px solid #1e3352 !important;
+    color: #f1f5f9 !important;
+}
+html.dark-mode .modal-header {
+    border-bottom-color: #1e3352 !important;
+}
+html.dark-mode .modal-title {
+    color: #f8fafc !important;
+}
+html.dark-mode .modal-desc {
+    color: #94a3b8 !important;
+}
+html.dark-mode .modal-form-label {
+    color: #cbd5e1 !important;
+}
+html.dark-mode .modal-form-select,
+html.dark-mode .modal-form-textarea {
+    background: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #f8fafc !important;
+}
 </style>
 @endpush
 

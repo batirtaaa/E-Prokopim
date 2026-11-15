@@ -728,6 +728,13 @@
         html.dark-mode .filter-card,
         html.dark-mode .trash-stat-card,
         html.dark-mode .trash-container-card,
+        html.dark-mode .sb-toolbar-wrap,
+        html.dark-mode .sb-table-wrap,
+        html.dark-mode .ms-toolbar-wrap,
+        html.dark-mode .an-toolbar-card,
+        html.dark-mode .an-table-card,
+        html.dark-mode [class*="-toolbar-wrap"],
+        html.dark-mode [class*="-table-wrap"],
         html.dark-mode [class*="-card"],
         html.dark-mode [class*="card-"],
         html.dark-mode .bg-white,
@@ -748,10 +755,96 @@
         html.dark-mode .dash-table-header,
         html.dark-mode .pgw-toolbar,
         html.dark-mode .kg-toolbar,
-        html.dark-mode .ga-toolbar-wrap {
+        html.dark-mode .ga-toolbar-wrap,
+        html.dark-mode .ms-toolbar-wrap {
             background-color: #131f33 !important;
             border-bottom-color: #1e3352 !important;
             border-color: #1e3352 !important;
+        }
+
+        /* ── Sambutan & Document Management Specific Elements ── */
+        html.dark-mode .sb-toolbar-wrap,
+        html.dark-mode .sb-table-wrap {
+            background-color: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .sb-tabs {
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .sb-tab {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .sb-tab:hover {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .sb-tab.active {
+            color: #38bdf8 !important;
+            border-bottom-color: #38bdf8 !important;
+        }
+        html.dark-mode .sb-search-input {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .sb-date-range-box {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .sb-date-label {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .sb-date-input {
+            color: #f8fafc !important;
+            color-scheme: dark !important;
+        }
+        html.dark-mode .sb-date-sep {
+            color: #64748b !important;
+        }
+        html.dark-mode .btn-export-outline {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .btn-export-outline:hover {
+            background: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .sb-table thead th {
+            background: #0f1c30 !important;
+            color: #94a3b8 !important;
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .sb-table tbody td {
+            border-bottom-color: #1a2a44 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .sb-table tbody tr:hover {
+            background: #17263d !important;
+        }
+        html.dark-mode .sb-nomor {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .sb-perihal-main {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .sb-perihal-sub {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .sb-pagination {
+            background: #0f1c30 !important;
+            border-top-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .sb-page-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .sb-page-btn:hover {
+            background: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
         }
 
         /* ── Dashboard Specific Elements ── */
