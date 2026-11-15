@@ -217,24 +217,22 @@
     border-color: #94a3b8;
     background: #f8fafc;
 }
-.pgw-btn-icon-export {
-    padding: 7px 10px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #334155;
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-    text-decoration: none;
+
+html.dark-mode .pgw-btn-filter {
+    background: #17263d !important;
+    color: #f8fafc !important;
+    border: 1px solid #1e3352 !important;
 }
-.pgw-btn-icon-export:hover {
-    border-color: #94a3b8;
-    background: #f8fafc;
+html.dark-mode .pgw-btn-filter:hover {
+    background: #1e3352 !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+html.dark-mode .pgw-btn-filter svg {
+    color: #94a3b8 !important;
+}
+html.dark-mode .pgw-btn-filter:hover svg {
+    color: #ffffff !important;
 }
 
 /* Filter Dropdown Modal/Box */
@@ -566,21 +564,6 @@
                         </svg>
                         <span>Filter</span>
                     </button>
-
-                    {{-- Export Button --}}
-                    @php
-                        $exportParams = array_filter([
-                            'search'            => request('search'),
-                            'status_kepegawaian'=> request('status_kepegawaian'),
-                            'bidang'            => request('bidang'),
-                        ]);
-                        $exportUrl = route('pegawai.export', $exportParams);
-                    @endphp
-                    <a href="{{ $exportUrl }}" id="pgwExportBtn" class="pgw-btn-icon-export" title="Unduh Excel (.xlsx)">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="15" height="15">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                        </svg>
-                    </a>
                 </div>
             </form>
         </div>
@@ -835,14 +818,17 @@ function fetchPegawaiData(urlStr, pushHistory = true) {
             tableArea.innerHTML = newTableArea.innerHTML;
         }
 
-        // Update export button URL
-        const newExportBtn = doc.getElementById('pgwExportBtn');
-        if (newExportBtn && exportBtn) {
-            exportBtn.href = newExportBtn.href;
-        }
+        // Update top export button URL
         const topExportBtn = document.getElementById('pgwTopExportBtn');
-        if (newExportBtn && topExportBtn) {
-            topExportBtn.href = newExportBtn.href;
+        if (topExportBtn) {
+            try {
+                const currentUrl = new URL(urlStr, window.location.origin);
+                const exportUrl = new URL(topExportBtn.href, window.location.origin);
+                currentUrl.searchParams.forEach((val, key) => {
+                    if (key !== 'page' && key !== 'per_page') exportUrl.searchParams.set(key, val);
+                });
+                topExportBtn.href = exportUrl.toString();
+            } catch(e) {}
         }
 
         // Update hidden search inputs in filter modal if present

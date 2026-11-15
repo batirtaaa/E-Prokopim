@@ -878,10 +878,73 @@
             border-color: #3b82f6 !important;
         }
 
+        /* Filter Buttons & Dropdowns in Dark Mode */
+        html.dark-mode .pgw-btn-filter,
+        html.dark-mode .ar-btn-filter,
+        html.dark-mode .ast-btn-filter,
+        html.dark-mode [class*="-btn-filter"],
+        html.dark-mode [class*="btn-filter"],
+        html.dark-mode .filter-btn,
+        html.dark-mode .btn-filter {
+            background: #17263d !important;
+            color: #f8fafc !important;
+            border: 1px solid #1e3352 !important;
+        }
+        html.dark-mode .pgw-btn-filter:hover,
+        html.dark-mode .ar-btn-filter:hover,
+        html.dark-mode .ast-btn-filter:hover,
+        html.dark-mode [class*="-btn-filter"]:hover,
+        html.dark-mode [class*="btn-filter"]:hover,
+        html.dark-mode .filter-btn:hover,
+        html.dark-mode .btn-filter:hover {
+            background: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .pgw-btn-filter svg,
+        html.dark-mode .ar-btn-filter svg,
+        html.dark-mode .ast-btn-filter svg {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .pgw-btn-filter:hover svg {
+            color: #ffffff !important;
+        }
+        html.dark-mode .pgw-filter-dropdown {
+            background: #131f33 !important;
+            border: 1px solid #1e3352 !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6) !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark-mode .pgw-filter-dropdown select {
+            background: #17263d !important;
+            border: 1px solid #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .pgw-perpage-select {
+            background: #17263d !important;
+            border: 1px solid #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .pgw-perpage-wrap label {
+            color: #94a3b8 !important;
+        }
+
         /* Pegawai Avatar & Status Pills */
-        html.dark-mode .pegawai-avatar {
+        html.dark-mode .pegawai-avatar,
+        html.dark-mode .pgw-avatar {
             background: #1e3352 !important;
             color: #cbd5e1 !important;
+        }
+        html.dark-mode .pgw-name-text {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .pgw-email-text,
+        html.dark-mode .pgw-email-text svg {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .pgw-email-text:hover,
+        html.dark-mode .pgw-email-text:hover svg {
+            color: #60a5fa !important;
         }
         html.dark-mode .pgw-status-pill.status-pns {
             background: #172e54 !important;
@@ -896,6 +959,37 @@
         html.dark-mode .pgw-status-pill.status-default {
             background: #1e293b !important;
             color: #cbd5e1 !important;
+        }
+        html.dark-mode .pgw-pagination-footer {
+            background: #0f1c30 !important;
+            border-top: 1px solid #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .pgw-p-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .pgw-p-btn:hover {
+            background: #1e3352 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .pgw-p-btn.active {
+            background: #2563eb !important;
+            border-color: #2563eb !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .pgw-p-btn.disabled {
+            background: #0f1c30 !important;
+            color: #475569 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .pgw-icon-btn {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .pgw-icon-btn:hover {
+            color: #ffffff !important;
+            background: #1e3352 !important;
         }
 
         /* ── All Tables in Dark Mode ── */
