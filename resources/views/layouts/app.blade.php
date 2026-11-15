@@ -2388,7 +2388,24 @@
         html.dark-mode .stat-value { color: #f8fafc !important; }
         html.dark-mode .stat-label { color: #94a3b8 !important; }
         html.dark-mode .stat-sub { color: #64748b !important; }
-        html.dark-mode .stat-icon-wrap { opacity: 0.9; }
+        html.dark-mode .stat-icon-wrap {
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+        html.dark-mode .stat-icon-masuk {
+            background: #172e54 !important;
+            color: #60a5fa !important;
+            border-color: rgba(96, 165, 250, 0.25) !important;
+        }
+        html.dark-mode .stat-icon-keluar {
+            background: #083344 !important;
+            color: #22d3ee !important;
+            border-color: rgba(34, 211, 238, 0.25) !important;
+        }
+        html.dark-mode .stat-icon-total {
+            background: #064e3b !important;
+            color: #4ade80 !important;
+            border-color: rgba(74, 222, 128, 0.25) !important;
+        }
         html.dark-mode .filter-card,
         html.dark-mode .table-card {
             background: #131f33 !important;

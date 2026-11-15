@@ -116,6 +116,25 @@
 .stat-icon-keluar  { background: #ecfeff; color: #0891b2; }
 .stat-icon-total   { background: #f0fdf4; color: #16a34a; }
 
+html.dark-mode .stat-icon-wrap {
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+html.dark-mode .stat-icon-masuk {
+    background: #172e54 !important;
+    color: #60a5fa !important;
+    border-color: rgba(96, 165, 250, 0.25) !important;
+}
+html.dark-mode .stat-icon-keluar {
+    background: #083344 !important;
+    color: #22d3ee !important;
+    border-color: rgba(34, 211, 238, 0.25) !important;
+}
+html.dark-mode .stat-icon-total {
+    background: #064e3b !important;
+    color: #4ade80 !important;
+    border-color: rgba(74, 222, 128, 0.25) !important;
+}
+
 .stat-info { display: flex; flex-direction: column; }
 .stat-value { font-size: 24px; font-weight: 700; color: #0f172a; line-height: 1.2; }
 .stat-label { font-size: 12.5px; color: #64748b; font-weight: 500; margin-top: 2px; }
@@ -618,7 +637,7 @@
     </div>
     <div class="stat-card">
         <div class="stat-icon-wrap stat-icon-total">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
         </div>
         <div class="stat-info">
             <span class="stat-value" style="color:#16a34a">{{ $totalSemua }}</span>
