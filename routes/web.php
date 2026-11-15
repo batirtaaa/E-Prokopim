@@ -28,6 +28,7 @@ use App\Http\Controllers\SuratKeluarController;
 use App\Http\Controllers\AsistenAiController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\TrashController;
+use App\Http\Controllers\PanduanController;
 
 // Auth Routes
 Route::middleware('guest')->group(function () {
@@ -243,4 +244,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/trash/force-delete/{type}/{id}', [TrashController::class, 'forceDelete'])->name('trash.force-delete');
     Route::post('/trash/bulk-force-delete', [TrashController::class, 'bulkForceDelete'])->name('trash.bulk-force-delete');
     Route::post('/trash/empty', [TrashController::class, 'emptyTrash'])->name('trash.empty');
+
+    // Buku Panduan Penggunaan Sistem (Guide Book)
+    Route::get('/panduan', [PanduanController::class, 'index'])->name('panduan.index');
+    Route::get('/buku-panduan', fn() => redirect()->route('panduan.index'))->name('panduan.alias');
 });
