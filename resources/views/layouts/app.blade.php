@@ -1285,44 +1285,266 @@
             color: #f8fafc !important;
         }
 
-        /* ── Asisten AI Chat in Dark Mode ── */
-        html.dark-mode .ai-chat-card,
-        html.dark-mode .ai-chat-header,
-        html.dark-mode .ai-chat-input-bar,
-        html.dark-mode .ai-sidebar {
-            background-color: #131f33 !important;
-            border-color: #1e3352 !important;
-        }
-        html.dark-mode .ai-bubble-bot,
-        html.dark-mode .ai-msg-bubble-bot {
-            background-color: #17263d !important;
-            border-color: #1e3352 !important;
-            color: #e2e8f0 !important;
+        /* ══════════════════════════════════════════════════════════════
+           UNIVERSAL MULTI-LAYERED TEXT, NUMBER & CONTRAST ENGINE
+           Guarantees NO letters or numbers blend into dark background
+        ══════════════════════════════════════════════════════════════ */
+        
+        /* 1. Global App Layout & Content Base Text */
+        html.dark-mode body,
+        html.dark-mode .app-layout,
+        html.dark-mode .main-content,
+        html.dark-mode .page-content,
+        html.dark-mode .content-area {
+            color: #cbd5e1 !important;
         }
 
-        /* ── General Text Contrast & Overrides ── */
-        html.dark-mode .text-dark,
-        html.dark-mode .text-gray-900,
-        html.dark-mode .text-slate-900,
-        html.dark-mode [style*="color:#0f172a"],
-        html.dark-mode [style*="color: #0f172a"],
-        html.dark-mode [style*="color:#111827"],
-        html.dark-mode [style*="color: #111827"],
-        html.dark-mode [style*="color:#1e293b"],
-        html.dark-mode [style*="color: #1e293b"] {
+        /* 2. All Headings, Titles, Names, Strong & Bold Text across ANY page */
+        html.dark-mode h1,
+        html.dark-mode h2,
+        html.dark-mode h3,
+        html.dark-mode h4,
+        html.dark-mode h5,
+        html.dark-mode h6,
+        html.dark-mode strong,
+        html.dark-mode b,
+        html.dark-mode th,
+        html.dark-mode dt,
+        html.dark-mode .page-title,
+        html.dark-mode .card-title,
+        html.dark-mode .modal-title,
+        html.dark-mode .section-title,
+        html.dark-mode .font-bold,
+        html.dark-mode .font-semibold,
+        html.dark-mode [class*="-title"],
+        html.dark-mode [class*="_title"],
+        html.dark-mode [class*="-heading"],
+        html.dark-mode [class*="_heading"],
+        html.dark-mode [class*="-header-title"],
+        html.dark-mode [class*="-name"]:not(.btn):not(button),
+        html.dark-mode [class*="_name"]:not(.btn):not(button) {
             color: #f8fafc !important;
         }
+
+        /* 3. Universal Numbers, Counts, Values, Totals & Metrics */
+        html.dark-mode [class*="-number"],
+        html.dark-mode [class*="_number"],
+        html.dark-mode [class*="-count"],
+        html.dark-mode [class*="_count"],
+        html.dark-mode [class*="-value"],
+        html.dark-mode [class*="_value"],
+        html.dark-mode [class*="-val"]:not(.modal),
+        html.dark-mode [class*="_val"],
+        html.dark-mode [class*="-total"],
+        html.dark-mode [class*="_total"],
+        html.dark-mode [class*="-amount"],
+        html.dark-mode [class*="_amount"],
+        html.dark-mode [class*="stat-val"],
+        html.dark-mode [class*="stat-number"],
+        html.dark-mode [class*="stat-value"],
+        html.dark-mode [class*="stat-count"],
+        html.dark-mode .stat-value,
+        html.dark-mode .stat-card-value,
+        html.dark-mode .trash-stat-value,
+        html.dark-mode .pn-stat-number,
+        html.dark-mode .td-nomor,
+        html.dark-mode .ar-doc-nomor,
+        html.dark-mode .kg-tanggal-date,
+        html.dark-mode .folder-count-badge {
+            color: #f8fafc !important;
+        }
+
+        /* 4. Subtitles, Descriptions, Hints, Notes, Units, Jobs, Dates, Times */
+        html.dark-mode p,
+        html.dark-mode dd,
+        html.dark-mode .page-subtitle,
+        html.dark-mode .card-subtitle,
+        html.dark-mode .modal-desc,
+        html.dark-mode [class*="-subtitle"],
+        html.dark-mode [class*="_subtitle"],
+        html.dark-mode [class*="-desc"],
+        html.dark-mode [class*="_desc"],
+        html.dark-mode [class*="-description"],
+        html.dark-mode [class*="-sub"]:not([class*="-sub-"]):not(.modal),
+        html.dark-mode [class*="_sub"],
+        html.dark-mode [class*="-job"],
+        html.dark-mode [class*="_job"],
+        html.dark-mode [class*="-unit"],
+        html.dark-mode [class*="_unit"],
+        html.dark-mode [class*="-hint"],
+        html.dark-mode [class*="_hint"],
+        html.dark-mode [class*="-note"],
+        html.dark-mode [class*="_note"],
+        html.dark-mode [class*="-time"],
+        html.dark-mode [class*="_time"],
+        html.dark-mode [class*="-date"],
+        html.dark-mode [class*="_date"],
+        html.dark-mode [class*="-location"],
+        html.dark-mode [class*="-lokasi"],
+        html.dark-mode [class*="-label"]:not([class*="badge"]),
+        html.dark-mode [class*="_label"]:not([class*="badge"]),
+        html.dark-mode [class*="-lbl"]:not([class*="badge"]) {
+            color: #94a3b8 !important;
+        }
+
+        /* 5. Global Table System (applies across all tables and page tables) */
+        html.dark-mode table,
+        html.dark-mode .table,
+        html.dark-mode [class*="-table"],
+        html.dark-mode [class*="table-"] {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode table thead,
+        html.dark-mode table thead tr,
+        html.dark-mode table thead th,
+        html.dark-mode .table thead,
+        html.dark-mode .table thead tr,
+        html.dark-mode .table thead th,
+        html.dark-mode [class*="-table"] thead,
+        html.dark-mode [class*="-table"] thead tr,
+        html.dark-mode [class*="-table"] thead th {
+            background-color: #0f1c30 !important;
+            border-bottom: 1px solid #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode table tbody td,
+        html.dark-mode .table tbody td,
+        html.dark-mode [class*="-table"] tbody td {
+            background-color: transparent !important;
+            border-bottom: 1px solid #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode table tbody tr:hover,
+        html.dark-mode table tbody tr:hover td,
+        html.dark-mode .table tbody tr:hover,
+        html.dark-mode .table tbody tr:hover td,
+        html.dark-mode [class*="-table"] tbody tr:hover,
+        html.dark-mode [class*="-table"] tbody tr:hover td {
+            background-color: #17263d !important;
+        }
+        html.dark-mode table tbody td strong,
+        html.dark-mode table tbody td b,
+        html.dark-mode table tbody td .font-semibold,
+        html.dark-mode table tbody td .font-bold,
+        html.dark-mode [class*="-table"] tbody td strong,
+        html.dark-mode [class*="-table"] tbody td b,
+        html.dark-mode [class*="-table"] tbody td .font-semibold,
+        html.dark-mode [class*="-table"] tbody td .font-bold,
+        html.dark-mode [class*="-table"] tbody td [class*="-title"],
+        html.dark-mode [class*="-table"] tbody td [class*="-name"] {
+            color: #f8fafc !important;
+        }
+        html.dark-mode table tbody td .text-muted,
+        html.dark-mode [class*="-table"] tbody td .text-muted,
+        html.dark-mode [class*="-table"] tbody td [class*="-sub"],
+        html.dark-mode [class*="-table"] tbody td [class*="-job"],
+        html.dark-mode [class*="-table"] tbody td [class*="-time"],
+        html.dark-mode [class*="-table"] tbody td [class*="-date"] {
+            color: #94a3b8 !important;
+        }
+
+        /* 6. Form Controls, Labels, Inputs & Placeholders */
+        html.dark-mode label,
+        html.dark-mode .form-label,
+        html.dark-mode .form-label-normal,
+        html.dark-mode [class*="-form-label"] {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+        html.dark-mode select,
+        html.dark-mode textarea,
+        html.dark-mode .form-control,
+        html.dark-mode [class*="-control"],
+        html.dark-mode [class*="-input"]:not(.btn),
+        html.dark-mode [class*="-select"] {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+            color-scheme: dark !important;
+        }
+        html.dark-mode input::placeholder,
+        html.dark-mode textarea::placeholder,
+        html.dark-mode [class*="-input"]::placeholder {
+            color: #64748b !important;
+        }
+
+        /* 7. Pagination Wrappers & Item Info */
+        html.dark-mode .pagination-wrapper,
+        html.dark-mode [class*="-pagination-wrap"],
+        html.dark-mode [class*="-pagination-row"],
+        html.dark-mode .pagination {
+            color: #94a3b8 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .pagination a,
+        html.dark-mode .pagination span {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+
+        /* 8. Empty States across all modules */
+        html.dark-mode .empty-state,
+        html.dark-mode [class*="-empty-state"],
+        html.dark-mode td[colspan][style*="text-align:center"],
+        html.dark-mode div[style*="text-align:center"] p {
+            color: #94a3b8 !important;
+        }
+
+        /* 9. Hardcoded Hex Colors Nullification & High Contrast Remapping */
+        /* Near Black / Deep Slate -> Bright Crisp White (#f8fafc) */
+        html.dark-mode [style*="color:#000"],
+        html.dark-mode [style*="color: #000"],
+        html.dark-mode [style*="color:black"],
+        html.dark-mode [style*="color: black"],
+        html.dark-mode [style*="color:#020617"],
+        html.dark-mode [style*="color: #020617"],
+        html.dark-mode [style*="color:#091e42"],
+        html.dark-mode [style*="color: #091e42"],
+        html.dark-mode [style*="color:#0f172a"],
+        html.dark-mode [style*="color: #0f172a"],
+        html.dark-mode [style*="color:#0f2942"],
+        html.dark-mode [style*="color: #0f2942"],
+        html.dark-mode [style*="color:#111827"],
+        html.dark-mode [style*="color: #111827"],
+        html.dark-mode [style*="color:#162f4f"],
+        html.dark-mode [style*="color: #162f4f"],
+        html.dark-mode [style*="color:#1e293b"],
+        html.dark-mode [style*="color: #1e293b"],
+        html.dark-mode [style*="color:#1e3a5f"],
+        html.dark-mode [style*="color: #1e3a5f"],
+        html.dark-mode [style*="color:#1f2937"],
+        html.dark-mode [style*="color: #1f2937"],
+        html.dark-mode .text-dark,
+        html.dark-mode .text-black,
+        html.dark-mode .text-gray-900,
+        html.dark-mode .text-gray-800,
+        html.dark-mode .text-slate-900,
+        html.dark-mode .text-slate-800,
+        html.dark-mode .text-zinc-900,
+        html.dark-mode .text-zinc-800,
+        html.dark-mode .text-neutral-900,
+        html.dark-mode .text-neutral-800 {
+            color: #f8fafc !important;
+        }
+
+        /* Slate / Gray 700-600 -> Light readable Slate (#cbd5e1) */
         html.dark-mode [style*="color:#334155"],
         html.dark-mode [style*="color: #334155"],
         html.dark-mode [style*="color:#374151"],
         html.dark-mode [style*="color: #374151"],
         html.dark-mode [style*="color:#475569"],
-        html.dark-mode [style*="color: #475569"] {
+        html.dark-mode [style*="color: #475569"],
+        html.dark-mode [style*="color:#4b5563"],
+        html.dark-mode [style*="color: #4b5563"],
+        html.dark-mode .text-gray-700,
+        html.dark-mode .text-slate-700,
+        html.dark-mode .text-zinc-700,
+        html.dark-mode .text-neutral-700 {
             color: #cbd5e1 !important;
         }
-        html.dark-mode .text-muted,
-        html.dark-mode .text-gray-500,
-        html.dark-mode .text-slate-500,
+
+        /* Slate / Gray 500-400 & Muted -> High contrast secondary (#94a3b8) */
         html.dark-mode [style*="color:#64748b"],
         html.dark-mode [style*="color: #64748b"],
         html.dark-mode [style*="color:#6b7280"],
@@ -1330,9 +1552,96 @@
         html.dark-mode [style*="color:#9ca3af"],
         html.dark-mode [style*="color: #9ca3af"],
         html.dark-mode [style*="color:#94a3b8"],
-        html.dark-mode [style*="color: #94a3b8"] {
+        html.dark-mode [style*="color: #94a3b8"],
+        html.dark-mode .text-muted,
+        html.dark-mode .text-gray-500,
+        html.dark-mode .text-slate-500 {
             color: #94a3b8 !important;
         }
+
+        /* Dark / Deep Blues -> Vibrant Sky Blue (#38bdf8 / #60a5fa) */
+        html.dark-mode [style*="color:#1e40af"],
+        html.dark-mode [style*="color: #1e40af"],
+        html.dark-mode [style*="color:#1d4ed8"],
+        html.dark-mode [style*="color: #1d4ed8"],
+        html.dark-mode [style*="color:#0369a1"],
+        html.dark-mode [style*="color: #0369a1"],
+        html.dark-mode [style*="color:#0284c7"],
+        html.dark-mode [style*="color: #0284c7"],
+        html.dark-mode [style*="color:#155e75"],
+        html.dark-mode [style*="color: #155e75"],
+        html.dark-mode [style*="color:#2563eb"],
+        html.dark-mode [style*="color: #2563eb"],
+        html.dark-mode [style*="color:#0891b2"],
+        html.dark-mode [style*="color: #0891b2"],
+        html.dark-mode [style*="color:#172554"],
+        html.dark-mode [style*="color: #172554"] {
+            color: #38bdf8 !important;
+        }
+
+        /* Dark / Deep Greens -> Vibrant Mint Green (#4ade80) */
+        html.dark-mode [style*="color:#065f46"],
+        html.dark-mode [style*="color: #065f46"],
+        html.dark-mode [style*="color:#047857"],
+        html.dark-mode [style*="color: #047857"],
+        html.dark-mode [style*="color:#166534"],
+        html.dark-mode [style*="color: #166534"],
+        html.dark-mode [style*="color:#15803d"],
+        html.dark-mode [style*="color: #15803d"],
+        html.dark-mode [style*="color:#059669"],
+        html.dark-mode [style*="color: #059669"],
+        html.dark-mode [style*="color:#16a34a"],
+        html.dark-mode [style*="color: #16a34a"],
+        html.dark-mode [style*="color:#0f766e"],
+        html.dark-mode [style*="color: #0f766e"] {
+            color: #4ade80 !important;
+        }
+
+        /* Dark / Deep Reds -> Vibrant Coral Red (#f87171) */
+        html.dark-mode [style*="color:#991b1b"],
+        html.dark-mode [style*="color: #991b1b"],
+        html.dark-mode [style*="color:#b91c1c"],
+        html.dark-mode [style*="color: #b91c1c"],
+        html.dark-mode [style*="color:#dc2626"],
+        html.dark-mode [style*="color: #dc2626"],
+        html.dark-mode [style*="color:#ef4444"],
+        html.dark-mode [style*="color: #ef4444"],
+        html.dark-mode [style*="color:#be185d"],
+        html.dark-mode [style*="color: #be185d"],
+        html.dark-mode [style*="color:#7f1d1d"],
+        html.dark-mode [style*="color: #7f1d1d"] {
+            color: #f87171 !important;
+        }
+
+        /* Dark / Deep Ambers & Browns -> Bright Warm Amber (#fbbf24) */
+        html.dark-mode [style*="color:#78350f"],
+        html.dark-mode [style*="color: #78350f"],
+        html.dark-mode [style*="color:#854d0e"],
+        html.dark-mode [style*="color: #854d0e"],
+        html.dark-mode [style*="color:#92400e"],
+        html.dark-mode [style*="color: #92400e"],
+        html.dark-mode [style*="color:#b45309"],
+        html.dark-mode [style*="color: #b45309"],
+        html.dark-mode [style*="color:#d97706"],
+        html.dark-mode [style*="color: #d97706"],
+        html.dark-mode [style*="color:#c2410c"],
+        html.dark-mode [style*="color: #c2410c"] {
+            color: #fbbf24 !important;
+        }
+
+        /* Dark / Deep Purples -> Soft Lavender (#c084fc) */
+        html.dark-mode [style*="color:#581c87"],
+        html.dark-mode [style*="color: #581c87"],
+        html.dark-mode [style*="color:#6d28d9"],
+        html.dark-mode [style*="color: #6d28d9"],
+        html.dark-mode [style*="color:#7e22ce"],
+        html.dark-mode [style*="color: #7e22ce"],
+        html.dark-mode [style*="color:#4338ca"],
+        html.dark-mode [style*="color: #4338ca"] {
+            color: #c084fc !important;
+        }
+
+        /* Universal Borders */
         html.dark-mode .border,
         html.dark-mode [style*="border-color:#e2e8f0"],
         html.dark-mode [style*="border-color: #e2e8f0"],
@@ -1347,6 +1656,137 @@
         html.dark-mode [style*="border-top:1px solid #f1f5f9"],
         html.dark-mode [style*="border-top: 1px solid #f1f5f9"] {
             border-color: #1e3352 !important;
+        }
+
+        /* ── Asisten AI Full Dark Mode ── */
+        html.dark-mode .ai-chat-card,
+        html.dark-mode .ai-chat-header,
+        html.dark-mode .ai-chat-bottom,
+        html.dark-mode .ai-messages-area,
+        html.dark-mode .ai-sidebar {
+            background-color: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ai-header-title {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ai-header-subtitle {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ai-btn-header {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ai-btn-header:hover {
+            background: #1e3352 !important;
+            color: #f8fafc !important;
+            border-color: #3b82f6 !important;
+        }
+        html.dark-mode .ai-bubble-bot,
+        html.dark-mode .ai-msg-bubble-bot {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark-mode .ai-bubble-bot p,
+        html.dark-mode .ai-msg-bubble-bot p {
+            color: #e2e8f0 !important;
+        }
+        html.dark-mode .ai-msg-bubble-user {
+            background-color: #1e3a5f !important;
+            border-color: #2563eb !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ai-msg-sender-bot,
+        html.dark-mode .ai-msg-sender-user {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ai-file-badge {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ai-file-badge:hover {
+            border-color: #3b82f6 !important;
+            background-color: #1e3352 !important;
+        }
+        html.dark-mode .ai-schedule-card,
+        html.dark-mode .ai-mail-card {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ai-schedule-item,
+        html.dark-mode .ai-mail-item {
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .ai-schedule-time {
+            color: #38bdf8 !important;
+        }
+        html.dark-mode .ai-schedule-title {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ai-schedule-location {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ai-typing-indicator {
+            background-color: #17263d !important;
+        }
+        html.dark-mode .ai-chip-btn {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ai-chip-btn:hover {
+            background-color: #1e3352 !important;
+            color: #ffffff !important;
+            border-color: #3b82f6 !important;
+        }
+        html.dark-mode .ai-input-bar {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ai-input-bar:focus-within {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+        }
+        html.dark-mode .ai-text-input {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ai-text-input::placeholder {
+            color: #64748b !important;
+        }
+        html.dark-mode .ai-clip-icon {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ai-clip-icon:hover {
+            color: #f8fafc !important;
+            background-color: #1e3352 !important;
+        }
+        html.dark-mode .ai-send-btn {
+            background-color: #2563eb !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .ai-send-btn:hover {
+            background-color: #1d4ed8 !important;
+        }
+        html.dark-mode .ai-disclaimer {
+            color: #64748b !important;
+        }
+        html.dark-mode .ai-modal-card {
+            background-color: #131f33 !important;
+            border: 1px solid #1e3352 !important;
+        }
+        html.dark-mode .ai-modal-title {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ai-modal-desc {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ai-modal-input {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
         }
 
         /* ── Media Sosial (ms-) Dark Mode ── */
@@ -2217,6 +2657,265 @@
         html.dark-mode select[style*="background: white"] {
             background-color: #17263d !important;
             border-color: #1e3352 !important;
+        }
+
+        /* ── Arsip Terhapus (trash-) Full Dark Mode ── */
+        html.dark-mode .trash-header-left h1 {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .trash-header-left p {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .trash-stat-card {
+            background-color: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .trash-stat-label {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .trash-stat-value {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .trash-stat-sub {
+            color: #64748b !important;
+        }
+        html.dark-mode .trash-container-card {
+            background-color: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .trash-toolbar {
+            background-color: #131f33 !important;
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .trash-filter-select {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+            color-scheme: dark !important;
+        }
+        html.dark-mode .trash-search-box input {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .trash-search-box input:focus {
+            border-color: #3b82f6 !important;
+        }
+        html.dark-mode .btn-trash-empty {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .btn-trash-empty:hover {
+            background-color: #2d1515 !important;
+            border-color: #7f1d1d !important;
+            color: #f87171 !important;
+        }
+        html.dark-mode .trash-table thead th {
+            background-color: #0f1c30 !important;
+            border-bottom-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .trash-table tbody td {
+            border-bottom-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+            background-color: transparent !important;
+        }
+        html.dark-mode .trash-table tbody tr:hover td {
+            background-color: #17263d !important;
+        }
+        html.dark-mode .trash-table tbody tr.selected td {
+            background-color: #172e54 !important;
+        }
+        html.dark-mode .file-chip {
+            background-color: #17263d !important;
+            color: #cbd5e1 !important;
+        }
+
+        /* ── Arsip Surat (ar-) Full Dark Mode ── */
+        html.dark-mode .arsip-page {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ar-header-left h1 {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ar-header-left p {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ar-filter-card {
+            background-color: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ar-filter-label {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ar-select-control,
+        html.dark-mode .ar-date-control {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+            color-scheme: dark !important;
+        }
+        html.dark-mode .ar-date-separator {
+            color: #64748b !important;
+        }
+        html.dark-mode .ar-table-card {
+            background-color: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ar-table thead th {
+            background-color: #0f1c30 !important;
+            border-bottom-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ar-table tbody td {
+            border-bottom-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+            background-color: transparent !important;
+        }
+        html.dark-mode .ar-clickable-row:hover td {
+            background-color: #17263d !important;
+        }
+        html.dark-mode .ar-clickable-row:active td {
+            background-color: #1e3352 !important;
+        }
+        html.dark-mode .ar-cell-no {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ar-doc-title {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ar-doc-nomor {
+            color: #cbd5e1 !important;
+        }
+
+        /* ── Surat Keluar & Surat Masuk (Keuangan) Dark Mode ── */
+        html.dark-mode .page-header-left h1 {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .page-header-left p {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .btn-secondary-action {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .btn-secondary-action:hover {
+            background-color: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .filter-select {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+            color-scheme: dark !important;
+        }
+        html.dark-mode .td-nomor,
+        html.dark-mode .td-perihal {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .td-tujuan,
+        html.dark-mode .td-date {
+            color: #cbd5e1 !important;
+        }
+
+        /* ── Profil Admin & Pengaturan Dark Mode ── */
+        html.dark-mode .profile-card {
+            background-color: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .profile-name {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .profile-role-badge {
+            background-color: #172e54 !important;
+            border-color: #1e3a5f !important;
+            color: #93c5fd !important;
+        }
+        html.dark-mode .settings-tabs {
+            background-color: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .settings-tab-item {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .settings-tab-item:hover {
+            background-color: #17263d !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .settings-tab-item.active {
+            background-color: #17263d !important;
+            color: #38bdf8 !important;
+            border-left-color: #38bdf8 !important;
+        }
+
+        /* ── Additional Background Segments Nullification ── */
+        html.dark-mode button[style*="background:white"],
+        html.dark-mode button[style*="background: white"],
+        html.dark-mode button[style*="background:#fff"],
+        html.dark-mode button[style*="background: #fff"],
+        html.dark-mode span[style*="background:white"]:not(.kg-avatar):not(.user-avatar),
+        html.dark-mode span[style*="background: white"]:not(.kg-avatar):not(.user-avatar),
+        html.dark-mode a[style*="background:white"]:not(.kg-avatar):not(.user-avatar),
+        html.dark-mode a[style*="background: white"]:not(.kg-avatar):not(.user-avatar),
+        html.dark-mode [style*="background:#edf2f7"],
+        html.dark-mode [style*="background: #edf2f7"] {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+        }
+
+        /* ── Universal File Upload Area & Form Elements in Dark Mode ── */
+        html.dark-mode .upload-area,
+        html.dark-mode [class*="-upload-area"],
+        html.dark-mode .drop-zone {
+            background-color: #0f1c30 !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .upload-area:hover,
+        html.dark-mode .upload-area.dragover {
+            background-color: #17263d !important;
+            border-color: #3b82f6 !important;
+        }
+        html.dark-mode .upload-main,
+        html.dark-mode .upload-title,
+        html.dark-mode [class*="-upload-main"] {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .upload-sub,
+        html.dark-mode .upload-hint,
+        html.dark-mode [class*="-upload-sub"],
+        html.dark-mode [class*="-upload-hint"] {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .disposisi-card,
+        html.dark-mode .form-card {
+            background-color: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .disposisi-title,
+        html.dark-mode .form-card-title {
+            color: #f8fafc !important;
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .form-group .form-label,
+        html.dark-mode .form-group label.form-label,
+        html.dark-mode .upload-label-text {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .form-input,
+        html.dark-mode .form-select,
+        html.dark-mode .form-textarea {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+            color-scheme: dark !important;
+        }
+        html.dark-mode .form-input::placeholder,
+        html.dark-mode .form-textarea::placeholder {
+            color: #64748b !important;
         }
     </style>
 </head>

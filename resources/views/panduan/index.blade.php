@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buku Panduan Penggunaan — E-PROKOPIM Kota Bandung</title>
     <meta name="description" content="Buku panduan lengkap dan dokumentasi resmi penggunaan Sistem Informasi Protokol dan Komunikasi Pimpinan (E-PROKOPIM) Pemerintah Kota Bandung.">
+    <script>
+        if (localStorage.getItem('prokopim_theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,6 +51,57 @@
             --font-mono: 'JetBrains Mono', monospace;
             --sidebar-width: 290px;
             --header-height: 64px;
+        }
+
+        html.dark-mode {
+            --primary-900: #0b1320;
+            --primary-800: #131f33;
+            --primary-700: #17263d;
+            --primary-50: #172e54;
+            --primary-100: #1e3a5f;
+            --slate-900: #f8fafc;
+            --slate-800: #f1f5f9;
+            --slate-700: #cbd5e1;
+            --slate-600: #94a3b8;
+            --slate-500: #64748b;
+            --slate-400: #475569;
+            --slate-300: #1e3352;
+            --slate-200: #1e3352;
+            --slate-100: #17263d;
+            --slate-50: #0b1320;
+            --emerald-50: #064e3b;
+            --amber-50: #451a03;
+            --rose-50: #4c0519;
+            --purple-50: #2e1065;
+            color-scheme: dark;
+        }
+
+        html.dark-mode body {
+            background: #0b1320;
+            color: #cbd5e1;
+        }
+
+        html.dark-mode .guide-header,
+        html.dark-mode .guide-sidebar,
+        html.dark-mode .guide-topic,
+        html.dark-mode .guide-card,
+        html.dark-mode .feature-box,
+        html.dark-mode .faq-item {
+            background-color: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
+
+        html.dark-mode .guide-search-input,
+        html.dark-mode .code-block {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+
+        html.dark-mode .sidebar-link:hover,
+        html.dark-mode .sidebar-link.active {
+            background-color: #17263d !important;
+            color: #38bdf8 !important;
         }
 
         * {
