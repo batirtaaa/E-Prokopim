@@ -687,17 +687,20 @@
 
 /* Y-axis */
 .sambutan-y-axis {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
     width: 28px;
-    padding-bottom: 22px;
+    position: relative;
     flex-shrink: 0;
+    margin-top: 17px;
+    margin-bottom: 20px;
+    height: calc(100% - 37px);
 }
 .sambutan-y-axis span {
+    position: absolute;
+    right: 4px;
+    transform: translateY(50%);
     font-size: 10px;
-    color: #94a3b8;
+    font-weight: 600;
+    color: #64748b;
     line-height: 1;
 }
 
@@ -707,18 +710,25 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 .sambutan-grid-lines {
     position: absolute;
-    inset: 0 0 22px 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    top: 17px;
+    bottom: 20px;
+    left: 0;
+    right: 0;
     pointer-events: none;
 }
 .sambutan-grid-line {
+    position: absolute;
+    left: 0;
+    right: 0;
     border-top: 1px dashed #e2e8f0;
     width: 100%;
+}
+.sambutan-grid-line--base {
+    border-top: 1px solid #cbd5e1;
 }
 
 /* Bars container */
@@ -727,7 +737,7 @@
     display: flex;
     align-items: flex-end;
     gap: 6px;
-    padding-bottom: 22px;
+    height: 100%;
     position: relative;
     z-index: 1;
 }
@@ -740,21 +750,22 @@
     align-items: center;
     height: 100%;
     justify-content: flex-end;
-    gap: 3px;
 }
 .sambutan-bar-value {
     font-size: 10px;
     font-weight: 700;
-    color: #475569;
-    min-height: 14px;
-    line-height: 1;
+    color: #1e293b;
+    height: 14px;
+    margin-bottom: 3px;
+    line-height: 14px;
+    text-align: center;
 }
-.sambutan-bar-value--zero { color: transparent; }
 .sambutan-bar-outer {
     width: 100%;
     flex: 1;
     display: flex;
     align-items: flex-end;
+    position: relative;
 }
 .sambutan-bar {
     width: 100%;
@@ -787,7 +798,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
-    line-height: 1.2;
+    height: 17px;
+    margin-top: 3px;
+    line-height: 17px;
 }
 .sambutan-bar-label--current {
     color: #10b981;
@@ -803,6 +816,11 @@
     border: 1px solid #c7d2fe;
     border-radius: 20px;
     padding: 3px 10px;
+}
+.dok-total-badge {
+    background: #f0fdf4;
+    color: #16a34a;
+    border-color: #bbf7d0;
 }
 .sambutan-year-badge {
     font-size: 12px;
@@ -958,6 +976,83 @@
 .dok-bar-col:hover .dok-tooltip {
     opacity: 1;
     transform: translateX(-50%) translateY(-10px);
+}
+
+/* ── Dark Mode Adaptations for Charts & Filters ── */
+html.dark-mode .sambutan-single-card,
+html.dark-mode .dok-single-card {
+    background: #131f33 !important;
+    border-color: #1e3352 !important;
+}
+
+html.dark-mode .sambutan-single-card .dash-card-header,
+html.dark-mode .dok-single-card .dash-card-header {
+    border-bottom-color: #1e3352 !important;
+}
+
+html.dark-mode .filter-select,
+html.dark-mode .sambutan-filters .filter-select {
+    background-color: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #f8fafc !important;
+    color-scheme: dark !important;
+}
+html.dark-mode .filter-select:hover,
+html.dark-mode .sambutan-filters .filter-select:hover {
+    border-color: #38bdf8 !important;
+    background-color: #1a2c47 !important;
+}
+html.dark-mode .filter-select option,
+html.dark-mode .sambutan-filters .filter-select option {
+    background-color: #17263d !important;
+    color: #f8fafc !important;
+}
+
+html.dark-mode .sambutan-total-badge {
+    background: #1e1b4b !important;
+    color: #a5b4fc !important;
+    border-color: #3730a3 !important;
+}
+
+html.dark-mode .dok-total-badge {
+    background: #064e3b !important;
+    color: #6ee7b7 !important;
+    border-color: #047857 !important;
+}
+
+html.dark-mode .sambutan-y-axis span {
+    color: #94a3b8 !important;
+}
+
+html.dark-mode .sambutan-grid-line {
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark-mode .sambutan-grid-line--base {
+    border-top-color: #334155 !important;
+}
+
+html.dark-mode .sambutan-bar-value {
+    color: #f8fafc !important;
+}
+
+html.dark-mode .sambutan-bar-label {
+    color: #94a3b8 !important;
+}
+
+html.dark-mode .sambutan-bar-label--current {
+    color: #34d399 !important;
+}
+
+html.dark-mode .dok-legend {
+    color: #cbd5e1 !important;
+}
+
+html.dark-mode .dok-tooltip,
+html.dark-mode .chart-bar-tooltip {
+    background: #0b1329 !important;
+    color: #f8fafc !important;
+    border: 1px solid #1e3352 !important;
 }
 </style>
 @endpush
@@ -1183,6 +1278,8 @@
             </div>
         </div>
     </div>
+</div>
+
 {{-- 5b. Grafik Dokumentasi (Foto, Video & Notulensi) --}}
 <div class="dash-card dok-single-card">
     <div class="dash-card-header" style="flex-wrap:wrap;gap:12px;">
@@ -1229,7 +1326,7 @@
                 <option value="11">November</option>
                 <option value="12">Desember</option>
             </select>
-            <span class="sambutan-total-badge" id="dok-total-label" style="background:#f0fdf4;color:#16a34a;border-color:#bbf7d0;">Total: 0</span>
+            <span class="sambutan-total-badge dok-total-badge" id="dok-total-label">Total: 0</span>
         </div>
     </div>
     <div class="dash-card-body">
@@ -1581,11 +1678,62 @@ function handleSambutanYearChange(select) {
     renderSambutanChart();
 }
 
+// ── Helper: Skala & Grid Line Unik Tanpa Angka 0 dan Tanpa Pengulangan ──
+function getScaleTicks(actualMax) {
+    let scaleMax = 4;
+    let ticks = [];
+
+    if (actualMax <= 0) {
+        scaleMax = 4;
+        ticks = [4, 3, 2, 1];
+    } else if (actualMax === 1) {
+        scaleMax = 2;
+        ticks = [2, 1];
+    } else if (actualMax === 2) {
+        scaleMax = 2;
+        ticks = [2, 1];
+    } else if (actualMax === 3) {
+        scaleMax = 3;
+        ticks = [3, 2, 1];
+    } else if (actualMax === 4) {
+        scaleMax = 4;
+        ticks = [4, 3, 2, 1];
+    } else if (actualMax === 5) {
+        scaleMax = 5;
+        ticks = [5, 4, 3, 2, 1];
+    } else if (actualMax <= 8) {
+        scaleMax = 8;
+        ticks = [8, 6, 4, 2];
+    } else if (actualMax <= 12) {
+        scaleMax = 12;
+        ticks = [12, 9, 6, 3];
+    } else if (actualMax <= 16) {
+        scaleMax = 16;
+        ticks = [16, 12, 8, 4];
+    } else if (actualMax <= 20) {
+        scaleMax = 20;
+        ticks = [20, 15, 10, 5];
+    } else {
+        const magnitude = Math.pow(10, Math.floor(Math.log10(actualMax)));
+        let step = magnitude;
+        if (actualMax / magnitude <= 2) step = Math.max(1, Math.round(magnitude * 0.5));
+        else if (actualMax / magnitude <= 5) step = magnitude;
+        else step = magnitude * 2;
+        scaleMax = Math.ceil(actualMax / step) * step;
+        for (let t = scaleMax; t >= step; t -= step) {
+            ticks.push(t);
+        }
+    }
+
+    return { scaleMax, ticks };
+}
+
 function renderSambutanChart() {
     const yearSelect = document.getElementById('sambutan-filter-tahun');
     const monthSelect = document.getElementById('sambutan-filter-bulan');
     const totalBadge = document.getElementById('sambutan-total-label');
     const yAxisContainer = document.getElementById('sambutan-y-axis');
+    const gridLinesContainer = document.getElementById('sambutan-grid-lines');
     const barsContainer = document.getElementById('sambutan-bars-container');
 
     if (!yearSelect || !monthSelect || !barsContainer) return;
@@ -1636,41 +1784,44 @@ function renderSambutanChart() {
         totalBadge.textContent = namaBulan + ' ' + yr + ': ' + valBulan + ' Sambutan';
     }
 
-    const maxVal = Math.max(...chartItems.map(i => i.value), 1);
+    const actualMax = Math.max(...chartItems.map(i => i.value), 0);
+    const { scaleMax, ticks } = getScaleTicks(actualMax);
 
-    if (yAxisContainer) {
-        yAxisContainer.innerHTML = `
-            <span>${maxVal}</span>
-            <span>${Math.round(maxVal * 0.66)}</span>
-            <span>${Math.round(maxVal * 0.33)}</span>
-            <span>0</span>
-        `;
+    if (yAxisContainer && gridLinesContainer) {
+        let yAxisHtml = '';
+        let gridHtml = '';
+
+        ticks.forEach(tick => {
+            const bottomPct = ((tick / scaleMax) * 100).toFixed(2);
+            yAxisHtml += `<span style="bottom: ${bottomPct}%;">${tick}</span>`;
+            gridHtml += `<div class="sambutan-grid-line" style="bottom: ${bottomPct}%;"></div>`;
+        });
+
+        // Baseline di 0%
+        gridHtml += `<div class="sambutan-grid-line sambutan-grid-line--base" style="bottom: 0%;"></div>`;
+
+        yAxisContainer.innerHTML = yAxisHtml;
+        gridLinesContainer.innerHTML = gridHtml;
     }
 
     barsContainer.innerHTML = '';
 
     chartItems.forEach(item => {
-        const pct = maxVal > 0 ? Math.round((item.value / maxVal) * 100) : 0;
-        const barHeight = item.value > 0 ? Math.max(pct, 8) : 3;
+        const pct = scaleMax > 0 ? (item.value / scaleMax) * 100 : 0;
+        const barHeight = item.value > 0 ? Math.max(Math.round(pct), 6) : 0;
 
         let barClass = 'sambutan-bar sambutan-bar--bulan';
-
-        if (item.isCurrent) {
-            barClass += ' sambutan-bar--current';
-        }
-        if (item.dimmed) {
-            barClass += ' sambutan-bar--dimmed';
-        }
-        if (item.isHighlighted && selectedMonth > 0) {
-            barClass += ' sambutan-bar--highlighted';
-        }
+        if (item.isCurrent) barClass += ' sambutan-bar--current';
+        if (item.dimmed) barClass += ' sambutan-bar--dimmed';
+        if (item.isHighlighted && selectedMonth > 0) barClass += ' sambutan-bar--highlighted';
 
         const col = document.createElement('div');
         col.className = 'sambutan-bar-col';
+        col.setAttribute('title', `${item.label}: ${item.value} sambutan`);
         col.innerHTML = `
-            <div class="sambutan-bar-value ${item.value === 0 ? 'sambutan-bar-value--zero' : ''}">${item.value}</div>
+            <div class="sambutan-bar-value">${item.value > 0 ? item.value : ''}</div>
             <div class="sambutan-bar-outer">
-                <div class="${barClass}" style="height: ${barHeight}%;" title="${item.label}: ${item.value} sambutan"></div>
+                ${item.value > 0 ? `<div class="${barClass}" style="height: ${barHeight}%;"></div>` : ''}
             </div>
             <div class="sambutan-bar-label ${item.isCurrent ? 'sambutan-bar-label--current' : ''}">${item.label}</div>
         `;
@@ -1850,15 +2001,24 @@ function renderDokumentasiChart() {
     }
     if (totalBadge) totalBadge.textContent = badgeText;
 
-    // Y-Axis scale
-    const maxVal = Math.max(...chartItems.map(i => i.value), 1);
-    if (yAxisContainer) {
-        yAxisContainer.innerHTML = `
-            <span>${maxVal}</span>
-            <span>${Math.round(maxVal * 0.66)}</span>
-            <span>${Math.round(maxVal * 0.33)}</span>
-            <span>0</span>
-        `;
+    const actualMax = Math.max(...chartItems.map(i => i.value), 0);
+    const { scaleMax, ticks } = getScaleTicks(actualMax);
+
+    if (yAxisContainer && gridLinesContainer) {
+        let yAxisHtml = '';
+        let gridHtml = '';
+
+        ticks.forEach(tick => {
+            const bottomPct = ((tick / scaleMax) * 100).toFixed(2);
+            yAxisHtml += `<span style="bottom: ${bottomPct}%;">${tick}</span>`;
+            gridHtml += `<div class="sambutan-grid-line" style="bottom: ${bottomPct}%;"></div>`;
+        });
+
+        // Baseline di 0%
+        gridHtml += `<div class="sambutan-grid-line sambutan-grid-line--base" style="bottom: 0%;"></div>`;
+
+        yAxisContainer.innerHTML = yAxisHtml;
+        gridLinesContainer.innerHTML = gridHtml;
     }
 
     barsContainer.innerHTML = '';
@@ -1869,8 +2029,8 @@ function renderDokumentasiChart() {
     }
 
     chartItems.forEach(item => {
-        const pct = maxVal > 0 ? Math.round((item.value / maxVal) * 100) : 0;
-        const barHeight = item.value > 0 ? Math.max(pct, 8) : 3;
+        const pct = scaleMax > 0 ? (item.value / scaleMax) * 100 : 0;
+        const barHeight = item.value > 0 ? Math.max(Math.round(pct), 6) : 0;
 
         const col = document.createElement('div');
         col.className = 'sambutan-bar-col dok-bar-col';
@@ -1887,11 +2047,8 @@ function renderDokumentasiChart() {
         }
 
         let barInnerHtml = '';
-        if (selectedTipe === 'semua') {
-            // Stacked bar
-            if (item.value === 0) {
-                barInnerHtml = `<div class="dok-bar-stacked" style="height: ${barHeight}%; background: #e2e8f0;"></div>`;
-            } else {
+        if (item.value > 0) {
+            if (selectedTipe === 'semua') {
                 const totalVal = item.total || 1;
                 const pctFoto = Math.round((item.foto / totalVal) * 100);
                 const pctVideo = Math.round((item.video / totalVal) * 100);
@@ -1904,18 +2061,17 @@ function renderDokumentasiChart() {
                         ${item.notulensi > 0 ? `<div class="dok-segment dok-segment--notulensi" style="height:${pctNotulensi}%"></div>` : ''}
                     </div>
                 `;
+            } else {
+                let singleClass = `dok-bar--single-${selectedTipe}`;
+                barInnerHtml = `
+                    <div class="sambutan-bar ${singleClass}" style="height: ${barHeight}%;"></div>
+                `;
             }
-        } else {
-            // Single category bar
-            let singleClass = `dok-bar--single-${selectedTipe}`;
-            barInnerHtml = `
-                <div class="sambutan-bar ${singleClass}" style="height: ${barHeight}%;"></div>
-            `;
         }
 
         col.innerHTML = `
             <div class="dok-tooltip">${tooltipText}</div>
-            <div class="sambutan-bar-value ${item.value === 0 ? 'sambutan-bar-value--zero' : ''}">${item.value}</div>
+            <div class="sambutan-bar-value">${item.value > 0 ? item.value : ''}</div>
             <div class="sambutan-bar-outer" style="position:relative;">
                 ${barInnerHtml}
             </div>
