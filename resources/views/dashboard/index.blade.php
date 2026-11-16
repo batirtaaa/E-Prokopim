@@ -1484,8 +1484,8 @@ html.dark-mode .chart-bar-tooltip {
             <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px">
                 <div id="modal-avatar-container"></div>
                 <div>
-                    <h3 id="modal-nama" style="margin:0 0 4px;font-size:16px;font-weight:700;color:#0f172a"></h3>
-                    <div id="modal-nip" style="font-size:12.5px;color:#64748b;font-family:monospace"></div>
+                    <h3 id="modal-nama" style="margin:0 0 4px;font-size:16px;font-weight:700;color:#0f172a" class="dash-modal-nama"></h3>
+                    <div id="modal-nip" style="font-size:12.5px;color:#64748b;font-family:monospace" class="dash-modal-nip"></div>
                 </div>
             </div>
             <div class="pegawai-modal-grid">

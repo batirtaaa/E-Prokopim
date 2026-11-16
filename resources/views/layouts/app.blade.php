@@ -1209,6 +1209,41 @@
         html.dark-mode .custom-modal-body {
             background: #131f33 !important;
         }
+
+        /* ── Pegawai Modal Detail — Dark Mode ── */
+        html.dark-mode .pegawai-modal-item {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .pegawai-modal-item label {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .pegawai-modal-item span {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode #modal-nama,
+        html.dark-mode .dash-modal-nama {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode #modal-nip,
+        html.dark-mode .dash-modal-nip {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .custom-modal-footer {
+            border-top-color: #1e3352 !important;
+        }
+        html.dark-mode .btn-modal-cancel {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .btn-modal-cancel:hover {
+            background: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .btn-modal-submit {
+            background: #2563eb !important;
+        }
         html.dark-mode .date-preset-btn {
             background: #17263d !important;
             border-color: #1e3352 !important;
