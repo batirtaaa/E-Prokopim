@@ -2867,6 +2867,74 @@
             color: #cbd5e1 !important;
         }
 
+        /* ── Pegawai Form Edit/Create (pgw-form-*) Full Dark Mode ── */
+        html.dark-mode .pgw-form-container {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .pgw-form-title {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .pgw-form-subtitle {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .pgw-back-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .pgw-back-btn:hover {
+            background: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .pgw-form-card {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.3) !important;
+        }
+        html.dark-mode .pgw-section-header {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .pgw-section-icon {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .pgw-label {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .pgw-input-text,
+        html.dark-mode .pgw-select {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f1f5f9 !important;
+            color-scheme: dark !important;
+        }
+        html.dark-mode .pgw-input-text:focus,
+        html.dark-mode .pgw-select:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2) !important;
+        }
+        html.dark-mode .pgw-input-text::placeholder {
+            color: #475569 !important;
+        }
+        html.dark-mode .pgw-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E") !important;
+        }
+        html.dark-mode .pgw-btn-cancel {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .pgw-btn-cancel:hover {
+            background: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .pgw-btn-save {
+            background: #1a4a7a !important;
+        }
+        html.dark-mode .pgw-btn-save:hover {
+            background: #1e5490 !important;
+        }
+
         /* ── Arsip Surat (ar-) Full Dark Mode ── */
         html.dark-mode .arsip-page {
             color: #cbd5e1 !important;
