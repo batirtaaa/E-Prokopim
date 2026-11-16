@@ -2746,6 +2746,26 @@
         html.dark-mode .trash-header-left p {
             color: #94a3b8 !important;
         }
+        html.dark-mode .two-layer-banner {
+            background: linear-gradient(135deg, rgba(6, 78, 59, 0.4) 0%, rgba(12, 74, 110, 0.35) 100%) !important;
+            border-color: rgba(16, 185, 129, 0.35) !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+        }
+        html.dark-mode .two-layer-banner-icon {
+            background: rgba(16, 185, 129, 0.2) !important;
+            color: #34d399 !important;
+            border: 1px solid rgba(52, 211, 153, 0.35) !important;
+            box-shadow: none !important;
+        }
+        html.dark-mode .two-layer-banner-text h4 {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .two-layer-banner-text p {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .two-layer-banner-text strong {
+            color: #38bdf8 !important;
+        }
         html.dark-mode .trash-stat-card {
             background-color: #131f33 !important;
             border-color: #1e3352 !important;

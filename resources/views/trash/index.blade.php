@@ -525,6 +525,172 @@
 .trash-modal-btn-confirm.success:hover {
     background: #059669;
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   DARK MODE ADAPTATIONS FOR TRASH / ARSIP TERHAPUS
+   ══════════════════════════════════════════════════════════════════ */
+html.dark-mode .trash-header-left h1 {
+    color: #f8fafc !important;
+}
+html.dark-mode .trash-header-left p {
+    color: #94a3b8 !important;
+}
+
+/* Two Layer Soft Delete Banner (Harmonis dengan Dark Mode) */
+html.dark-mode .two-layer-banner {
+    background: linear-gradient(135deg, rgba(6, 78, 59, 0.4) 0%, rgba(12, 74, 110, 0.35) 100%) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+}
+html.dark-mode .two-layer-banner-icon {
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(52, 211, 153, 0.35) !important;
+    box-shadow: none !important;
+}
+html.dark-mode .two-layer-banner-text h4 {
+    color: #f1f5f9 !important;
+}
+html.dark-mode .two-layer-banner-text p {
+    color: #cbd5e1 !important;
+}
+html.dark-mode .two-layer-banner-text strong {
+    color: #38bdf8 !important;
+}
+
+/* Stats Cards Safe Value */
+.trash-stat-safe {
+    color: #059669;
+}
+html.dark-mode .trash-stat-safe {
+    color: #34d399 !important;
+}
+
+/* Toolbar Bulk Buttons in Dark Mode */
+html.dark-mode .btn-trash-restore-bulk {
+    background: rgba(16, 185, 129, 0.16) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.32) !important;
+}
+html.dark-mode .btn-trash-restore-bulk:hover:not(:disabled) {
+    background: #10b981 !important;
+    color: #ffffff !important;
+    border-color: #10b981 !important;
+}
+html.dark-mode .btn-trash-delete-bulk {
+    background: rgba(239, 68, 68, 0.16) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.32) !important;
+}
+html.dark-mode .btn-trash-delete-bulk:hover:not(:disabled) {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+    border-color: #ef4444 !important;
+}
+html.dark-mode .btn-trash-action:disabled {
+    opacity: 0.4 !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #64748b !important;
+}
+
+/* Table Item Elements */
+.trash-item-title {
+    font-weight: 600;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+html.dark-mode .trash-item-title {
+    color: #f1f5f9 !important;
+}
+html.dark-mode .item-meta-chip {
+    color: #94a3b8 !important;
+}
+html.dark-mode .item-meta-chip svg {
+    color: #64748b !important;
+}
+html.dark-mode .item-meta-chip .chip-files-count {
+    color: #38bdf8 !important;
+}
+
+/* Row Action Buttons in Dark Mode */
+html.dark-mode .btn-row-restore {
+    background: rgba(16, 185, 129, 0.16) !important;
+    color: #34d399 !important;
+    border-color: rgba(16, 185, 129, 0.35) !important;
+}
+html.dark-mode .btn-row-restore:hover {
+    background: #10b981 !important;
+    color: #ffffff !important;
+    border-color: #10b981 !important;
+}
+html.dark-mode .btn-row-delete {
+    background: rgba(239, 68, 68, 0.16) !important;
+    color: #f87171 !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+}
+html.dark-mode .btn-row-delete:hover {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+    border-color: #ef4444 !important;
+}
+
+/* Type Badges in Dark Mode */
+html.dark-mode .type-badge {
+    border: 1px solid transparent;
+}
+html.dark-mode .type-badge-kegiatan       { background: rgba(59, 130, 246, 0.18) !important; color: #93c5fd !important; border-color: rgba(59, 130, 246, 0.3) !important; }
+html.dark-mode .type-badge-sambutan       { background: rgba(99, 102, 241, 0.18) !important; color: #c7d2fe !important; border-color: rgba(99, 102, 241, 0.3) !important; }
+html.dark-mode .type-badge-media_sosial   { background: rgba(236, 72, 153, 0.18) !important; color: #fbcfe8 !important; border-color: rgba(236, 72, 153, 0.3) !important; }
+html.dark-mode .type-badge-analisis_isu   { background: rgba(139, 92, 246, 0.18) !important; color: #ddd6fe !important; border-color: rgba(139, 92, 246, 0.3) !important; }
+html.dark-mode .type-badge-galeri_arsip   { background: rgba(245, 158, 11, 0.18) !important; color: #fde68a !important; border-color: rgba(245, 158, 11, 0.3) !important; }
+html.dark-mode .type-badge-penugasan      { background: rgba(6, 182, 212, 0.18) !important; color: #a5f3fc !important; border-color: rgba(6, 182, 212, 0.3) !important; }
+html.dark-mode .type-badge-arahan         { background: rgba(16, 185, 129, 0.18) !important; color: #a7f3d0 !important; border-color: rgba(16, 185, 129, 0.3) !important; }
+html.dark-mode .type-badge-arsip          { background: rgba(234, 179, 8, 0.18) !important; color: #fef08a !important; border-color: rgba(234, 179, 8, 0.3) !important; }
+html.dark-mode .type-badge-aset_barang    { background: rgba(20, 184, 166, 0.18) !important; color: #99f6e4 !important; border-color: rgba(20, 184, 166, 0.3) !important; }
+html.dark-mode .type-badge-aset_kendaraan { background: rgba(249, 115, 22, 0.18) !important; color: #fed7aa !important; border-color: rgba(249, 115, 22, 0.3) !important; }
+html.dark-mode .type-badge-pegawai        { background: rgba(34, 197, 94, 0.18) !important; color: #bbf7d0 !important; border-color: rgba(34, 197, 94, 0.3) !important; }
+html.dark-mode .type-badge-keuangan       { background: rgba(59, 130, 246, 0.18) !important; color: #bfdbfe !important; border-color: rgba(59, 130, 246, 0.3) !important; }
+html.dark-mode .type-badge-surat_keluar   { background: rgba(14, 165, 233, 0.18) !important; color: #bae6fd !important; border-color: rgba(14, 165, 233, 0.3) !important; }
+html.dark-mode .type-badge-notulensi      { background: rgba(245, 158, 11, 0.18) !important; color: #fde68a !important; border-color: rgba(245, 158, 11, 0.3) !important; }
+html.dark-mode .type-badge-dokumentasi    { background: rgba(168, 85, 247, 0.18) !important; color: #e9d5ff !important; border-color: rgba(168, 85, 247, 0.3) !important; }
+html.dark-mode .type-badge-laporan        { background: rgba(100, 116, 139, 0.18) !important; color: #cbd5e1 !important; border-color: rgba(100, 116, 139, 0.3) !important; }
+
+/* Modals in Dark Mode */
+html.dark-mode .trash-modal-card {
+    background: #131f33 !important;
+    border: 1px solid #1e3352 !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6) !important;
+}
+html.dark-mode .trash-modal-title {
+    color: #f8fafc !important;
+}
+html.dark-mode .trash-modal-message {
+    color: #94a3b8 !important;
+}
+html.dark-mode .trash-modal-btn-cancel {
+    background: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .trash-modal-btn-cancel:hover {
+    background: #1e3352 !important;
+    color: #f8fafc !important;
+}
+
+/* Empty State */
+html.dark-mode .trash-empty-icon {
+    background: #17263d !important;
+    color: #64748b !important;
+}
+html.dark-mode .trash-empty-title {
+    color: #f8fafc !important;
+}
+html.dark-mode .trash-empty-desc {
+    color: #94a3b8 !important;
+}
 </style>
 @endpush
 
@@ -591,7 +757,7 @@
             </div>
             <div class="trash-stat-info">
                 <div class="trash-stat-label">Status File & Dokumen</div>
-                <div class="trash-stat-value" style="font-size: 18px; color: #059669;">100% Aman</div>
+                <div class="trash-stat-value trash-stat-safe" style="font-size: 18px;">100% Aman</div>
                 <div class="trash-stat-sub">File tersimpan utuh di sistem</div>
             </div>
         </div>
@@ -691,7 +857,7 @@
                                     </span>
                                 </td>
                                 <td style="max-width: 0;">
-                                    <div style="font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <div class="trash-item-title">
                                         {{ $item['title'] }}
                                     </div>
                                     <div class="item-meta">
@@ -704,7 +870,7 @@
                                         @if($item['has_files'])
                                             <span class="item-meta-chip" title="{{ count($item['files']) }} file lampiran">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="11" height="11" style="color:#0284c7;"><path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.37l-9.547 9.547a1.5 1.5 0 11-2.122-2.122l8.486-8.486" /></svg>
-                                                <span style="color:#0369a1;">{{ count($item['files']) }} file</span>
+                                                <span class="chip-files-count" style="color:#0369a1;">{{ count($item['files']) }} file</span>
                                             </span>
                                         @endif
                                         <span class="item-meta-chip">
