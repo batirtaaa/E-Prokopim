@@ -1187,7 +1187,7 @@
                                 <tr>
                                     <td><strong>Kegiatan Pimpinan (Input, Edit, Hapus)</strong></td>
                                     <td style="text-align: center;"><span class="badge-check badge-check-yes">✓ Akses Penuh + Bulk Delete</span></td>
-                                    <td style="text-align: center;"><span class="badge-check badge-check-yes">✓ Input & Update Status</span></td>
+                                    <td style="text-align: center;"><span class="badge-check badge-check-yes">✓ Input, Edit &amp; Hapus (Soft)</span></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Ekspor Rekap Kegiatan & Sambutan ke Excel</strong></td>
@@ -1197,12 +1197,12 @@
                                 <tr>
                                     <td><strong>Pengelolaan Naskah Sambutan & Media Sosial</strong></td>
                                     <td style="text-align: center;"><span class="badge-check badge-check-yes">✓ Akses Penuh</span></td>
-                                    <td style="text-align: center;"><span class="badge-check badge-check-yes">✓ Akses Penuh</span></td>
+                                    <td style="text-align: center;"><span class="badge-check badge-check-yes">✓ Input &amp; Upload Media Lengkap</span></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Administrasi Pegawai, Aset, & Surat Masuk/Keluar</strong></td>
                                     <td style="text-align: center;"><span class="badge-check badge-check-yes">✓ Akses Penuh</span></td>
-                                    <td style="text-align: center;"><span class="badge-check badge-check-yes">✓ Kelola Operasional</span></td>
+                                    <td style="text-align: center;"><span class="badge-check badge-check-yes">✓ Input, Edit &amp; Unggah Berkas</span></td>
                                 </tr>
                                 <tr>
                                     <td><strong>Asisten AI (Chatbot Google Gemini)</strong></td>

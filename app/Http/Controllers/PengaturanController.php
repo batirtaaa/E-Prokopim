@@ -23,8 +23,8 @@ class PengaturanController extends Controller
 
     public function updateInstansi(Request $request)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengubah profil instansi.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Akses ditolak. Hanya Super Admin yang dapat mengubah profil instansi.');
         }
 
         $validated = $request->validate([
@@ -48,8 +48,8 @@ class PengaturanController extends Controller
 
     public function storeUser(Request $request)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menambah pengguna.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Akses ditolak. Hanya Super Admin yang dapat menambah pengguna.');
         }
 
         $validated = $request->validate([
@@ -72,8 +72,8 @@ class PengaturanController extends Controller
 
     public function updateUser(Request $request, User $user)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit pengguna.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Akses ditolak. Hanya Super Admin yang dapat mengedit pengguna.');
         }
 
         $validated = $request->validate([
@@ -101,8 +101,8 @@ class PengaturanController extends Controller
 
     public function destroyUser(User $user)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menghapus pengguna.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Akses ditolak. Hanya Super Admin yang dapat menghapus pengguna.');
         }
 
         if ($user->id === auth()->id()) {
@@ -115,8 +115,8 @@ class PengaturanController extends Controller
 
     public function toggleUserStatus(User $user)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengubah status pengguna.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Akses ditolak. Hanya Super Admin yang dapat mengubah status pengguna.');
         }
 
         $user->update(['is_active' => !$user->is_active]);

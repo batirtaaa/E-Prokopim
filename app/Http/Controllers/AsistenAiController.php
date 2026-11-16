@@ -121,8 +121,8 @@ class AsistenAiController extends Controller
 
     public function saveApiKey(Request $request)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengubah konfigurasi API Key.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Akses ditolak. Hanya Super Admin yang dapat mengubah konfigurasi API Key.');
         }
 
         $request->validate([

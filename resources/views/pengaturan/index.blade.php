@@ -72,11 +72,11 @@
                             </div>
                         </div>
                         <div class="form-actions">
-                            @if(auth()->user()->isAdmin())
+                            @if(auth()->user()->isSuperAdmin())
                             <button type="reset" class="btn btn-outline">Batal</button>
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                             @else
-                            <span class="text-sm text-muted">Hanya Administrator yang dapat mengubah profil instansi.</span>
+                            <span class="text-sm text-muted">Hanya Super Admin yang dapat mengubah profil instansi.</span>
                             @endif
                         </div>
                     </form>
@@ -89,7 +89,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Manajemen Pengguna</h3>
-                    @if(auth()->user()->isAdmin())
+                    @if(auth()->user()->isSuperAdmin())
                     <button class="btn btn-primary btn-sm" data-modal-open="#modal-tambah-user">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                         Tambah Pengguna
@@ -133,7 +133,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    @if(auth()->user()->isAdmin())
+                                    @if(auth()->user()->isSuperAdmin())
                                     <div style="display:flex;gap:6px;">
                                         <button type="button" class="btn btn-xs btn-outline" onclick="openEditUserModal({{ json_encode([
                                             'id' => $user->id,
@@ -280,13 +280,13 @@
                         </div>
 
                         <div class="form-actions" style="display:flex; justify-content:flex-end; gap:8px;">
-                            @if(auth()->user()->isAdmin())
+                            @if(auth()->user()->isSuperAdmin())
                             <button type="submit" class="btn btn-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
                                 Simpan Kunci Permanen
                             </button>
                             @else
-                            <span class="text-sm text-muted">Hanya Administrator yang dapat mengubah konfigurasi AI.</span>
+                            <span class="text-sm text-muted">Hanya Super Admin yang dapat mengubah konfigurasi AI.</span>
                             @endif
                         </div>
                     </form>
@@ -308,7 +308,7 @@
                             <div class="font-semibold" style="margin-bottom:4px;">Riwayat Login</div>
                             <div class="text-sm text-muted">Riwayat login tersimpan untuk <strong>30 hari</strong> terakhir.</div>
                         </div>
-                        @if(auth()->user()->isAdmin())
+                        @if(auth()->user()->isSuperAdmin())
                         <div style="padding:16px;background:var(--danger-bg);border-radius:var(--radius-sm);">
                             <div class="font-semibold" style="color:var(--danger);margin-bottom:4px;">Hapus Semua Sesi</div>
                             <div class="text-sm text-muted" style="margin-bottom:10px;">Ini akan mengeluarkan semua pengguna yang sedang login.</div>

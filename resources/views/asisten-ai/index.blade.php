@@ -558,11 +558,11 @@
                 <h2 class="ai-header-title">
                     <span>Asisten AI Prokopim</span>
                     @if($currentApiKey)
-                        <span class="ai-status-badge active" onclick="openApiKeyModal()" title="Terhubung ke Google Gemini AI (Klik untuk ubah)">
+                        <span class="ai-status-badge active" @if(auth()->user()->isSuperAdmin()) onclick="openApiKeyModal()" title="Terhubung ke Google Gemini AI (Klik untuk ubah)" style="cursor:pointer;" @else title="Terhubung ke Google Gemini AI" style="cursor:default;" @endif>
                             <span class="ai-pulse-dot"></span> Gemini AI Aktif
                         </span>
                     @else
-                        <span class="ai-status-badge fallback" onclick="openApiKeyModal()" title="Terhubung ke Basis Data Prokopim (Klik untuk pasang Gemini API)">
+                        <span class="ai-status-badge fallback" @if(auth()->user()->isSuperAdmin()) onclick="openApiKeyModal()" title="Terhubung ke Basis Data Prokopim (Klik untuk pasang Gemini API)" style="cursor:pointer;" @else title="Terhubung ke Basis Data Prokopim" style="cursor:default;" @endif>
                             <span class="ai-pulse-dot fallback"></span> Engine Database Aktif
                         </span>
                     @endif
@@ -572,12 +572,14 @@
         </div>
 
         <div class="ai-header-actions">
+            @if(auth()->user()->isSuperAdmin())
             <button type="button" class="ai-btn-header" onclick="openApiKeyModal()" title="Pengaturan API Key">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="14" height="14">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
                 </svg>
                 <span>Google Gemini API</span>
             </button>
+            @endif
 
             <form method="POST" action="{{ route('asisten-ai.clear') }}" onsubmit="return confirm('Bersihkan riwayat percakapan?')" style="margin:0;">
                 @csrf
@@ -733,7 +735,8 @@
         <p class="ai-disclaimer">Asisten AI Prokopim terhubung secara dinamis dengan Basis Data E-Prokopim &amp; Google Gemini AI.</p>
     </div>
 
-    {{-- API Key Setting Modal --}}
+    {{-- API Key Setting Modal (Khusus Super Admin) --}}
+    @if(auth()->user()->isSuperAdmin())
     <div id="aiApiKeyModal" class="ai-modal-overlay" onclick="if(event.target === this) closeApiKeyModal()">
         <div class="ai-modal-card">
             <h3 class="ai-modal-title">
@@ -792,6 +795,7 @@
             </form>
         </div>
     </div>
+    @endif
 </div>
 @endsection
 
@@ -810,10 +814,10 @@ const apiKeyModal = document.getElementById('aiApiKeyModal');
 let selectedFile = null;
 
 function openApiKeyModal() {
-    apiKeyModal.classList.add('show');
+    if (apiKeyModal) apiKeyModal.classList.add('show');
 }
 function closeApiKeyModal() {
-    apiKeyModal.classList.remove('show');
+    if (apiKeyModal) apiKeyModal.classList.remove('show');
 }
 function toggleApiKeyVisibility() {
     const input = document.getElementById('geminiApiKeyInput');

@@ -352,8 +352,8 @@ class TrashController extends Controller
      */
     public function forceDelete(string $type, $id)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Hanya administrator yang dapat menghapus data secara permanen.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Akses ditolak. Hanya Super Admin yang dapat menghapus data secara permanen.');
         }
 
         $configs = $this->getModelConfig();
@@ -387,8 +387,8 @@ class TrashController extends Controller
      */
     public function bulkForceDelete(Request $request)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Hanya administrator yang dapat menghapus data secara permanen.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Akses ditolak. Hanya Super Admin yang dapat menghapus data secara permanen.');
         }
 
         $selected = $request->input('selected_items', []);
@@ -429,8 +429,8 @@ class TrashController extends Controller
      */
     public function emptyTrash(Request $request)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Akses ditolak. Hanya administrator yang dapat mengosongkan Trash.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Akses ditolak. Hanya Super Admin yang dapat mengosongkan Trash.');
         }
 
         $type = $request->input('type', 'all');
