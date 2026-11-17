@@ -2992,6 +2992,26 @@
             color: #f8fafc !important;
             border-color: #3b82f6 !important;
         }
+        html.dark-mode .btn-quick-deadline {
+            background: rgba(37, 99, 235, 0.18) !important;
+            border-color: rgba(59, 130, 246, 0.35) !important;
+            color: #93c5fd !important;
+        }
+        html.dark-mode .btn-quick-deadline:hover {
+            background: rgba(37, 99, 235, 0.3) !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .disposisi-reminder-banner {
+            background: rgba(245, 158, 11, 0.14) !important;
+            border: 1px solid rgba(245, 158, 11, 0.35) !important;
+            color: #fde68a !important;
+        }
+        html.dark-mode .disposisi-reminder-banner svg {
+            color: #fbbf24 !important;
+        }
+        html.dark-mode .disposisi-reminder-banner strong {
+            color: #fef08a !important;
+        }
 
         /* ── Arsip Surat (ar-) Full Dark Mode ── */
         html.dark-mode .arsip-page {

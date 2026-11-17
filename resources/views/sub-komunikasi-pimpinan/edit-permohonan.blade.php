@@ -131,6 +131,109 @@
 .btn-submit { padding:9px 20px; border:1px solid #1e3a5f; border-radius:8px; background:#1e3a5f; font-size:13.5px; font-weight:600; color:white; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:7px; transition:background 0.15s; }
 .btn-submit:hover { background:#162f4f; }
 .btn-submit svg { width:15px; height:15px; }
+
+/* Quick Deadline Button */
+.btn-quick-deadline {
+    font-size: 11.5px;
+    padding: 3px 9px;
+    border: 1px solid #bfdbfe;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.15s ease;
+}
+.btn-quick-deadline:hover {
+    background: #dbeafe;
+}
+
+/* Disposisi Reminder Banner (Tabel/Bar Kuning Pengingat) */
+.disposisi-reminder-banner {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #b45309;
+    margin-top: 6px;
+    background: #fef3c7;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #fde68a;
+    line-height: 1.45;
+}
+.disposisi-reminder-banner svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: #d97706;
+}
+.disposisi-reminder-banner strong {
+    color: #92400e;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DARK MODE ADAPTATIONS FOR EDIT PERMOHONAN SAMBUTAN
+   ══════════════════════════════════════════════════════════════════ */
+html.dark-mode .btn-quick-deadline {
+    background: rgba(37, 99, 235, 0.18) !important;
+    border-color: rgba(59, 130, 246, 0.35) !important;
+    color: #93c5fd !important;
+}
+html.dark-mode .btn-quick-deadline:hover {
+    background: rgba(37, 99, 235, 0.3) !important;
+    color: #ffffff !important;
+}
+
+html.dark-mode .disposisi-reminder-banner {
+    background: rgba(245, 158, 11, 0.14) !important;
+    border-color: rgba(245, 158, 11, 0.35) !important;
+    color: #fde68a !important;
+}
+html.dark-mode .disposisi-reminder-banner svg {
+    color: #fbbf24 !important;
+}
+html.dark-mode .disposisi-reminder-banner strong {
+    color: #fef08a !important;
+}
+
+html.dark-mode .upload-area {
+    background: #0f1c30 !important;
+    border-color: #1e3352 !important;
+}
+html.dark-mode .upload-area:hover {
+    background: #17263d !important;
+    border-color: #3b82f6 !important;
+}
+html.dark-mode .upload-main {
+    color: #f8fafc !important;
+}
+html.dark-mode .upload-sub {
+    color: #94a3b8 !important;
+}
+html.dark-mode .upload-hint {
+    color: #64748b !important;
+}
+html.dark-mode .current-file-badge {
+    background: rgba(59, 130, 246, 0.15) !important;
+    border-color: rgba(59, 130, 246, 0.35) !important;
+    color: #93c5fd !important;
+}
+html.dark-mode .btn-cancel {
+    background: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .btn-cancel:hover {
+    background: #1e3352 !important;
+    color: #f8fafc !important;
+}
+html.dark-mode .radio-item {
+    color: #cbd5e1 !important;
+}
+html.dark-mode .form-footer {
+    border-top-color: #1e3352 !important;
+}
 </style>
 @endpush
 
@@ -314,7 +417,7 @@
                 <label class="form-label" style="margin-bottom:0 !important">Deadline Pengerjaan <span class="req">*</span></label>
                 <div style="display:flex;gap:6px;align-items:center;">
                     <span style="font-size:11.5px;color:#64748b;">Pintas:</span>
-                    <button type="button" onclick="setQuickDeadline(2)" style="font-size:11.5px;padding:3px 9px;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;border-radius:6px;cursor:pointer;font-weight:600"> +2 Jam (Standar Disposisi)</button>
+                    <button type="button" class="btn-quick-deadline" onclick="setQuickDeadline(2)"> +2 Jam (Standar Disposisi)</button>
                 </div>
             </div>
             <div class="form-row-2">
@@ -325,8 +428,8 @@
                     <input type="time" class="form-input" name="deadline_jam" id="input-deadline-jam" value="{{ $deadlineJam }}" required>
                 </div>
             </div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#d97706;margin-top:6px;background:#fef3c7;padding:6px 12px;border-radius:6px">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:14px;height:14px;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <div class="disposisi-reminder-banner">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span><strong>Pengingat Disposisi:</strong> Disposisi naskah sambutan diharapkan selesai dikerjakan maksimal <strong>2 jam</strong> setelah instruksi diberikan.</span>
             </div>
         </div>

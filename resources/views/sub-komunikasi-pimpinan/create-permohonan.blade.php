@@ -118,6 +118,119 @@
 .btn-submit { padding:9px 20px; border:1px solid #1e3a5f; border-radius:8px; background:#1e3a5f; font-size:13.5px; font-weight:600; color:white; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:7px; transition:background 0.15s; }
 .btn-submit:hover { background:#162f4f; }
 .btn-submit svg { width:15px; height:15px; }
+
+/* Quick Deadline Button */
+.btn-quick-deadline {
+    font-size: 11.5px;
+    padding: 3px 9px;
+    border: 1px solid #bfdbfe;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.15s ease;
+}
+.btn-quick-deadline:hover {
+    background: #dbeafe;
+}
+
+/* Disposisi Reminder Banner (Tabel/Bar Kuning Pengingat) */
+.disposisi-reminder-banner {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #b45309;
+    margin-top: 6px;
+    background: #fef3c7;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #fde68a;
+    line-height: 1.45;
+}
+.disposisi-reminder-banner svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: #d97706;
+}
+.disposisi-reminder-banner strong {
+    color: #92400e;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DARK MODE ADAPTATIONS FOR PERMOHONAN SAMBUTAN CREATE / EDIT
+   ══════════════════════════════════════════════════════════════════ */
+html.dark-mode .btn-quick-deadline {
+    background: rgba(37, 99, 235, 0.18) !important;
+    border-color: rgba(59, 130, 246, 0.35) !important;
+    color: #93c5fd !important;
+}
+html.dark-mode .btn-quick-deadline:hover {
+    background: rgba(37, 99, 235, 0.3) !important;
+    color: #ffffff !important;
+}
+
+html.dark-mode .disposisi-reminder-banner {
+    background: rgba(245, 158, 11, 0.14) !important;
+    border-color: rgba(245, 158, 11, 0.35) !important;
+    color: #fde68a !important;
+}
+html.dark-mode .disposisi-reminder-banner svg {
+    color: #fbbf24 !important;
+}
+html.dark-mode .disposisi-reminder-banner strong {
+    color: #fef08a !important;
+}
+
+html.dark-mode .upload-area {
+    background: #0f1c30 !important;
+    border-color: #1e3352 !important;
+}
+html.dark-mode .upload-area:hover {
+    background: #17263d !important;
+    border-color: #3b82f6 !important;
+}
+html.dark-mode .upload-main {
+    color: #f8fafc !important;
+}
+html.dark-mode .upload-sub {
+    color: #94a3b8 !important;
+}
+html.dark-mode .upload-hint {
+    color: #64748b !important;
+}
+html.dark-mode .btn-cancel {
+    background: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .btn-cancel:hover {
+    background: #1e3352 !important;
+    color: #f8fafc !important;
+}
+html.dark-mode .radio-item {
+    color: #cbd5e1 !important;
+}
+html.dark-mode .form-footer {
+    border-top-color: #1e3352 !important;
+}
+html.dark-mode .modal-warning-card {
+    background: #131f33 !important;
+    border: 1px solid #1e3352 !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+}
+html.dark-mode .modal-warning-card h3 {
+    color: #f8fafc !important;
+}
+html.dark-mode .modal-warning-card p {
+    color: #94a3b8 !important;
+}
+html.dark-mode .modal-warning-icon {
+    background: rgba(245, 158, 11, 0.18) !important;
+    color: #fbbf24 !important;
+}
 </style>
 @endpush
 
@@ -263,7 +376,7 @@
                 <label class="form-label" style="margin-bottom:0 !important">Deadline Pengerjaan <span class="req">*</span></label>
                 <div style="display:flex;gap:6px;align-items:center;">
                     <span style="font-size:11.5px;color:#64748b;">Pintas:</span>
-                    <button type="button" onclick="setQuickDeadline(2)" style="font-size:11.5px;padding:3px 9px;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;border-radius:6px;cursor:pointer;font-weight:600"> +2 Jam (Standar Disposisi)</button>
+                    <button type="button" class="btn-quick-deadline" onclick="setQuickDeadline(2)"> +2 Jam (Standar Disposisi)</button>
                 </div>
             </div>
             <div class="form-row-2">
@@ -274,8 +387,8 @@
                     <input type="time" class="form-input" name="deadline_jam" id="input-deadline-jam" value="{{ old('deadline_jam', '16:00') }}" required>
                 </div>
             </div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#d97706;margin-top:6px;background:#fef3c7;padding:6px 12px;border-radius:6px">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:14px;height:14px;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <div class="disposisi-reminder-banner">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span><strong>Pengingat Disposisi:</strong> Disposisi naskah sambutan diharapkan selesai dikerjakan maksimal <strong>2 jam</strong> setelah instruksi diberikan.</span>
             </div>
         </div>
@@ -303,21 +416,21 @@
 
 {{-- Custom Warning Modal --}}
 <div id="uploadWarningModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,23,42,0.6);z-index:99999;align-items:center;justify-content:center;backdrop-filter:blur(3px);">
-    <div style="background:white;border-radius:18px;width:90%;max-width:440px;padding:32px 28px 24px;text-align:center;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);animation:scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
-        <div style="width:68px;height:68px;background:#fef3c7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:#d97706">
+    <div class="modal-warning-card" style="border-radius:18px;width:90%;max-width:440px;padding:32px 28px 24px;text-align:center;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);animation:scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
+        <div class="modal-warning-icon" style="width:68px;height:68px;background:#fef3c7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:#d97706">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:36px;height:36px">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
             </svg>
         </div>
-        <h3 style="font-size:19px;font-weight:700;color:#111827;margin-bottom:8px">Dokumen Surat Wajib Diupload!</h3>
-        <p style="font-size:13.5px;color:#6b7280;line-height:1.55;margin-bottom:24px">
+        <h3 style="font-size:19px;font-weight:700;margin-bottom:8px">Dokumen Surat Wajib Diupload!</h3>
+        <p style="font-size:13.5px;line-height:1.55;margin-bottom:24px">
             Mohon upload file dokumen surat permohonan terlebih dahulu sebelum menyimpan dan melanjutkan ke proses disposisi.
         </p>
         <div style="display:flex;gap:10px;justify-content:center">
-            <button type="button" onclick="closeWarningModal()" style="padding:10px 18px;border:1px solid #e5e7eb;border-radius:8px;background:white;color:#374151;font-size:13.5px;font-weight:500;cursor:pointer">
+            <button type="button" class="btn-cancel" onclick="closeWarningModal()">
                 Tutup
             </button>
-            <button type="button" onclick="triggerUploadFromModal()" style="padding:10px 20px;border:1px solid #1e3a5f;border-radius:8px;background:#1e3a5f;color:white;font-size:13.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px">
+            <button type="button" class="btn-submit" onclick="triggerUploadFromModal()" style="display:inline-flex;align-items:center;gap:6px">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px;height:16px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
                 Upload Surat Sekarang
             </button>
