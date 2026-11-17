@@ -692,6 +692,71 @@ html.dark-mode .modal-form-textarea {
     border-color: #1e3352 !important;
     color: #f8fafc !important;
 }
+html.dark-mode .modal-form-select option {
+    background-color: #131f33 !important;
+    color: #f8fafc !important;
+}
+html.dark-mode .modal-form-textarea::placeholder {
+    color: #64748b !important;
+}
+html.dark-mode .upload-dropzone {
+    background: #17263d !important;
+    border-color: #334155 !important;
+}
+html.dark-mode .upload-dropzone:hover {
+    border-color: #60a5fa !important;
+    background: #1e3a5f !important;
+}
+html.dark-mode #modalDropTitle {
+    color: #e2e8f0 !important;
+}
+html.dark-mode #modalDropSub {
+    color: #94a3b8 !important;
+}
+html.dark-mode .modal-body {
+    background: #131f33 !important;
+}
+html.dark-mode .modal-footer {
+    background: #0f1c30 !important;
+    border-top-color: #1e3352 !important;
+}
+html.dark-mode .btn-modal-cancel {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .btn-modal-cancel:hover {
+    background: #334155 !important;
+    color: #ffffff !important;
+}
+html.dark-mode .modal-close {
+    color: #94a3b8 !important;
+}
+html.dark-mode .modal-close:hover {
+    color: #f8fafc !important;
+}
+/* Checkbox area "Tandai status selesai" */
+html.dark-mode #formUploadHasil div[style*="background:#f8fafc"] {
+    background: #17263d !important;
+    border-color: #334155 !important;
+}
+html.dark-mode #formUploadHasil label[for="cbSelesai"] {
+    color: #cbd5e1 !important;
+}
+/* Info box surat terpilih */
+html.dark-mode #modalSuratInfoBox {
+    background: rgba(30, 58, 95, 0.5) !important;
+    border-color: #2563eb !important;
+}
+html.dark-mode #modalSuratInfoBox div:first-child {
+    color: #93c5fd !important;
+}
+html.dark-mode #modalInfoNomor {
+    color: #f8fafc !important;
+}
+html.dark-mode #modalInfoPerihal {
+    color: #94a3b8 !important;
+}
 </style>
 @endpush
 
