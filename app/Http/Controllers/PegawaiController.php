@@ -58,7 +58,7 @@ class PegawaiController extends Controller
 
     public function create()
     {
-        if (!Auth::user()->isAdmin()) {
+        if (!Auth::user()->canManagePegawai()) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menambah data pegawai.');
         }
         return view('pegawai.create');
@@ -66,7 +66,7 @@ class PegawaiController extends Controller
 
     public function store(Request $request)
     {
-        if (!Auth::user()->isAdmin()) {
+        if (!Auth::user()->canManagePegawai()) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menambah data pegawai.');
         }
         $request->validate([
@@ -104,7 +104,7 @@ class PegawaiController extends Controller
 
     public function edit(Personel $pegawai)
     {
-        if (!Auth::user()->isAdmin()) {
+        if (!Auth::user()->canManagePegawai()) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit data pegawai.');
         }
         return view('pegawai.edit', compact('pegawai'));
@@ -112,7 +112,7 @@ class PegawaiController extends Controller
 
     public function update(Request $request, Personel $pegawai)
     {
-        if (!Auth::user()->isAdmin()) {
+        if (!Auth::user()->canManagePegawai()) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengedit data pegawai.');
         }
         $request->validate([
@@ -151,7 +151,7 @@ class PegawaiController extends Controller
 
     public function destroy(Personel $pegawai)
     {
-        if (!Auth::user()->isAdmin()) {
+        if (!Auth::user()->canManagePegawai()) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk menghapus data pegawai.');
         }
 

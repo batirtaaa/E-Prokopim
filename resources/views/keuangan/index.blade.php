@@ -513,6 +513,235 @@ html.dark-mode .stat-icon-total {
     font-weight: 700;
 }
 .sb-page-btn.disabled { color: #cbd5e1; cursor: not-allowed; }
+
+/* ================= DARK MODE OVERRIDES ================= */
+html.dark-mode .stat-card {
+    background: #131f33 !important;
+    border-color: #1e293b !important;
+}
+html.dark-mode .stat-value {
+    color: #f8fafc !important;
+}
+html.dark-mode .stat-label {
+    color: #94a3b8 !important;
+}
+html.dark-mode .stat-sub {
+    color: #64748b !important;
+}
+
+html.dark-mode .filter-card {
+    background: #131f33 !important;
+    border-color: #1e293b !important;
+}
+html.dark-mode .search-input {
+    background: #0b1324 !important;
+    border-color: #24344d !important;
+    color: #f8fafc !important;
+}
+html.dark-mode .search-input::placeholder {
+    color: #64748b !important;
+}
+html.dark-mode .search-wrap svg {
+    color: #64748b !important;
+}
+html.dark-mode .filter-select {
+    background-color: #0b1324 !important;
+    border-color: #24344d !important;
+    color: #e2e8f0 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 8px center !important;
+    background-size: 14px !important;
+}
+html.dark-mode .filter-select option {
+    background-color: #0b1324 !important;
+    color: #f8fafc !important;
+}
+html.dark-mode .btn-filter-submit {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+html.dark-mode .btn-filter-submit:hover {
+    background: #334155 !important;
+    color: #ffffff !important;
+}
+html.dark-mode .btn-reset-filter {
+    color: #94a3b8 !important;
+}
+html.dark-mode .btn-reset-filter:hover {
+    color: #f87171 !important;
+}
+
+html.dark-mode .selection-action-bar {
+    background: #172554 !important;
+    border-color: #1e40af !important;
+}
+html.dark-mode .selection-info {
+    color: #93c5fd !important;
+}
+
+html.dark-mode .table-card {
+    background: #131f33 !important;
+    border-color: #1e293b !important;
+}
+html.dark-mode .spreadsheet-table thead th {
+    background: #0f1c30 !important;
+    border-right-color: rgba(255,255,255,0.07) !important;
+    color: #93c5fd !important;
+}
+html.dark-mode .spreadsheet-table tbody td {
+    background: #131f33 !important;
+    color: #cbd5e1 !important;
+    border-bottom-color: #1e293b !important;
+    border-right-color: rgba(255,255,255,0.04) !important;
+}
+html.dark-mode .spreadsheet-table tbody tr:hover td {
+    background: #17263d !important;
+}
+html.dark-mode .spreadsheet-table tbody tr.row-printed td {
+    background: #131f33 !important;
+}
+html.dark-mode .spreadsheet-table tbody tr.row-printed:hover td {
+    background: #17263d !important;
+}
+html.dark-mode .spreadsheet-table tbody tr.row-selected td {
+    background: #1e3a5f !important;
+}
+
+html.dark-mode .td-no {
+    color: #64748b !important;
+}
+html.dark-mode .td-date {
+    color: #cbd5e1 !important;
+}
+html.dark-mode .td-nomor {
+    color: #60a5fa !important;
+}
+html.dark-mode .td-pengirim {
+    color: #f8fafc !important;
+}
+html.dark-mode .td-perihal {
+    color: #e2e8f0 !important;
+}
+html.dark-mode .td-disposisi {
+    color: #94a3b8 !important;
+}
+
+html.dark-mode .print-label.printed {
+    background: rgba(34, 197, 94, 0.15) !important;
+    color: #86efac !important;
+    border: 1px solid rgba(34, 197, 94, 0.3) !important;
+}
+html.dark-mode .print-label.unprinted {
+    background: rgba(148, 163, 184, 0.12) !important;
+    color: #94a3b8 !important;
+    border: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+html.dark-mode .link-doc-btn {
+    background: rgba(37, 99, 235, 0.15) !important;
+    color: #93c5fd !important;
+    border: 1px solid rgba(37, 99, 235, 0.3) !important;
+}
+html.dark-mode .link-doc-btn:hover {
+    background: rgba(37, 99, 235, 0.28) !important;
+    color: #bfdbfe !important;
+    border-color: #60a5fa !important;
+}
+html.dark-mode .link-empty {
+    color: #475569 !important;
+}
+
+html.dark-mode .icon-action-btn {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .icon-action-btn:hover {
+    background: #334155 !important;
+    border-color: #475569 !important;
+    color: #ffffff !important;
+}
+html.dark-mode .icon-action-btn.delete:hover {
+    background: rgba(239, 68, 68, 0.2) !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+    color: #f87171 !important;
+}
+
+html.dark-mode .empty-state-title {
+    color: #f8fafc !important;
+}
+html.dark-mode .empty-state-text {
+    color: #94a3b8 !important;
+}
+html.dark-mode .empty-state-icon {
+    background: #1e293b !important;
+}
+
+html.dark-mode .sb-pagination {
+    border-top-color: #1e293b !important;
+    color: #94a3b8 !important;
+}
+html.dark-mode .sb-page-btn {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .sb-page-btn:hover {
+    background: #334155 !important;
+    color: #ffffff !important;
+}
+html.dark-mode .sb-page-btn.active {
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+    color: #ffffff !important;
+}
+html.dark-mode .sb-page-btn.disabled {
+    color: #475569 !important;
+    border-color: #1e293b !important;
+    background: transparent !important;
+}
+
+/* Modal Export in Dark Mode */
+html.dark-mode .export-modal-dialog {
+    background: #131f33 !important;
+    border: 1px solid #1e293b !important;
+    color: #f8fafc !important;
+}
+html.dark-mode .export-modal-header {
+    background: #0f1c30 !important;
+    border-bottom: 1px solid #1e293b !important;
+}
+html.dark-mode .export-modal-desc {
+    color: #94a3b8 !important;
+}
+html.dark-mode .export-modal-label {
+    color: #cbd5e1 !important;
+}
+html.dark-mode .export-modal-select {
+    background-color: #0b1324 !important;
+    border-color: #24344d !important;
+    color: #60a5fa !important;
+}
+html.dark-mode .export-modal-select option {
+    background-color: #0b1324 !important;
+    color: #f8fafc !important;
+}
+html.dark-mode .export-modal-info {
+    background: #0b1324 !important;
+    border-color: #1e293b !important;
+    color: #94a3b8 !important;
+}
+html.dark-mode .btn-modal-cancel {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+html.dark-mode .btn-modal-cancel:hover {
+    background: #334155 !important;
+    color: #ffffff !important;
+}
 </style>
 @endpush
 
@@ -548,23 +777,23 @@ html.dark-mode .stat-icon-total {
 
 {{-- Modal Export Pilih Periode & Filter --}}
 <div id="exportModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(2px);">
-    <div style="background:#fff;border-radius:16px;width:420px;max-width:92vw;box-shadow:0 20px 60px -10px rgba(0,0,0,0.25);overflow:hidden;">
-        <div style="background:#1e3a5f;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;">
+    <div class="export-modal-dialog" style="background:#fff;border-radius:16px;width:420px;max-width:92vw;box-shadow:0 20px 60px -10px rgba(0,0,0,0.25);overflow:hidden;">
+        <div class="export-modal-header" style="background:#1e3a5f;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;">
             <div style="display:flex;align-items:center;gap:8px;">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:20px;height:20px;color:#fff"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
                 <span style="font-size:15px;font-weight:700;color:#fff;">Unduh Rekap Excel Surat Masuk</span>
             </div>
             <button onclick="document.getElementById('exportModal').style.display='none'" style="background:none;border:none;color:#fff;cursor:pointer;font-size:22px;line-height:1;">&times;</button>
         </div>
-        <div style="padding:22px 24px;">
-            <p style="font-size:13px;color:#64748b;margin-bottom:16px;line-height:1.5;">
+        <div class="export-modal-body" style="padding:22px 24px;">
+            <p class="export-modal-desc" style="font-size:13px;color:#64748b;margin-bottom:16px;line-height:1.5;">
                 Pilih rentang tahun dan bulan untuk menghasilkan file Excel dengan format rapi (berisi <strong>Sheet Rekap Bulanan</strong> dan <strong>Sheet Detail</strong>).
             </p>
 
             {{-- Pilih Tahun --}}
             <div style="margin-bottom:14px;">
-                <label style="font-size:12.5px;font-weight:700;color:#334155;display:block;margin-bottom:6px;">Tahun</label>
-                <select id="exportTahunSelect" style="width:100%;padding:9px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13.5px;font-weight:600;color:#1e3a5f;background:#f8fafc;outline:none;">
+                <label class="export-modal-label" style="font-size:12.5px;font-weight:700;color:#334155;display:block;margin-bottom:6px;">Tahun</label>
+                <select id="exportTahunSelect" class="export-modal-select" style="width:100%;padding:9px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13.5px;font-weight:600;color:#1e3a5f;background:#f8fafc;outline:none;">
                     @foreach($availableYears as $yr)
                         <option value="{{ $yr }}" {{ $selectedTahun == $yr ? 'selected' : '' }}>{{ $yr }}</option>
                     @endforeach
@@ -573,8 +802,8 @@ html.dark-mode .stat-icon-total {
 
             {{-- Pilih Bulan --}}
             <div style="margin-bottom:14px;">
-                <label style="font-size:12.5px;font-weight:700;color:#334155;display:block;margin-bottom:6px;">Periode Bulan</label>
-                <select id="exportBulanSelect" style="width:100%;padding:9px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13.5px;color:#334155;background:#f8fafc;outline:none;">
+                <label class="export-modal-label" style="font-size:12.5px;font-weight:700;color:#334155;display:block;margin-bottom:6px;">Periode Bulan</label>
+                <select id="exportBulanSelect" class="export-modal-select" style="width:100%;padding:9px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13.5px;color:#334155;background:#f8fafc;outline:none;">
                     <option value="">Semua Bulan (Rekap 1 Tahun Penuh + Detail)</option>
                     @php
                         $bulanExportList = [
@@ -591,20 +820,20 @@ html.dark-mode .stat-icon-total {
 
             {{-- Pilih Status Print --}}
             <div style="margin-bottom:14px;">
-                <label style="font-size:12.5px;font-weight:700;color:#334155;display:block;margin-bottom:6px;">Status Pencetakan</label>
-                <select id="exportStatusPrintSelect" style="width:100%;padding:9px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13.5px;color:#334155;background:#f8fafc;outline:none;">
+                <label class="export-modal-label" style="font-size:12.5px;font-weight:700;color:#334155;display:block;margin-bottom:6px;">Status Pencetakan</label>
+                <select id="exportStatusPrintSelect" class="export-modal-select" style="width:100%;padding:9px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13.5px;color:#334155;background:#f8fafc;outline:none;">
                     <option value="">Semua Status (Sudah & Belum Diprint)</option>
                     <option value="1" {{ request('status_print') === '1' ? 'selected' : '' }}>Sudah Diprint Saja</option>
                     <option value="0" {{ request('status_print') === '0' ? 'selected' : '' }}>Belum Diprint Saja</option>
                 </select>
             </div>
 
-            <div style="font-size:11.5px;color:#94a3b8;background:#f8fafc;padding:8px 10px;border-radius:6px;border:1px solid #e2e8f0;">
+            <div class="export-modal-info" style="font-size:11.5px;color:#94a3b8;background:#f8fafc;padding:8px 10px;border-radius:6px;border:1px solid #e2e8f0;">
                 Format: Microsoft Excel (.xls) dengan tabel bergaris dan status print tanda V.
             </div>
         </div>
-        <div style="padding:0 24px 20px;display:flex;gap:10px;justify-content:flex-end;">
-            <button onclick="document.getElementById('exportModal').style.display='none'" style="padding:9px 16px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;font-size:13px;color:#475569;cursor:pointer;font-weight:500;">Batal</button>
+        <div class="export-modal-footer" style="padding:0 24px 20px;display:flex;gap:10px;justify-content:flex-end;">
+            <button onclick="document.getElementById('exportModal').style.display='none'" class="btn-modal-cancel" style="padding:9px 16px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;font-size:13px;color:#475569;cursor:pointer;font-weight:500;">Batal</button>
             <button onclick="doExportSuratMasuk()" style="padding:9px 22px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:15px;height:15px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
                 Download Excel

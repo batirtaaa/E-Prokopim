@@ -77,6 +77,11 @@ class User extends Authenticatable
         return in_array($this->role, ['super_admin', 'admin', 'user', 'operator', 'personel']);
     }
 
+    public function canManagePegawai(): bool
+    {
+        return in_array($this->role, ['super_admin', 'admin']);
+    }
+
     public function canInput(): bool
     {
         return in_array($this->role, ['super_admin', 'admin', 'user', 'operator', 'personel']);
