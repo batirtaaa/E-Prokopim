@@ -2935,6 +2935,64 @@
             background: #1e5490 !important;
         }
 
+        /* ── File Drop Zone & Form Footer Full Dark Mode ── */
+        html.dark-mode .file-drop-zone {
+            background-color: #0f1c30 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .file-drop-zone:hover,
+        html.dark-mode .file-drop-zone.dragging {
+            border-color: #38bdf8 !important;
+            background-color: #17263d !important;
+        }
+        html.dark-mode .file-drop-label {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .file-drop-hint {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .form-footer {
+            background-color: #0f1c30 !important;
+            border-top-color: #1e3352 !important;
+        }
+        html.dark-mode .form-card-section-title {
+            color: #f8fafc !important;
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .dok-tab-nav {
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .dok-tab-btn {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .dok-tab-btn:hover {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .dok-tab-btn.active {
+            color: #38bdf8 !important;
+            border-bottom-color: #38bdf8 !important;
+        }
+        html.dark-mode .dok-tab-btn .tab-badge {
+            background: #17263d !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .dok-tab-btn.active .tab-badge {
+            background: #0284c7 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .btn-secondary,
+        html.dark-mode .btn-outline {
+            background-color: #17263d !important;
+            color: #cbd5e1 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .btn-secondary:hover,
+        html.dark-mode .btn-outline:hover {
+            background-color: #1e3352 !important;
+            color: #f8fafc !important;
+            border-color: #3b82f6 !important;
+        }
+
         /* ── Arsip Surat (ar-) Full Dark Mode ── */
         html.dark-mode .arsip-page {
             color: #cbd5e1 !important;

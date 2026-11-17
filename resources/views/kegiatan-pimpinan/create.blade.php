@@ -275,6 +275,196 @@
 .btn-secondary:hover { background: #f3f4f6; }
 .btn-outline { background: white; color: var(--text-primary); border-color: var(--border); }
 .btn-outline:hover { background: #f9fafb; }
+
+/* Banner ISO Penamaan File */
+.dok-iso-banner {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 9px 12px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    color: #0369a1;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.45;
+}
+.dok-iso-banner svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #0284c7;
+}
+.dok-iso-banner strong {
+    color: #0c4a6e;
+}
+.dok-iso-banner code {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 1px 4px;
+    border-radius: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DARK MODE ADAPTATIONS FOR KEGIATAN PIMPINAN CREATE / EDIT
+   ══════════════════════════════════════════════════════════════════ */
+html.dark-mode .form-card {
+    background: #131f33 !important;
+    border-color: #1e3352 !important;
+}
+html.dark-mode .form-card-section-title {
+    color: #f8fafc !important;
+    border-bottom-color: #1e3352 !important;
+}
+html.dark-mode .form-label {
+    color: #94a3b8 !important;
+}
+html.dark-mode .form-input,
+html.dark-mode .form-select,
+html.dark-mode .form-textarea {
+    background: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #f1f5f9 !important;
+    color-scheme: dark !important;
+}
+html.dark-mode .form-input:focus,
+html.dark-mode .form-select:focus,
+html.dark-mode .form-textarea:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+html.dark-mode .form-input::placeholder,
+html.dark-mode .form-textarea::placeholder {
+    color: #475569 !important;
+}
+html.dark-mode .form-input.auto-generated {
+    background: #0f1c30 !important;
+    color: #94a3b8 !important;
+    border-color: #1e3352 !important;
+}
+html.dark-mode .form-hint {
+    color: #64748b !important;
+}
+html.dark-mode .form-sep {
+    color: #94a3b8 !important;
+}
+
+/* Banner ISO Penamaan File in Dark Mode */
+html.dark-mode .dok-iso-banner {
+    background: rgba(14, 165, 233, 0.12) !important;
+    border-color: rgba(14, 165, 233, 0.3) !important;
+    color: #bae6fd !important;
+}
+html.dark-mode .dok-iso-banner strong {
+    color: #38bdf8 !important;
+}
+html.dark-mode .dok-iso-banner svg {
+    color: #38bdf8 !important;
+}
+html.dark-mode .dok-iso-banner code {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #e0f2fe !important;
+}
+
+/* Dokumentasi Tabs in Dark Mode */
+html.dark-mode .dok-tab-nav {
+    border-bottom-color: #1e3352 !important;
+}
+html.dark-mode .dok-tab-btn {
+    color: #94a3b8 !important;
+}
+html.dark-mode .dok-tab-btn:hover {
+    color: #f1f5f9 !important;
+}
+html.dark-mode .dok-tab-btn.active {
+    color: #38bdf8 !important;
+    border-bottom-color: #38bdf8 !important;
+}
+html.dark-mode .dok-tab-btn .tab-badge {
+    background: #17263d !important;
+    color: #94a3b8 !important;
+}
+html.dark-mode .dok-tab-btn.active .tab-badge {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+/* File Drop Zone (Area Upload Dokumen & Foto) in Dark Mode */
+html.dark-mode .file-drop-zone {
+    background: #0f1c30 !important;
+    border-color: #1e3352 !important;
+}
+html.dark-mode .file-drop-zone:hover,
+html.dark-mode .file-drop-zone.dragging {
+    border-color: #38bdf8 !important;
+    background: #17263d !important;
+}
+html.dark-mode .file-drop-label {
+    color: #f1f5f9 !important;
+}
+html.dark-mode .file-drop-hint {
+    color: #94a3b8 !important;
+}
+html.dark-mode .file-drop-icon svg {
+    color: #64748b !important;
+}
+
+/* File Preview List in Dark Mode */
+html.dark-mode .file-preview-item {
+    background: #17263d !important;
+    border-color: #1e3352 !important;
+}
+html.dark-mode .file-preview-item .file-name {
+    color: #f1f5f9 !important;
+}
+html.dark-mode .file-preview-item .file-size {
+    color: #94a3b8 !important;
+}
+html.dark-mode .file-preview-item .file-remove:hover {
+    background: rgba(239, 68, 68, 0.2) !important;
+}
+
+/* Existing Docs List in Dark Mode */
+html.dark-mode .existing-doc-item {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+}
+html.dark-mode .existing-doc-item .ed-name {
+    color: #a7f3d0 !important;
+}
+
+/* Checkbox Items in Dark Mode */
+html.dark-mode .checkbox-item {
+    color: #cbd5e1 !important;
+}
+
+/* Form Footer & Buttons in Dark Mode */
+html.dark-mode .form-footer {
+    background: #0f1c30 !important;
+    border-top-color: #1e3352 !important;
+}
+html.dark-mode .btn-secondary,
+html.dark-mode .btn-outline {
+    background: #17263d !important;
+    color: #cbd5e1 !important;
+    border-color: #1e3352 !important;
+}
+html.dark-mode .btn-secondary:hover,
+html.dark-mode .btn-outline:hover {
+    background: #1e3352 !important;
+    color: #f8fafc !important;
+    border-color: #3b82f6 !important;
+}
+html.dark-mode .btn-primary {
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+    color: #ffffff !important;
+}
+html.dark-mode .btn-primary:hover {
+    background: #1d4ed8 !important;
+    border-color: #1d4ed8 !important;
+}
 </style>
 @endpush
 
@@ -564,10 +754,10 @@
     <div class="form-card-body">
 
         {{-- Banner Rekomendasi Standar ISO Penamaan File --}}
-        <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:12px;color:#0369a1;display:flex;align-items:flex-start;gap:8px;line-height:1.45;">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:16px;height:16px;flex-shrink:0;margin-top:2px;color:#0284c7;"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
+        <div class="dok-iso-banner">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
             <div>
-                <strong style="color:#0c4a6e;">Standar ISO Penamaan File:</strong> Format penamaan foto &amp; dokumen disarankan <code>Tanggal_Bulan_Tahun_Nama Kegiatan</code> (contoh: <code>11_11_2026_Nama_Kegiatan.jpg</code>). Sistem otomatis menerapkan penamaan standar ini saat disimpan.
+                <strong>Standar ISO Penamaan File:</strong> Format penamaan foto &amp; dokumen disarankan <code>Tanggal_Bulan_Tahun_Nama Kegiatan</code> (contoh: <code>11_11_2026_Nama_Kegiatan.jpg</code>). Sistem otomatis menerapkan penamaan standar ini saat disimpan.
             </div>
         </div>
 
