@@ -620,9 +620,9 @@ html.dark-mode .sb-page-btn.disabled {
         <p>Pencatatan dan pengelolaan surat keluar Bagian Protokol dan Komunikasi Pimpinan.</p>
     </div>
     <div class="header-actions">
-        <a href="{{ route('surat-keluar.export', request()->query()) }}" class="btn-secondary-action" title="Unduh CSV Surat Keluar">
+        <a href="{{ route('surat-keluar.export', request()->query()) }}" class="btn-secondary-action" title="Download Rekap Surat">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-            Ekspor CSV
+            Download Rekap Surat
         </a>
         @if(auth()->user()->isAdmin())
         <a href="{{ route('surat-keluar.create') }}" class="btn-primary-action">
