@@ -2496,14 +2496,245 @@
         html.dark-mode .btn-filter-submit:hover { background: #1e3352 !important; color: #fff !important; }
 
         /* ── Asset Dark Mode (ast-) ── */
+        html.dark-mode .ast-container,
+        html.dark-mode .ast-create-container {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ast-title,
+        html.dark-mode .ast-create-title {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ast-subtitle,
+        html.dark-mode .ast-create-subtitle {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ast-back-btn {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ast-back-btn:hover {
+            background: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .ast-form-card {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4) !important;
+        }
+        html.dark-mode .ast-section-header {
+            color: #f1f5f9 !important;
+        }
+        html.dark-mode .ast-section-icon {
+            color: #60a5fa !important;
+        }
+        html.dark-mode .ast-label,
+        html.dark-mode .ast-upload-box-title {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ast-input-text,
+        html.dark-mode .ast-select,
+        html.dark-mode .ast-input-date,
+        html.dark-mode .ast-textarea {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ast-input-text:focus,
+        html.dark-mode .ast-select:focus,
+        html.dark-mode .ast-input-date:focus,
+        html.dark-mode .ast-textarea:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important;
+            background-color: #1a2c47 !important;
+        }
+        html.dark-mode .ast-input-text.readonly-auto {
+            background-color: #0f1c30 !important;
+            color: #64748b !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ast-select option {
+            background-color: #131f33 !important;
+            color: #f8fafc !important;
+        }
+
+        /* Upload Dropzone Boxes (Foto Barang, Dokumen, Kendaraan) */
+        html.dark-mode .ast-drop-box {
+            background: #0f1c30 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .ast-drop-box:hover {
+            background: #17263d !important;
+            border-color: #3b82f6 !important;
+        }
+        html.dark-mode .ast-drop-icon {
+            color: #64748b !important;
+        }
+        html.dark-mode .ast-drop-box:hover .ast-drop-icon {
+            color: #38bdf8 !important;
+        }
+        html.dark-mode .ast-drop-text-primary {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ast-drop-text-primary .link-text {
+            color: #38bdf8 !important;
+        }
+        html.dark-mode .ast-drop-text-sub {
+            color: #64748b !important;
+        }
+        html.dark-mode .ast-file-uploaded,
+        html.dark-mode .ast-drop-box span[style*="color:#0f172a"],
+        html.dark-mode .ast-drop-box span[style*="color: #0f172a"] {
+            color: #38bdf8 !important;
+        }
+
+        /* Buttons & Actions */
+        html.dark-mode .ast-btn-cancel {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ast-btn-cancel:hover {
+            background: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .ast-btn-save,
+        html.dark-mode .ast-btn-add {
+            background: #2563eb !important;
+            border-color: #2563eb !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .ast-btn-save:hover,
+        html.dark-mode .ast-btn-add:hover {
+            background: #1d4ed8 !important;
+        }
+        html.dark-mode .ast-btn-excel {
+            background: #0f5132 !important;
+            border-color: #0d462b !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .ast-btn-excel:hover {
+            background: #146c43 !important;
+        }
+        html.dark-mode .ast-btn-filter,
+        html.dark-mode .ast-btn-icon-export {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ast-btn-filter:hover,
+        html.dark-mode .ast-btn-icon-export:hover {
+            background: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+
+        /* Tabs & Table on Asset Index */
+        html.dark-mode .ast-card {
+            background: #131f33 !important;
+            border-color: #1e3352 !important;
+        }
         html.dark-mode .ast-tabs-bar {
             background: #131f33 !important;
             border-bottom-color: #1e3352 !important;
         }
-        html.dark-mode .ast-tab-link { color: #94a3b8 !important; }
-        html.dark-mode .ast-tab-link:hover { color: #f8fafc !important; }
-        html.dark-mode .ast-tab-link.active { color: #38bdf8 !important; border-bottom-color: #38bdf8 !important; }
-        html.dark-mode .ast-toolbar { border-bottom-color: #1e3352 !important; }
+        html.dark-mode .ast-tab-link {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ast-tab-link:hover {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ast-tab-link.active {
+            color: #38bdf8 !important;
+            border-bottom-color: #38bdf8 !important;
+        }
+        html.dark-mode .ast-toolbar {
+            border-bottom-color: #1e3352 !important;
+        }
+        html.dark-mode .ast-search-input {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ast-search-icon {
+            color: #64748b !important;
+        }
+        html.dark-mode .ast-table thead th {
+            background: #0f1c30 !important;
+            border-bottom-color: #1e3352 !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ast-table tbody td {
+            border-bottom-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ast-table tbody td[style*="color: #0f172a"],
+        html.dark-mode .ast-table tbody td[style*="color:#0f172a"] {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ast-table tbody tr:hover {
+            background: #17263d !important;
+        }
+        html.dark-mode .ast-icon-action-btn {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ast-icon-action-btn:hover {
+            background: #1e3352 !important;
+            color: #38bdf8 !important;
+        }
+        html.dark-mode .ast-pill-status.tersedia {
+            background: #1e293b !important;
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ast-pill-status.tersedia .ast-pill-dot {
+            background: #94a3b8 !important;
+        }
+        html.dark-mode .ast-pill-status.sedang_digunakan {
+            background: rgba(37, 99, 235, 0.2) !important;
+            color: #93c5fd !important;
+        }
+        html.dark-mode .ast-pill-status.sedang_digunakan .ast-pill-dot {
+            background: #3b82f6 !important;
+        }
+        html.dark-mode .ast-pill-status.perbaikan {
+            background: rgba(239, 68, 68, 0.2) !important;
+            color: #fca5a5 !important;
+        }
+        html.dark-mode .ast-pill-status.perbaikan .ast-pill-dot {
+            background: #ef4444 !important;
+        }
+
+        /* Pegawai & Arsip Dropzones Dark Mode */
+        html.dark-mode .pgw-drop-box,
+        html.dark-mode .ar-dropzone {
+            background: #0f1c30 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode .pgw-drop-box:hover,
+        html.dark-mode .ar-dropzone:hover,
+        html.dark-mode .ar-dropzone.dragover {
+            background: #17263d !important;
+            border-color: #3b82f6 !important;
+        }
+        html.dark-mode .ar-drop-icon-wrap {
+            background: #1e3352 !important;
+            color: #38bdf8 !important;
+        }
+        html.dark-mode .ar-drop-title {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ar-drop-sub,
+        html.dark-mode .pgw-drop-text-sub {
+            color: #64748b !important;
+        }
+        html.dark-mode .pgw-drop-text-primary {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .pgw-drop-text-primary .link-text {
+            color: #38bdf8 !important;
+        }
 
         /* ── Penugasan Personel (pn-) Dark Mode ── */
         html.dark-mode .pn-container { color: #cbd5e1 !important; }

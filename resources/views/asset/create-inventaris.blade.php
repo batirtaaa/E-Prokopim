@@ -252,6 +252,10 @@
 .ast-btn-save:hover {
     background: #081d30;
 }
+.ast-file-uploaded {
+    color: #0f172a;
+    font-weight: 600;
+}
 </style>
 @endpush
 
@@ -455,7 +459,7 @@
 function previewUploadName(input, labelId) {
     if (input.files && input.files[0]) {
         const file = input.files[0];
-        document.getElementById(labelId).innerHTML = `<span style="color:#0f172a; font-weight:600;">✓ ${file.name}</span> (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+        document.getElementById(labelId).innerHTML = `<span class="ast-file-uploaded">✓ ${file.name}</span> (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
     }
 }
 </script>

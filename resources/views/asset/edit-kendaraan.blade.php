@@ -236,6 +236,10 @@
 .ast-btn-save:hover {
     background: #081d30;
 }
+.ast-file-uploaded {
+    color: #0f172a;
+    font-weight: 600;
+}
 </style>
 @endpush
 
@@ -393,7 +397,7 @@
                         </svg>
                         <div class="ast-drop-text-primary" id="fotoKendaraanLabel">
                             @if($kendaraan->foto)
-                                <span style="color:#0f172a; font-weight:600;">✓ Foto sudah terunggah</span> (Klik untuk mengganti)
+                                <span class="ast-file-uploaded">✓ Foto sudah terunggah</span> (Klik untuk mengganti)
                             @else
                                 <span class="link-text">Unggah foto</span> atau tarik dan lepas
                             @endif
@@ -412,7 +416,7 @@
                         </svg>
                         <div class="ast-drop-text-primary" id="docKendaraanLabel">
                             @if($kendaraan->dokumen)
-                                <span style="color:#0f172a; font-weight:600;">✓ Dokumen sudah terunggah</span> (Klik untuk mengganti)
+                                <span class="ast-file-uploaded">✓ Dokumen sudah terunggah</span> (Klik untuk mengganti)
                             @else
                                 <span class="link-text">Unggah dokumen</span> atau tarik dan lepas
                             @endif
@@ -437,7 +441,7 @@
 function previewUploadName(input, labelId) {
     if (input.files && input.files[0]) {
         const file = input.files[0];
-        document.getElementById(labelId).innerHTML = `<span style="color:#0f172a; font-weight:600;">✓ ${file.name}</span> (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+        document.getElementById(labelId).innerHTML = `<span class="ast-file-uploaded">✓ ${file.name}</span> (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
     }
 }
 </script>
