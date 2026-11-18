@@ -37,9 +37,10 @@
             color: var(--sidebar-text-active);
         }
         .sidebar-nav-group-header.active {
-            background: #3b82f6 !important;
-            color: #ffffff !important;
-            font-weight: 500;
+            background: rgba(59, 130, 246, 0.22) !important;
+            color: #93c5fd !important;
+            font-weight: 600;
+            border-left: 3px solid #3b82f6;
         }
         .sidebar-nav-group-header svg.main-icon {
             width: 17px;
@@ -49,7 +50,7 @@
         }
         .sidebar-nav-group-header.active svg.main-icon {
             opacity: 1;
-            color: #ffffff;
+            color: #93c5fd;
         }
         .sidebar-nav-group-header .chevron {
             margin-left: auto;
@@ -61,7 +62,7 @@
         }
         .sidebar-nav-group-header.active .chevron {
             opacity: 1;
-            color: #ffffff;
+            color: #93c5fd;
         }
         .sidebar-nav-group-header.open .chevron {
             transform: rotate(180deg);
@@ -90,9 +91,10 @@
             background: rgba(255, 255, 255, 0.06);
         }
         .sidebar-nav-sublink.active {
-            color: #22c55e !important;
+            color: #38bdf8 !important;
             font-weight: 600;
-            background: transparent !important;
+            background: rgba(56, 189, 248, 0.12) !important;
+            border-left: 2px solid #38bdf8;
         }
 
         /* ── Sidebar Sub-Nav-Group (nested collapsible under sublink level) ── */
@@ -115,8 +117,9 @@
             background: rgba(255,255,255,0.06);
         }
         .sidebar-nav-subgroup-header.active {
-            color: #22c55e !important;
+            color: #38bdf8 !important;
             font-weight: 600;
+            background: rgba(56, 189, 248, 0.10) !important;
         }
         .sidebar-nav-subgroup-header .sub-chevron {
             width: 11px;
@@ -668,6 +671,40 @@
         html.dark-mode .topbar-icon-btn:hover { background: #17263d !important; color: #f8fafc !important; }
         html.dark-mode .sidebar-toggle-btn { background: #17263d !important; border-color: #1e3352 !important; color: #94a3b8 !important; }
         html.dark-mode .sidebar-toggle-btn:hover { background: #1e3352 !important; color: #ffffff !important; }
+
+        /* ── Sidebar Active State (Dark Mode) ── */
+        html.dark-mode .sidebar-nav-link.active {
+            background: rgba(37, 99, 235, 0.28) !important;
+            color: #93c5fd !important;
+            border-left: 3px solid #3b82f6 !important;
+        }
+        html.dark-mode .sidebar-nav-link.active svg { color: #93c5fd !important; }
+        html.dark-mode .sidebar-nav-link:hover {
+            background: rgba(255, 255, 255, 0.07) !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .sidebar-nav-group-header.active {
+            background: rgba(59, 130, 246, 0.22) !important;
+            color: #93c5fd !important;
+            border-left: 3px solid #3b82f6 !important;
+        }
+        html.dark-mode .sidebar-nav-group-header.active svg,
+        html.dark-mode .sidebar-nav-group-header.active .chevron { color: #93c5fd !important; }
+        html.dark-mode .sidebar-nav-sublink.active {
+            color: #38bdf8 !important;
+            background: rgba(56, 189, 248, 0.12) !important;
+            border-left: 2px solid #38bdf8 !important;
+            font-weight: 600 !important;
+        }
+        html.dark-mode .sidebar-nav-sublink:hover {
+            background: rgba(255, 255, 255, 0.06) !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .sidebar-nav-subgroup-header.active {
+            color: #38bdf8 !important;
+            background: rgba(56, 189, 248, 0.10) !important;
+            font-weight: 600 !important;
+        }
         html.dark-mode .topbar-profile-name { color: #f8fafc !important; }
         html.dark-mode .topbar-profile-role { color: #94a3b8 !important; }
         html.dark-mode .topbar-profile-btn:hover { background: #17263d !important; }
