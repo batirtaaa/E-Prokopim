@@ -354,6 +354,15 @@
     width: 16px;
     height: 16px;
 }
+.ar-iso-hint {
+    color: #0284c7;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 4px;
+}
+html.dark-mode .ar-iso-hint {
+    color: #38bdf8 !important;
+}
 </style>
 @endpush
 
