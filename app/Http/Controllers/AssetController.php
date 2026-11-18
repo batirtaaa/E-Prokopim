@@ -20,8 +20,8 @@ class AssetController extends Controller
         // 1. Query Inventaris Barang
         $inventarisQuery = AsetBarang::orderBy('id', 'asc');
 
-        if ($request->filled('search_aset')) {
-            $search = $request->search_aset;
+        if ($request->filled('search_aset') || $request->filled('search_inventaris')) {
+            $search = $request->query('search_inventaris', $request->query('search_aset'));
             $inventarisQuery->where(function($q) use ($search) {
                 $q->where('kode_aset', 'like', "%{$search}%")
                   ->orWhere('nama_barang', 'like', "%{$search}%")
@@ -39,8 +39,16 @@ class AssetController extends Controller
             $inventarisQuery->where('status', $request->status_aset);
         }
 
-        $inventaris = $inventarisQuery->paginate(10, ['*'], 'page_inventaris')->withQueryString();
         $totalInventaris = AsetBarang::count();
+        $perPageInventaris = (string) $request->query('per_page_inventaris', $request->query('per_page', '10'));
+        if ($perPageInventaris === 'all' || $perPageInventaris === 'semua') {
+            $perPageInv = max($totalInventaris, 1);
+        } else {
+            $perPageInv = max((int)$perPageInventaris, 1);
+            if ($perPageInv > 500) $perPageInv = 500;
+        }
+
+        $inventaris = $inventarisQuery->paginate($perPageInv, ['*'], 'page_inventaris')->withQueryString();
 
         // 2. Query Kendaraan Operasional
         $kendaraanQuery = AsetKendaraan::orderBy('id', 'asc');
@@ -64,15 +72,25 @@ class AssetController extends Controller
             $kendaraanQuery->where('status', $request->status_kendaraan);
         }
 
-        $kendaraan = $kendaraanQuery->paginate(10, ['*'], 'page_kendaraan')->withQueryString();
         $totalKendaraan = AsetKendaraan::count();
+        $perPageKendaraan = (string) $request->query('per_page_kendaraan', $request->query('per_page', '10'));
+        if ($perPageKendaraan === 'all' || $perPageKendaraan === 'semua') {
+            $perPageKnd = max($totalKendaraan, 1);
+        } else {
+            $perPageKnd = max((int)$perPageKendaraan, 1);
+            if ($perPageKnd > 500) $perPageKnd = 500;
+        }
+
+        $kendaraan = $kendaraanQuery->paginate($perPageKnd, ['*'], 'page_kendaraan')->withQueryString();
 
         return view('asset.index', compact(
             'activeTab',
             'inventaris',
             'kendaraan',
             'totalInventaris',
-            'totalKendaraan'
+            'totalKendaraan',
+            'perPageInventaris',
+            'perPageKendaraan'
         ));
     }
 

@@ -2705,6 +2705,38 @@
         html.dark-mode .ast-pill-status.perbaikan .ast-pill-dot {
             background: #ef4444 !important;
         }
+        html.dark-mode .ast-perpage-wrap {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ast-perpage-select {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ast-perpage-select:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+        }
+        html.dark-mode .ast-perpage-select option {
+            background-color: #131f33 !important;
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ast-modal-box {
+            background: #131f33 !important;
+            border: 1px solid #1e3352 !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
+        }
+        html.dark-mode .ast-modal-box h3 {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .ast-modal-box p {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .ast-modal-box input[type="number"] {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
+        }
 
         /* Pegawai & Arsip Dropzones Dark Mode */
         html.dark-mode .pgw-drop-box,

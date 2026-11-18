@@ -385,9 +385,96 @@
     pointer-events: none;
 }
 
+/* Pagination Info & Per-Page Controls */
+.ast-pagination-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.ast-perpage-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: #64748b;
+}
+.ast-perpage-select {
+    padding: 4px 22px 4px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #334155;
+    background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E") no-repeat right 6px center / 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    transition: all 0.15s ease;
+}
+.ast-perpage-select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+/* Custom Per-Page Modal */
+.ast-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+.ast-modal-overlay.open {
+    display: flex;
+}
+.ast-modal-box {
+    background: #ffffff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    padding: 24px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
 html.dark-mode .ast-pagination-footer {
     border-top-color: #1e3352 !important;
     color: #94a3b8 !important;
+}
+html.dark-mode .ast-perpage-wrap {
+    color: #94a3b8 !important;
+}
+html.dark-mode .ast-perpage-select {
+    background-color: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #f8fafc !important;
+}
+html.dark-mode .ast-perpage-select:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+}
+html.dark-mode .ast-perpage-select option {
+    background-color: #131f33 !important;
+    color: #f8fafc !important;
+}
+html.dark-mode .ast-modal-box {
+    background: #131f33 !important;
+    border: 1px solid #1e3352 !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
+}
+html.dark-mode .ast-modal-box h3 {
+    color: #f8fafc !important;
+}
+html.dark-mode .ast-modal-box p {
+    color: #94a3b8 !important;
+}
+html.dark-mode .ast-modal-box input[type="number"] {
+    background-color: #17263d !important;
+    border-color: #1e3352 !important;
+    color: #f8fafc !important;
 }
 html.dark-mode .ast-p-btn {
     background-color: #17263d !important;
@@ -490,6 +577,19 @@ html.dark-mode .ast-p-btn.disabled {
                     </div>
 
                     <div class="ast-actions-group">
+                        <div class="ast-perpage-wrap">
+                            <label for="per_page_inv_tb">Tampilkan:</label>
+                            <select id="per_page_inv_tb" class="ast-perpage-select" onchange="handlePerPageChange('inventaris', this.value)">
+                                <option value="10" {{ $perPageInventaris === '10' ? 'selected' : '' }}>10</option>
+                                <option value="25" {{ $perPageInventaris === '25' ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ $perPageInventaris === '50' ? 'selected' : '' }}>50</option>
+                                <option value="100" {{ $perPageInventaris === '100' ? 'selected' : '' }}>100</option>
+                                <option value="all" {{ $perPageInventaris === 'all' ? 'selected' : '' }}>Semua ({{ $totalInventaris }})</option>
+                                <option value="custom" {{ (!in_array($perPageInventaris, ['10', '25', '50', '100', 'all'])) ? 'selected' : '' }}>
+                                    {{ (!in_array($perPageInventaris, ['10', '25', '50', '100', 'all'])) ? $perPageInventaris . ' (Custom)' : 'Custom...' }}
+                                </option>
+                            </select>
+                        </div>
                         <button type="button" class="ast-btn-filter" onclick="toggleFilterModal('filterAsetModal')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="15" height="15">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
@@ -561,7 +661,22 @@ html.dark-mode .ast-p-btn.disabled {
 
             {{-- Footer Pagination --}}
             <div class="ast-pagination-footer">
-                <span>Menampilkan {{ $inventaris->firstItem() ?? 0 }}–{{ $inventaris->lastItem() ?? 0 }} dari {{ $inventaris->total() }} aset</span>
+                <div class="ast-pagination-info">
+                    <span>Menampilkan {{ $inventaris->firstItem() ?? 0 }}–{{ $inventaris->lastItem() ?? 0 }} dari {{ $inventaris->total() }} aset</span>
+                    <div class="ast-perpage-wrap">
+                        <label for="per_page_inv_ft">Per Halaman:</label>
+                        <select id="per_page_inv_ft" class="ast-perpage-select" onchange="handlePerPageChange('inventaris', this.value)">
+                            <option value="10" {{ $perPageInventaris === '10' ? 'selected' : '' }}>10</option>
+                            <option value="25" {{ $perPageInventaris === '25' ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ $perPageInventaris === '50' ? 'selected' : '' }}>50</option>
+                            <option value="100" {{ $perPageInventaris === '100' ? 'selected' : '' }}>100</option>
+                            <option value="all" {{ $perPageInventaris === 'all' ? 'selected' : '' }}>Semua ({{ $totalInventaris }})</option>
+                            <option value="custom" {{ (!in_array($perPageInventaris, ['10', '25', '50', '100', 'all'])) ? 'selected' : '' }}>
+                                {{ (!in_array($perPageInventaris, ['10', '25', '50', '100', 'all'])) ? $perPageInventaris . ' (Custom)' : 'Custom...' }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
                 <div class="ast-page-btns">
                     @if($inventaris->onFirstPage())
                         <span class="ast-p-btn disabled">
@@ -613,6 +728,19 @@ html.dark-mode .ast-p-btn.disabled {
                     </div>
 
                     <div class="ast-actions-group">
+                        <div class="ast-perpage-wrap">
+                            <label for="per_page_knd_tb">Tampilkan:</label>
+                            <select id="per_page_knd_tb" class="ast-perpage-select" onchange="handlePerPageChange('kendaraan', this.value)">
+                                <option value="10" {{ $perPageKendaraan === '10' ? 'selected' : '' }}>10</option>
+                                <option value="25" {{ $perPageKendaraan === '25' ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ $perPageKendaraan === '50' ? 'selected' : '' }}>50</option>
+                                <option value="100" {{ $perPageKendaraan === '100' ? 'selected' : '' }}>100</option>
+                                <option value="all" {{ $perPageKendaraan === 'all' ? 'selected' : '' }}>Semua ({{ $totalKendaraan }})</option>
+                                <option value="custom" {{ (!in_array($perPageKendaraan, ['10', '25', '50', '100', 'all'])) ? 'selected' : '' }}>
+                                    {{ (!in_array($perPageKendaraan, ['10', '25', '50', '100', 'all'])) ? $perPageKendaraan . ' (Custom)' : 'Custom...' }}
+                                </option>
+                            </select>
+                        </div>
                         <button type="button" class="ast-btn-filter" onclick="toggleFilterModal('filterKendaraanModal')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="15" height="15">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
@@ -689,7 +817,22 @@ html.dark-mode .ast-p-btn.disabled {
 
             {{-- Footer Pagination --}}
             <div class="ast-pagination-footer">
-                <span>Menampilkan {{ $kendaraan->firstItem() ?? 0 }}–{{ $kendaraan->lastItem() ?? 0 }} dari {{ $kendaraan->total() }} data</span>
+                <div class="ast-pagination-info">
+                    <span>Menampilkan {{ $kendaraan->firstItem() ?? 0 }}–{{ $kendaraan->lastItem() ?? 0 }} dari {{ $kendaraan->total() }} data</span>
+                    <div class="ast-perpage-wrap">
+                        <label for="per_page_knd_ft">Per Halaman:</label>
+                        <select id="per_page_knd_ft" class="ast-perpage-select" onchange="handlePerPageChange('kendaraan', this.value)">
+                            <option value="10" {{ $perPageKendaraan === '10' ? 'selected' : '' }}>10</option>
+                            <option value="25" {{ $perPageKendaraan === '25' ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ $perPageKendaraan === '50' ? 'selected' : '' }}>50</option>
+                            <option value="100" {{ $perPageKendaraan === '100' ? 'selected' : '' }}>100</option>
+                            <option value="all" {{ $perPageKendaraan === 'all' ? 'selected' : '' }}>Semua ({{ $totalKendaraan }})</option>
+                            <option value="custom" {{ (!in_array($perPageKendaraan, ['10', '25', '50', '100', 'all'])) ? 'selected' : '' }}>
+                                {{ (!in_array($perPageKendaraan, ['10', '25', '50', '100', 'all'])) ? $perPageKendaraan . ' (Custom)' : 'Custom...' }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
                 <div class="ast-page-btns">
                     @if($kendaraan->onFirstPage())
                         <span class="ast-p-btn disabled">
@@ -731,4 +874,80 @@ html.dark-mode .ast-p-btn.disabled {
         @endif
     </div>
 </div>
+
+{{-- Custom Per-Page Modal --}}
+<div class="ast-modal-overlay" id="customPerPageModal" onclick="closeCustomPerPageModal(event)">
+    <div class="ast-modal-box" onclick="event.stopPropagation()">
+        <h3 style="margin:0 0 8px; font-size:16px; font-weight:700; color:#0f172a;">Custom Jumlah Tampilan Baris</h3>
+        <p style="margin:0 0 16px; font-size:12.5px; color:#64748b;">Tentukan berapa banyak data yang ingin ditampilkan per halaman (1 - 500 baris):</p>
+        <form onsubmit="submitCustomPerPage(event)">
+            <input type="hidden" id="customPerPageTab" value="inventaris">
+            <div style="margin-bottom:18px;">
+                <input type="number" id="customPerPageInput" min="1" max="500" value="10"
+                       style="width:100%; padding:9px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:14px; font-weight:600; outline:none; box-sizing:border-box;">
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:8px;">
+                <button type="button" onclick="closeCustomPerPageModalDirect()"
+                        style="padding:8px 14px; border:1px solid #cbd5e1; background:#fff; color:#475569; border-radius:6px; font-size:12.5px; font-weight:600; cursor:pointer;"
+                        class="ast-btn-cancel">
+                    Batal
+                </button>
+                <button type="submit"
+                        style="padding:8px 16px; border:none; background:#0f2942; color:#fff; border-radius:6px; font-size:12.5px; font-weight:600; cursor:pointer;"
+                        class="ast-btn-save">
+                    Terapkan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+function handlePerPageChange(tab, val) {
+    if (val === 'custom') {
+        document.getElementById('customPerPageTab').value = tab;
+        const currentVal = tab === 'inventaris' 
+            ? '{{ is_numeric($perPageInventaris) ? $perPageInventaris : 10 }}' 
+            : '{{ is_numeric($perPageKendaraan) ? $perPageKendaraan : 10 }}';
+        document.getElementById('customPerPageInput').value = currentVal;
+        document.getElementById('customPerPageModal').classList.add('open');
+        setTimeout(() => document.getElementById('customPerPageInput').focus(), 50);
+        return;
+    }
+    applyPerPage(tab, val);
+}
+
+function submitCustomPerPage(e) {
+    e.preventDefault();
+    const tab = document.getElementById('customPerPageTab').value;
+    const val = parseInt(document.getElementById('customPerPageInput').value) || 10;
+    closeCustomPerPageModalDirect();
+    applyPerPage(tab, val);
+}
+
+function applyPerPage(tab, val) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', tab);
+    if (tab === 'inventaris') {
+        url.searchParams.set('per_page_inventaris', val);
+        url.searchParams.delete('page_inventaris');
+    } else {
+        url.searchParams.set('per_page_kendaraan', val);
+        url.searchParams.delete('page_kendaraan');
+    }
+    window.location.href = url.toString();
+}
+
+function closeCustomPerPageModal(e) {
+    if (e.target.id === 'customPerPageModal') {
+        closeCustomPerPageModalDirect();
+    }
+}
+
+function closeCustomPerPageModalDirect() {
+    document.getElementById('customPerPageModal').classList.remove('open');
+}
+</script>
+@endpush
