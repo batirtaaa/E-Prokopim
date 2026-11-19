@@ -19,6 +19,17 @@ class GaleriArsipController extends Controller
         }
 
         $fullPath = Storage::disk('public')->path($item->file_path);
+
+        // Proteksi OOM: batasi pembacaan base64 ke memori untuk file <= 12MB
+        if (filesize($fullPath) > 12 * 1024 * 1024) {
+            return response()->json([
+                'error' => 'File too large for inline thumbnail preview',
+                'url'   => asset('storage/' . $item->file_path),
+            ], 413);
+        }
+
+        @ini_set('memory_limit', '256M');
+
         $mime     = mime_content_type($fullPath) ?: 'image/jpeg';
         $base64   = base64_encode(file_get_contents($fullPath));
 
@@ -38,6 +49,18 @@ class GaleriArsipController extends Controller
         }
 
         $fullPath = Storage::disk('public')->path($item->file_paparan_path);
+
+        // Proteksi OOM: batasi pembacaan base64 ke memori untuk file <= 12MB
+        if (filesize($fullPath) > 12 * 1024 * 1024) {
+            return response()->json([
+                'error'     => 'File too large for inline preview',
+                'file_name' => $item->file_paparan_name,
+                'url'       => asset('storage/' . $item->file_paparan_path),
+            ], 413);
+        }
+
+        @ini_set('memory_limit', '256M');
+
         $mime     = mime_content_type($fullPath) ?: 'application/octet-stream';
         $base64   = base64_encode(file_get_contents($fullPath));
 
