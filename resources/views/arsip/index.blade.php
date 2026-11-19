@@ -898,7 +898,7 @@ html.dark-mode a[title="Edit Arsip"]:hover {
                         @if(auth()->user()->isAdmin())
                         <td onclick="event.stopPropagation()" style="text-align: right; white-space: nowrap;">
                             <div style="display: inline-flex; align-items: center; gap: 6px; justify-content: flex-end;">
-                                <a href="{{ route('arsip.edit', $item) }}" title="Edit Arsip" style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:6px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; text-decoration:none; transition:all 0.15s;">
+                                <a href="{{ route('arsip.edit', $item) }}" title="Edit Arsip" class="ar-btn-edit" style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:6px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; text-decoration:none; transition:all 0.15s;">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
                                 </a>
                                 <form method="POST" action="{{ route('arsip.destroy', $item) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus arsip ini?')" style="margin:0; display:inline;">

@@ -2320,35 +2320,66 @@
         html.dark-mode .ga-load-more-btn:hover { border-color: #3b82f6 !important; color: #fff !important; background: #1e3352 !important; }
         html.dark-mode .ga-thumb-bg { background-color: #0f1c30 !important; }
 
-        /* Galeri Arsip & Kegiatan Pimpinan Modals */
+        /* ── Universal Export Modals Dark Mode ── */
         html.dark-mode #exportNotulensiModal > div,
         html.dark-mode #exportModal > div,
         html.dark-mode .ga-export-card,
-        html.dark-mode .export-modal-card {
+        html.dark-mode .export-modal-card,
+        html.dark-mode .export-modal-dialog {
             background: #131f33 !important;
             border: 1px solid #1e3352 !important;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6) !important;
+        }
+        html.dark-mode #exportNotulensiModal > div > div:first-child,
+        html.dark-mode #exportModal > div > div:first-child,
+        html.dark-mode .ga-export-card > div:first-child,
+        html.dark-mode .export-modal-card > div:first-child,
+        html.dark-mode .export-modal-header {
+            background: #0f1c30 !important;
+            border-bottom: 1px solid #1e3352 !important;
         }
         html.dark-mode #exportNotulensiModal label,
-        html.dark-mode #exportModal label {
+        html.dark-mode #exportModal label,
+        html.dark-mode .export-modal-label {
             color: #cbd5e1 !important;
         }
         html.dark-mode #exportNotulensiModal p,
-        html.dark-mode #exportModal p {
+        html.dark-mode #exportModal p,
+        html.dark-mode .export-modal-desc {
             color: #94a3b8 !important;
         }
         html.dark-mode #exportNotulensiModal select,
         html.dark-mode #exportModal select,
-        html.dark-mode #exportTahunSelect {
+        html.dark-mode #exportTahunSelect,
+        html.dark-mode #exportBulanSelect,
+        html.dark-mode #exportStatusPrintSelect,
+        html.dark-mode .export-modal-select {
             background-color: #17263d !important;
             border-color: #1e3352 !important;
             color: #f8fafc !important;
             color-scheme: dark !important;
         }
+        html.dark-mode #exportNotulensiModal select option,
+        html.dark-mode #exportModal select option,
+        html.dark-mode #exportTahunSelect option,
+        html.dark-mode #exportBulanSelect option,
+        html.dark-mode #exportStatusPrintSelect option,
+        html.dark-mode .export-modal-select option {
+            background-color: #17263d !important;
+            color: #f8fafc !important;
+        }
         html.dark-mode #exportNotulensiModal button[onclick*="closeExportModal"],
-        html.dark-mode #exportModal button[onclick*="none"] {
+        html.dark-mode #exportModal button[onclick*="none"],
+        html.dark-mode .export-modal-card button[onclick*="none"],
+        html.dark-mode .btn-modal-cancel {
             background: #17263d !important;
             border-color: #1e3352 !important;
             color: #cbd5e1 !important;
+        }
+        html.dark-mode .export-modal-info {
+            background: #0f1c30 !important;
+            border-color: #1e3352 !important;
+            color: #94a3b8 !important;
         }
         html.dark-mode .modal-content {
             background: #131f33 !important;
@@ -2721,24 +2752,47 @@
             background-color: #131f33 !important;
             color: #f8fafc !important;
         }
-        html.dark-mode .ast-modal-box {
+        html.dark-mode .ast-modal-box,
+        html.dark-mode .pgw-modal-box {
             background: #131f33 !important;
             border: 1px solid #1e3352 !important;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
         }
-        html.dark-mode .ast-modal-box h3 {
+        html.dark-mode .ast-modal-box h3,
+        html.dark-mode .pgw-modal-box h3 {
             color: #f8fafc !important;
         }
-        html.dark-mode .ast-modal-box p {
+        html.dark-mode .ast-modal-box p,
+        html.dark-mode .pgw-modal-box p {
             color: #94a3b8 !important;
         }
-        html.dark-mode .ast-modal-box input[type="number"] {
+        html.dark-mode .ast-modal-box input[type="number"],
+        html.dark-mode .pgw-modal-box input[type="number"] {
             background-color: #17263d !important;
             border-color: #1e3352 !important;
             color: #f8fafc !important;
         }
+        html.dark-mode .pgw-modal-box button[onclick*="classList.remove"] {
+            background: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .pgw-modal-box button[type="submit"] {
+            background: #2563eb !important;
+            color: #ffffff !important;
+        }
 
         /* ── Arsip Surat Form (create / edit) & Dropzones Dark Mode ── */
+        html.dark-mode .ar-btn-edit {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .ar-btn-edit:hover {
+            background-color: #1e3352 !important;
+            border-color: #3b82f6 !important;
+            color: #38bdf8 !important;
+        }
         html.dark-mode .ar-create-page {
             color: #cbd5e1 !important;
         }
@@ -3673,6 +3727,76 @@
             background-color: #17263d !important;
             color: #38bdf8 !important;
             border-left-color: #38bdf8 !important;
+        }
+        html.dark-mode #toggleSettingsKeyBtn,
+        html.dark-mode #toggleApiKeyBtn {
+            background-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+            border: 1px solid #243b61 !important;
+        }
+        html.dark-mode #toggleSettingsKeyBtn:hover,
+        html.dark-mode #toggleApiKeyBtn:hover {
+            background-color: #2563eb !important;
+            color: #ffffff !important;
+        }
+        html.dark-mode .settings-panel div[style*="background:#f8fafc"],
+        html.dark-mode .settings-panel div[style*="background: #f8fafc"],
+        html.dark-mode #aiApiKeyModal div[style*="background:#f8fafc"],
+        html.dark-mode #aiApiKeyModal div[style*="background: #f8fafc"] {
+            background-color: #0f1c30 !important;
+            border-color: #1e3352 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode .settings-panel div[style*="background:#f8fafc"] strong,
+        html.dark-mode #aiApiKeyModal div[style*="background:#f8fafc"] strong {
+            color: #38bdf8 !important;
+        }
+        html.dark-mode span[style*="background:#f0fdf4"],
+        html.dark-mode span[style*="background: #f0fdf4"] {
+            background-color: #132f22 !important;
+            border-color: #166534 !important;
+            color: #4ade80 !important;
+        }
+        html.dark-mode span[style*="background:#fffbeb"],
+        html.dark-mode span[style*="background: #fffbeb"] {
+            background-color: #312109 !important;
+            border-color: #78350f !important;
+            color: #fde68a !important;
+        }
+        html.dark-mode #suratDetailPreview {
+            background-color: #0f1c30 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode #suratDetailPreview > div:first-child {
+            color: #38bdf8 !important;
+        }
+        html.dark-mode #suratDetailPreview div[style*="border-top"] {
+            border-top-color: #1e3352 !important;
+        }
+        html.dark-mode #modalSuratInfoBox {
+            background-color: #0f1c30 !important;
+            border-color: #1e3352 !important;
+        }
+        html.dark-mode #modalSuratInfoBox #modalInfoNomor {
+            color: #38bdf8 !important;
+        }
+        html.dark-mode #modalSuratInfoBox #modalInfoPerihal {
+            color: #cbd5e1 !important;
+        }
+        html.dark-mode #viewer-fallback-msg {
+            background-color: #131f33 !important;
+            border: 1px solid #1e3352 !important;
+        }
+        html.dark-mode #viewer-fallback-msg h3 {
+            color: #f8fafc !important;
+        }
+        html.dark-mode #viewer-fallback-msg p {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode select[name="gemini_model"].ai-modal-input {
+            background-color: #17263d !important;
+            border-color: #1e3352 !important;
+            color: #f8fafc !important;
         }
 
         /* ── Additional Background Segments Nullification ── */
