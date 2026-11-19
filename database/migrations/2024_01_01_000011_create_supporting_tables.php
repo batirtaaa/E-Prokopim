@@ -28,7 +28,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('judul');
             $table->text('pesan');
-            $table->enum('tipe', ['info', 'warning', 'success', 'error'])->default('info');
+            $table->string('tipe', 50)->default('info');
             $table->string('link')->nullable();
             $table->boolean('is_read')->default(false);
             $table->timestamp('read_at')->nullable();

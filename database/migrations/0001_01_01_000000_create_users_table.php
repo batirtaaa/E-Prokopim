@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone', 20)->nullable();
             $table->string('jabatan')->nullable();
-            $table->enum('role', ['super_admin', 'admin', 'operator', 'personel'])->default('operator');
+            $table->string('role', 30)->default('user');
             $table->string('photo')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -18,6 +18,7 @@ return new class extends Migration
         if (DB::getDriverName() === 'mysql') {
             DB::statement("ALTER TABLE `notifikasi` MODIFY COLUMN `tipe` VARCHAR(50) NOT NULL DEFAULT 'info'");
         } else {
+            DB::statement("ALTER TABLE notifikasi DROP CONSTRAINT IF EXISTS notifikasi_tipe_check");
             Schema::table('notifikasi', function (Blueprint $table) {
                 $table->string('tipe', 50)->default('info')->change();
             });

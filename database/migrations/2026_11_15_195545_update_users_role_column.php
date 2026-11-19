@@ -16,6 +16,7 @@ return new class extends Migration
         if (DB::getDriverName() === 'mysql') {
             DB::statement("ALTER TABLE users MODIFY COLUMN role VARCHAR(30) NOT NULL DEFAULT 'user'");
         } else {
+            DB::statement("ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check");
             Schema::table('users', function (Blueprint $table) {
                 $table->string('role', 30)->default('user')->change();
             });

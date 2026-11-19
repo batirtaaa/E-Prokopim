@@ -13,11 +13,11 @@ return new class extends Migration
             $table->string('nomor_arsip')->nullable();
             $table->string('judul');
             $table->text('deskripsi')->nullable();
-            $table->enum('kategori', ['surat_masuk', 'surat_keluar', 'sk', 'peraturan', 'laporan', 'foto', 'video', 'lainnya'])->default('lainnya');
+            $table->string('kategori', 100)->default('lainnya');
             $table->string('file_path');
             $table->string('file_name');
             $table->bigInteger('file_size')->nullable();
-            $table->string('file_type', 50)->nullable();
+            $table->string('file_type', 150)->nullable();
             $table->date('tanggal_dokumen')->nullable();
             $table->string('tahun')->nullable();
             $table->enum('status', ['aktif', 'inaktif', 'arsip_permanen'])->default('aktif');

@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (\Illuminate\Support\Facades\DB::getDriverName() === 'pgsql') {
+            \Illuminate\Support\Facades\DB::statement("ALTER TABLE arsip DROP CONSTRAINT IF EXISTS arsip_kategori_check");
+        }
+
         Schema::table('arsip', function (Blueprint $table) {
             $table->string('kategori', 100)->default('lainnya')->change();
         });
