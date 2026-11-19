@@ -3,11 +3,14 @@
 namespace App\Exports;
 
 use App\Models\Keuangan;
+use App\Traits\DbCompatible;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class SuratMasukRekapExport
 {
+    use DbCompatible;
+
     protected int $tahun;
     protected ?int $bulan;
     protected ?string $statusPrint;
@@ -39,8 +42,8 @@ class SuratMasukRekapExport
                   $sub->whereNull('tanggal_diterima')->whereYear('tanggal', $this->tahun);
               });
         })
-        ->selectRaw('MONTH(COALESCE(tanggal_diterima, tanggal)) as bulan, is_printed, COUNT(*) as total')
-        ->groupByRaw('MONTH(COALESCE(tanggal_diterima, tanggal)), is_printed')
+        ->selectRaw($this->sqlMonth('COALESCE(tanggal_diterima, tanggal)') . ' as bulan, is_printed, COUNT(*) as total')
+        ->groupByRaw($this->sqlMonth('COALESCE(tanggal_diterima, tanggal)') . ', is_printed')
         ->get();
 
         $byBulan = [];

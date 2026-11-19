@@ -3,10 +3,13 @@
 namespace App\Exports;
 
 use App\Models\AnalisisIsu;
+use App\Traits\DbCompatible;
 use Illuminate\Support\Collection;
 
 class AnalisisIsuRekapExport
 {
+    use DbCompatible;
+
     protected int $tahun;
 
     const NAMA_BULAN = [
@@ -27,8 +30,8 @@ class AnalisisIsuRekapExport
     public function getRekapData(): Collection
     {
         $rows = AnalisisIsu::whereYear('tanggal', $this->tahun)
-            ->selectRaw('MONTH(tanggal) as bulan, sentimen, jenis_media, COUNT(*) as total')
-            ->groupByRaw('MONTH(tanggal), sentimen, jenis_media')
+            ->selectRaw($this->sqlMonth('tanggal') . ' as bulan, sentimen, jenis_media, COUNT(*) as total')
+            ->groupByRaw($this->sqlMonth('tanggal') . ', sentimen, jenis_media')
             ->get();
 
         $byBulan = [];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AnalisisIsuRekapExport;
 use App\Models\AnalisisIsu;
+use App\Traits\DbCompatible;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AnalisisIsuController extends Controller
 {
+    use DbCompatible;
+
     /**
      * Display a listing of the resource.
      * Mode 1 (default): 12-month folder grid for selected year.
@@ -21,7 +24,7 @@ class AnalisisIsuController extends Controller
         $selectedTahun = (int) $request->get('tahun', now()->year);
 
         // Available years (years that have data + current year)
-        $dataYears = AnalisisIsu::selectRaw('YEAR(tanggal) as tahun')
+        $dataYears = AnalisisIsu::selectRaw($this->sqlYear('tanggal') . ' as tahun')
             ->whereNotNull('tanggal')
             ->distinct()
             ->orderByDesc('tahun')
@@ -89,8 +92,8 @@ class AnalisisIsuController extends Controller
 
         // ---- MODE 1: 12-month folder grid ----
         $rows = AnalisisIsu::whereYear('tanggal', $selectedTahun)
-            ->selectRaw('MONTH(tanggal) as bulan, sentimen, COUNT(*) as cnt')
-            ->groupByRaw('MONTH(tanggal), sentimen')
+            ->selectRaw($this->sqlMonth('tanggal') . ' as bulan, sentimen, COUNT(*) as cnt')
+            ->groupByRaw($this->sqlMonth('tanggal') . ', sentimen')
             ->get();
 
         $byBulan = [];

@@ -8,11 +8,14 @@ use App\Models\Arsip;
 use App\Models\Personel;
 use App\Models\Sambutan;
 use App\Models\GaleriArsip;
+use App\Traits\DbCompatible;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
+    use DbCompatible;
+
     public function index(Request $request)
     {
         $today = Carbon::today();
@@ -178,13 +181,16 @@ class DashboardController extends Controller
         $currentYear = (int) Carbon::now()->year;
 
         // Raw data: per tahun + bulan
-        $rawSambutan = Sambutan::selectRaw('
-            YEAR(COALESCE(tanggal_acara, tanggal_terima)) as tahun,
-            MONTH(COALESCE(tanggal_acara, tanggal_terima)) as bulan,
-            COUNT(*) as total
-        ')
+        $rawSambutan = Sambutan::selectRaw(
+            $this->sqlYear('COALESCE(tanggal_acara, tanggal_terima)') . ' as tahun, ' .
+            $this->sqlMonth('COALESCE(tanggal_acara, tanggal_terima)') . ' as bulan, ' .
+            'COUNT(*) as total'
+        )
         ->whereNotNull('tanggal_terima')
-        ->groupByRaw('YEAR(COALESCE(tanggal_acara, tanggal_terima)), MONTH(COALESCE(tanggal_acara, tanggal_terima))')
+        ->groupByRaw(
+            $this->sqlYear('COALESCE(tanggal_acara, tanggal_terima)') . ', ' .
+            $this->sqlMonth('COALESCE(tanggal_acara, tanggal_terima)')
+        )
         ->orderByRaw('tahun ASC, bulan ASC')
         ->get();
 
@@ -226,14 +232,16 @@ class DashboardController extends Controller
         ]);
 
         // 9. Data Dokumentasi (Foto / Video / Notulensi) lengkap untuk chart dengan filter client-side
-        $rawDokumentasi = GaleriArsip::selectRaw('
-            YEAR(COALESCE(tanggal_kegiatan, created_at)) as tahun,
-            MONTH(COALESCE(tanggal_kegiatan, created_at)) as bulan,
-            tipe,
-            COUNT(*) as total
-        ')
+        $rawDokumentasi = GaleriArsip::selectRaw(
+            $this->sqlYear('COALESCE(tanggal_kegiatan, created_at)') . ' as tahun, ' .
+            $this->sqlMonth('COALESCE(tanggal_kegiatan, created_at)') . ' as bulan, ' .
+            'tipe, COUNT(*) as total'
+        )
         ->whereNotNull('tipe')
-        ->groupByRaw('YEAR(COALESCE(tanggal_kegiatan, created_at)), MONTH(COALESCE(tanggal_kegiatan, created_at)), tipe')
+        ->groupByRaw(
+            $this->sqlYear('COALESCE(tanggal_kegiatan, created_at)') . ', ' .
+            $this->sqlMonth('COALESCE(tanggal_kegiatan, created_at)') . ', tipe'
+        )
         ->orderByRaw('tahun ASC, bulan ASC')
         ->get();
 

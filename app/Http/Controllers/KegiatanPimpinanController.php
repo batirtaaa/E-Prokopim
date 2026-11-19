@@ -7,6 +7,7 @@ use App\Models\GaleriArsip;
 use App\Services\FileNamingService;
 use App\Exports\KegiatanPimpinanRekapExport;
 use App\Http\Controllers\NotifikasiController;
+use App\Traits\DbCompatible;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -14,6 +15,8 @@ use Carbon\Carbon;
 
 class KegiatanPimpinanController extends Controller
 {
+    use DbCompatible;
+
     public function index(Request $request)
     {
         $query = Kegiatan::query()->orderBy('tanggal_mulai', 'desc');
@@ -35,7 +38,7 @@ class KegiatanPimpinanController extends Controller
         ])->paginate(10)->withQueryString();
 
         $dbYears = Kegiatan::whereNotNull('tanggal_mulai')
-            ->selectRaw('YEAR(tanggal_mulai) as tahun')
+            ->selectRaw($this->sqlYear('tanggal_mulai') . ' as tahun')
             ->distinct()->pluck('tahun')->map(fn($y) => (int)$y)->toArray();
         $currentYear    = (int) now()->year;
         $defaultRange   = range($currentYear - 3, $currentYear + 1);

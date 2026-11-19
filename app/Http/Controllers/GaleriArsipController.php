@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\GaleriArsip;
 use App\Services\FileNamingService;
+use App\Traits\DbCompatible;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class GaleriArsipController extends Controller
 {
+    use DbCompatible;
+
     public function thumb($id)
     {
         $item = GaleriArsip::findOrFail($id);
@@ -135,7 +138,7 @@ class GaleriArsipController extends Controller
 
         // Hitung tahun yang tersedia dari data arsip
         $dbYears = GaleriArsip::whereNotNull('tanggal_kegiatan')
-            ->selectRaw('YEAR(tanggal_kegiatan) as tahun')
+            ->selectRaw($this->sqlYear('tanggal_kegiatan') . ' as tahun')
             ->distinct()->pluck('tahun')->map(fn($y) => (int)$y)->toArray();
         $currentYear    = (int) now()->year;
         $defaultRange   = range($currentYear - 3, $currentYear + 1);

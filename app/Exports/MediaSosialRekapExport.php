@@ -3,10 +3,13 @@
 namespace App\Exports;
 
 use App\Models\MediaSosial;
+use App\Traits\DbCompatible;
 use Illuminate\Support\Collection;
 
 class MediaSosialRekapExport
 {
+    use DbCompatible;
+
     protected int $tahun;
 
     const NAMA_BULAN = [
@@ -36,8 +39,8 @@ class MediaSosialRekapExport
         // Ambil semua data tahun ini, group by bulan & kategori
         $rows = MediaSosial::whereYear('tanggal_publikasi', $this->tahun)
             ->whereNotNull('tanggal_publikasi')
-            ->selectRaw('MONTH(tanggal_publikasi) as bulan, kategori, COUNT(*) as total')
-            ->groupByRaw('MONTH(tanggal_publikasi), kategori')
+            ->selectRaw($this->sqlMonth('tanggal_publikasi') . ' as bulan, kategori, COUNT(*) as total')
+            ->groupByRaw($this->sqlMonth('tanggal_publikasi') . ', kategori')
             ->get();
 
         $byBulan = [];

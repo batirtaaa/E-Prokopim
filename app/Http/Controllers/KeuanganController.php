@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Keuangan;
 use App\Models\SuratKeluar;
 use App\Models\Personel;
+use App\Traits\DbCompatible;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class KeuanganController extends Controller
 {
+    use DbCompatible;
+
     const NAMA_BULAN = [
         1  => 'Januari',  2  => 'Februari', 3  => 'Maret',
         4  => 'April',    5  => 'Mei',       6  => 'Juni',
@@ -25,7 +28,7 @@ class KeuanganController extends Controller
         $selectedTahun = (int) $request->get('tahun', now()->year);
 
         // Fetch distinct available years
-        $dataYears = Keuangan::selectRaw('YEAR(COALESCE(tanggal_diterima, tanggal)) as tahun')
+        $dataYears = Keuangan::selectRaw($this->sqlYear('COALESCE(tanggal_diterima, tanggal)') . ' as tahun')
             ->whereNotNull('tanggal_diterima')
             ->orWhereNotNull('tanggal')
             ->distinct()

@@ -3,10 +3,13 @@
 namespace App\Exports;
 
 use App\Models\Kegiatan;
+use App\Traits\DbCompatible;
 use Illuminate\Support\Collection;
 
 class KegiatanPimpinanRekapExport
 {
+    use DbCompatible;
+
     protected int $tahun;
 
     const NAMA_BULAN = [
@@ -28,8 +31,8 @@ class KegiatanPimpinanRekapExport
     {
         $rows = Kegiatan::whereYear('tanggal_mulai', $this->tahun)
             ->whereNotNull('tanggal_mulai')
-            ->selectRaw('MONTH(tanggal_mulai) as bulan, status, COUNT(*) as total')
-            ->groupByRaw('MONTH(tanggal_mulai), status')
+            ->selectRaw($this->sqlMonth('tanggal_mulai') . ' as bulan, status, COUNT(*) as total')
+            ->groupByRaw($this->sqlMonth('tanggal_mulai') . ', status')
             ->get();
 
         $byBulan = [];

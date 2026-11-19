@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Keuangan;
 use App\Models\SuratKeluar;
+use App\Traits\DbCompatible;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class SuratKeluarController extends Controller
 {
+    use DbCompatible;
+
     const NAMA_BULAN = [
         1  => 'Januari',  2  => 'Februari', 3  => 'Maret',
         4  => 'April',    5  => 'Mei',       6  => 'Juni',
@@ -22,7 +25,7 @@ class SuratKeluarController extends Controller
         $selectedTahun = (int) $request->get('tahun', now()->year);
 
         // Distinct years available
-        $dataYears = SuratKeluar::selectRaw('YEAR(tanggal_surat) as tahun')
+        $dataYears = SuratKeluar::selectRaw($this->sqlYear('tanggal_surat') . ' as tahun')
             ->whereNotNull('tanggal_surat')
             ->distinct()
             ->orderByDesc('tahun')

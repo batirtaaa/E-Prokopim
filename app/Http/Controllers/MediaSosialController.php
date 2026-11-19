@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\MediaSosial;
 use App\Exports\MediaSosialRekapExport;
+use App\Traits\DbCompatible;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class MediaSosialController extends Controller
 {
+    use DbCompatible;
+
     // Daftar sub-kategori baku untuk infografis (digunakan di form upload)
     const SUB_KATEGORI_LIST = [
         'hari_besar'    => 'Hari Besar',
@@ -39,7 +42,7 @@ class MediaSosialController extends Controller
         // Semua tab → tampilkan grid folder 12 bulan (konsisten untuk semua)
         $dbYears = MediaSosial::where('kategori', $tab)
             ->whereNotNull('tanggal_publikasi')
-            ->selectRaw('YEAR(tanggal_publikasi) as tahun')
+            ->selectRaw($this->sqlYear('tanggal_publikasi') . ' as tahun')
             ->distinct()
             ->pluck('tahun')
             ->map(fn($y) => (int)$y)
@@ -61,8 +64,8 @@ class MediaSosialController extends Controller
         // Hitung jumlah item per bulan untuk tahun terpilih
         $countsByMonth = MediaSosial::where('kategori', $tab)
             ->whereYear('tanggal_publikasi', $selectedTahun)
-            ->selectRaw('MONTH(tanggal_publikasi) as bulan, COUNT(*) as total')
-            ->groupByRaw('MONTH(tanggal_publikasi)')
+            ->selectRaw($this->sqlMonth('tanggal_publikasi') . ' as bulan, COUNT(*) as total')
+            ->groupByRaw($this->sqlMonth('tanggal_publikasi'))
             ->pluck('total', 'bulan')
             ->toArray();
 
@@ -125,9 +128,9 @@ class MediaSosialController extends Controller
                   ->orWhere('deskripsi', 'like', "%{$s}%")
                   ->orWhere('sub_kategori', 'like', "%{$s}%")
                   ->orWhere('platform', 'like', "%{$s}%")
-                  ->orWhereRaw("DATE_FORMAT(tanggal_publikasi, '%d %M %Y') LIKE ?", ["%{$s}%"])
-                  ->orWhereRaw("DATE_FORMAT(tanggal_publikasi, '%d-%m-%Y') LIKE ?", ["%{$s}%"])
-                  ->orWhereRaw("DATE_FORMAT(tanggal_publikasi, '%d/%m/%Y') LIKE ?", ["%{$s}%"])
+                  ->orWhereRaw($this->sqlDateFormatLong('tanggal_publikasi') . ' LIKE ?', ["%{$s}%"])
+                  ->orWhereRaw($this->sqlDateFormatShort('tanggal_publikasi') . ' LIKE ?', ["%{$s}%"])
+                  ->orWhereRaw($this->sqlDateFormatSlash('tanggal_publikasi') . ' LIKE ?', ["%{$s}%"])
                   ->orWhere('tanggal_publikasi', 'like', "%{$s}%");
             });
         }
@@ -141,7 +144,7 @@ class MediaSosialController extends Controller
         // Hitung tahun yang tersedia untuk filter / navigasi
         $dbYears = MediaSosial::where('kategori', $kategori)
             ->whereNotNull('tanggal_publikasi')
-            ->selectRaw('YEAR(tanggal_publikasi) as tahun')
+            ->selectRaw($this->sqlYear('tanggal_publikasi') . ' as tahun')
             ->distinct()->pluck('tahun')->map(fn($y) => (int)$y)->toArray();
         $currentYear    = (int) now()->year;
         $defaultRange   = range($currentYear - 3, $currentYear + 1);
