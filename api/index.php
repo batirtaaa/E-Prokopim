@@ -22,13 +22,6 @@ foreach ($directories as $directory) {
     }
 }
 
-// Salin database SQLite bawaan ke /tmp jika belum ada di serverless instance
-$sqliteSource = dirname(__DIR__) . '/database/database.sqlite';
-$sqliteTarget = '/tmp/database.sqlite';
-if (!file_exists($sqliteTarget) && file_exists($sqliteSource)) {
-    @copy($sqliteSource, $sqliteTarget);
-}
-
 // Teruskan request ke bootstrap & front controller Laravel
 require __DIR__ . '/../public/index.php';
 
